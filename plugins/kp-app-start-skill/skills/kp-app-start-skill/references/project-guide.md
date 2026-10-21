@@ -64,12 +64,19 @@ src/
 
 /init 실행 후 실제 구현을 기준으로 다음 문서 지도를 만든다.
 
-- 루트 AGENTS.md: 한두 문장 개요, 실제 폴더 트리, 개발·검증 명령, .agents/references/와 하위 AGENTS.md 링크, 범용 규칙을 둔다. Git identity나 원격 인증, Firebase/GCP, 로컬·개발 서버 테스트, KP API 문서 열람에 계정이 필요한 경우 AGENTS.local.md를 먼저 확인한다. 정보가 없거나 불완전하면 사용자가 필요한 정보를 제공하도록 요청하고, 무시 규칙이 적용된 AGENTS.local.md를 추가·갱신한 뒤 진행한다. 계정 정보를 추적 문서에 복사하지 않는다.
+- 루트 AGENTS.md: 한두 문장 개요, 실제 폴더 트리, 개발·검증 명령, `.agents/references/`와 하위 `AGENTS.md` 링크, 범용 규칙을 둔다. 커밋·PR 작업은 `.agents/references/commit-rule.md`와 `.agents/references/pr-rule.md`로 연결하고, PR 템플릿은 `.references/PULL_REQUEST_TEMPLATE.md`로 연결한다. 세부 규칙은 해당 참조 문서에 두고 AGENTS.md에는 라우팅 링크를 유지한다. Git identity나 원격 인증, Firebase/GCP, 로컬·개발 서버 테스트, KP API 문서 열람에 계정이 필요한 경우 `AGENTS.local.md`를 먼저 확인한다. 정보가 없거나 불완전하면 사용자가 필요한 정보를 제공하도록 요청하고, 무시 규칙이 적용된 `AGENTS.local.md`를 추가·갱신한 뒤 진행한다. 계정 정보를 추적 문서에 복사하지 않는다.
 - .agents/references/project-overview.md: 앱 목적, 실제 계층 구조, 엔트리 포인트, 라우팅과 Provider 조립.
 - .agents/references/api-contract.md: 도메인 API map, KP endpoint·인증·권한·Zod schema 문서의 위치와 Developer Center 문서 링크. API 문서 로그인 계정은 AGENTS.local.md에서 확인한다.
 - .agents/references/auth-and-data.md: OAuth·세션 수명주기, Query/Zustand 경계, 원본 데이터와 로컬 데이터 규칙.
 - .agents/references/local-setup.md: mode별 환경 변수 이름, 로컬 명령, AGENTS.local.md의 계정 정보 위치와 비밀값 취급 규칙. 실제 비밀값은 적지 않는다.
 - 각 주요 src/{layer}/AGENTS.md: 그 계층의 책임, 핵심 실제 파일·export·소비자, 테스트 위치, 해당 계층에서 금지할 의존 방향. src/hook/은 query/와 ui/ 사용법도 정리한다.
+
+## 커밋·PR 규칙 템플릿
+
+- `assets/templates/.agents/references/commit-rule.md`는 대상 저장소의 `.agents/references/commit-rule.md`로 복사한다.
+- `assets/templates/.agents/references/pr-rule.md`는 대상 저장소의 `.agents/references/pr-rule.md`로 복사한다.
+- `assets/templates/.references/PULL_REQUEST_TEMPLATE.md`는 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`로 복사한다.
+- 대상 저장소의 루트 `AGENTS.md`는 위 세 파일로 연결한다. 기존 문서가 있으면 덮어쓰지 않고 필요한 내용을 합친다.
 
 루트 지침은 상세 내용을 반복하지 말고 정확한 참조 경로를 안내한다. 각 문서에 존재하지 않는 파일이나 미구현 동작을 적지 않는다. 구조도와 코드 지도는 실제 소스를 반영한다.
 

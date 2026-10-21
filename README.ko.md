@@ -1,3 +1,5 @@
+[EN](README.md) | [한국어](README.ko.md)
+
 # KP Skill
 
 KP Skill은 Kingdom Planet 앱을 만들 때 재사용하는 에이전트 중립 지침을 제공합니다. 기준 Skill과 참고 자료는 `plugins/kp-app-start-skill/skills/kp-app-start-skill/`에 있습니다.
@@ -6,7 +8,7 @@ KP Skill은 Kingdom Planet 앱을 만들 때 재사용하는 에이전트 중립
 
 | 플러그인 | 버전 | 설명 |
 | --- | --- | --- |
-| `kp-app-start-skill` | `1.0.0` | 화면 설계가 끝난 React 소스를 KP API 앱으로 초기화합니다. |
+| [`kp-app-start-skill`](plugins/kp-app-start-skill/skills/kp-app-start-skill/SKILL.md) | `1.1.0` | 화면 설계가 끝난 React 소스를 KP API 앱으로 초기화합니다. |
 
 ## 지원 에이전트에 공통 Skill 설치
 
@@ -35,6 +37,8 @@ kp-skill/
 │           ├── SKILL.md
 │           ├── agents/openai.yaml
 │           ├── assets/templates/
+│           │   ├── .agents/references/{commit-rule,pr-rule}.md
+│           │   └── .references/PULL_REQUEST_TEMPLATE.md
 │           └── references/
 ├── README.md
 └── README.ko.md
