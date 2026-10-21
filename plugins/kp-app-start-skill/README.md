@@ -1,6 +1,6 @@
 # KP App Start Skill
 
-Version: 1.0.0
+Version: 1.1.0
 
 Initialize an existing, designed React source repository as a KP API application. The agent-neutral Skill preserves the supplied design, configures KP authentication and environment settings, and creates project guidance for the resulting source structure.
 

@@ -1,11 +1,19 @@
 ---
 name: kp-app-start-skill
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프로젝트 안내 문서를 연결할 때 사용한다."
+metadata:
+  version: "1.1.0"
 ---
 
 # KP 앱 초기화
 
 이미 화면 설계가 끝난 프론트엔드 소스를 실제 KP API 앱으로 연결한다. 기존 화면과 사용자의 작업물을 보존하고, 새 앱의 API 계약과 권한은 최신 KP 공식 문서 및 사용자가 제공한 앱 설정으로 확인한다.
+
+## 버전 관리
+
+- 정본 버전은 YAML frontmatter의 `metadata.version`이다.
+- 기존 동작과 호환되는 지침·템플릿 추가는 minor, 호환되는 오류 수정은 patch, 기존 사용 흐름이나 계약을 깨는 변경은 major 버전을 올린다.
+- `metadata.version`, `.claude-plugin/marketplace.json`, `.claude-plugin/plugin.json`, 저장소와 플러그인의 영문·한국어 README 버전을 모두 같은 값으로 맞춘다.
 
 ## 적용 범위와 시작 확인
 
@@ -38,6 +46,8 @@ description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React
 초기화, 코드 연결, 로컬 검증이 끝나면 대상 저장소에서 /init을 실행한다. 생성된 결과를 확인하고 아래 문서 계약에 맞게 보완한다.
 
 - 루트 AGENTS.md에 실제 폴더 트리를 그리고 .agents/references/의 상세 문서와 하위 AGENTS.md로 연결한다.
+- `assets/templates/.agents/references/commit-rule.md`와 `pr-rule.md`를 각각 대상 저장소의 `.agents/references/commit-rule.md`와 `pr-rule.md`로 복사하고, `assets/templates/.references/PULL_REQUEST_TEMPLATE.md`를 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`로 복사한다. 같은 경로의 기존 문서가 있으면 덮어쓰지 말고 내용을 합친다.
+- 루트 `AGENTS.md`에서 `.agents/references/commit-rule.md`, `.agents/references/pr-rule.md`, `.references/PULL_REQUEST_TEMPLATE.md`로 연결한다. 세부 규칙은 해당 참조 문서에 두고 `AGENTS.md`에는 라우팅 링크를 유지한다.
 - 각 주요 소스 계층에 해당 코드의 실제 지도와 책임을 담은 AGENTS.md를 만든다. 경로는 최소한 src/api/, src/schema/, src/type/, src/store/, src/hook/, src/provider/, src/router/, src/component/, src/page/, src/config/, src/util/을 조사한다.
 - 루트와 참조 문서에는 모든 새 폴더명·함수명·변수명을 단수로 짓는 Dixsoft 원칙을 기록한다. 배열 등 집합 변수는 userList, memberMap처럼 단수 도메인명 뒤에 자료형 의미를 붙인다. KP wire 필드·endpoint, 외부 라이브러리 계약은 바꾸지 않는다.
 - 빌드, 테스트, 정적 분석 결과와 실제 DEV OAuth·주요 읽기 동작 결과를 나누어 보고한다. 실제 브라우저 동작을 확인하지 못했으면 코드 수준 검증과 구분해 적는다.
