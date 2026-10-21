@@ -1,0 +1,9 @@
+{
+  "name": "kp-app-start-skill",
+  "description": "화면 설계 소스를 KP API 기반 React 앱으로 초기화하고 인증·환경 설정·프로젝트 지침을 연결합니다.",
+  "author": {
+    "name": "Kingdom Planet",
+    "url": "https://github.com/kingdompla-net"
+  },
+  "version": "1.0.0"
+}
