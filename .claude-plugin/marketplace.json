@@ -8,10 +8,10 @@
   },
   "plugins": [
     {
-      "name": "kp-app-start-skill",
-      "source": "./plugins/kp-app-start-skill",
-      "description": "화면 설계 소스를 KP API 기반 React 앱으로 초기화하고 인증·환경 설정·프로젝트 지침을 연결합니다.",
-      "version": "1.1.0"
+      "name": "kp-app-skill",
+      "source": "./kp-app-skill",
+      "description": "KP React 앱 초기화, API 연동, Firebase Hosting 배포를 돕는 프로젝트 로컬 Skill을 제공합니다.",
+      "version": "2.4.0"
     }
   ]
 }

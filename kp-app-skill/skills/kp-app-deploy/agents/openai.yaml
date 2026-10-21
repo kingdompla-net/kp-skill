@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP App Deploy"
+  short_description: "DEV 또는 PRD Firebase Hosting 배포 전 환경을 검증"
+  default_prompt: "요청한 DEV 또는 PRD 배포 환경과 Hosting 타깃을 확인한 뒤 $kp-app-deploy 절차를 사용해."
+
+policy:
+  allow_implicit_invocation: true
