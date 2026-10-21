@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "replace-with-dev-firebase-project-id"
+  },
+  "targets": {
+    "replace-with-dev-firebase-project-id": {
+      "hosting": {
+        "dev": ["replace-with-dev-hosting-site-id"]
+      }
+    },
+    "replace-with-prd-firebase-project-id": {
+      "hosting": {
+        "prd": ["replace-with-prd-hosting-site-id"]
+      }
+    }
+  }
+}

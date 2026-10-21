@@ -1,0 +1,9 @@
+{
+  "name": "kp-app-skill",
+  "description": "KP React 앱 초기화, API 연동, Firebase Hosting 배포를 돕는 프로젝트 로컬 Skill을 제공합니다.",
+  "author": {
+    "name": "Kingdom Planet",
+    "url": "https://github.com/kingdompla-net"
+  },
+  "version": "2.4.0"
+}

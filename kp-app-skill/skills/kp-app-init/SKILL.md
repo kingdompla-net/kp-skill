@@ -1,8 +1,8 @@
 ---
-name: kp-app-start-skill
-description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프로젝트 안내 문서를 연결할 때 사용한다."
+name: kp-app-init
+description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용한다."
 metadata:
-  version: "1.1.0"
+  version: "2.4.0"
 ---
 
 # KP 앱 초기화
@@ -21,7 +21,7 @@ metadata:
 2. 사용자가 이미 준 값을 다시 묻지 않는다. 다음 값 중 저장소나 대화에서 확인할 수 없는 값은 한 번에 묶어 요청한다.
    - KP APP_ID: 사용자가 KP Developer Center에서 직접 확인해 제공해야 한다. 앱 ID를 추측하거나 다른 저장소에서 가져오지 않는다. DEV/PRD가 다르면 각 값을 받고, 같으면 양쪽 환경에 같은 값을 쓴다는 확인을 받는다.
    - 로컬 OAuth callback: 기본값은 http://localhost:3000/auth/callback이다. 개발 서버 포트가 다르면 실제 URL을 받는다. localhost와 127.0.0.1은 서로 다른 redirect URI다.
-   - PRD OAuth callback 및 Firebase 프로젝트 ID·Hosting 사이트·운영 도메인.
+   - DEV/PRD OAuth callback 및 Firebase 프로젝트 ID·Hosting 사이트 ID·도메인. 대상 저장소의 기존 Firebase 설정에서 확인할 수 없는 값만 환경별로 요청한다.
    - KP Developer Center 로그인 계정: API 문서 열람에 필요하다. 기존 AGENTS.local.md를 확인하고 정보가 없으면 사용자에게 받은 뒤 기록한다.
    - 확정 구조의 store/slices/와 모든 폴더명 단수 원칙이 충돌한다. 이 초기화에서 해당 경로가 필요하면 store/slice/로 바꿀지, 기존 경로의 예외로 둘지 확인한다.
 3. VITE_APP_NAME은 package.json의 name에서 만들고, VITE_APP_DESCRIPTION은 package 설명·README·화면의 실제 목적에 맞춰 쓴다. 앱 이름 변환이 PascalCase인지 공백으로 구분한 이름인지 불명확하면 예시를 제시해 확인한다. 설명을 지어낼 근거가 없으면 사용자에게 목적을 묻는다.
@@ -31,23 +31,30 @@ metadata:
 
 ## 구현 기준
 
-- 아래 확정 구조와 references/project-guide.md의 책임 경계를 적용한다. 새로운 화면을 다시 디자인하지 말고 현재 화면, 콘텐츠, 컴포넌트를 구조에 매핑한다.
+- 아래 확정 구조와 references/frontend-architecture.md의 계층 책임을 적용한다. 새로운 화면을 다시 디자인하지 말고 현재 화면, 콘텐츠, 컴포넌트를 구조에 매핑한다.
 - 먼저 최신 KP 공식 API 문서를 읽고 docs/kp-api-analysis.md에 필요한 endpoint, HTTP method, 인증, app_id, 요청·응답 필드, 페이지네이션, 권한을 기록한다. 확인되지 않은 endpoint·필드·권한은 추측하지 않는다.
 - KP API 문서는 [DEV Developer Center](https://developer-kpcenter-dev.web.app/api) 또는 [PRD Developer Center](https://developer-kpcenter.web.app/api)에서 해당 환경의 계약을 확인한다. 로그인 계정은 대상 저장소의 AGENTS.local.md에서 확인하고, 접속 전 활성 계정이 맞는지 검증한다.
 - assets/templates/kpClient.ts를 src/api/kpClient.ts로, assets/templates/authentication.ts를 src/schema/authentication.ts로 추가한다. 기존 앱 구성과 충돌하는 import 경로만 실제 alias에 맞춰 조정한다. 해당 클라이언트가 요구하는 config/app와 Vite 환경 타입 선언을 조사해 없을 때만 보완한다.
 - Zod가 없으면 저장소의 package manager를 확인해 런타임 의존성으로 추가한다. npm 저장소라면 npm i zod를 사용하고 lockfile을 함께 갱신한다.
 - 기존 파일을 덮어쓰지 않는다. 같은 경로에 기존 코드가 있으면 소비자와 테스트를 확인하고 필요한 동작을 합친다.
 - 화면 요청은 hook/query/에 TanStack Query key·query·mutation을 두고, 전역 클라이언트 상태는 store/의 Zustand에 둔다. 서버 응답을 Zustand에 중복 보관하지 않는다. 확정 구조에 없는 서비스 계층은 임의로 추가하지 않는다. 여러 API 호출로 이루어진 흐름도 우선 query/mutation에서 조정하되, 새 계층이 필요해 보이면 구조를 바꾸기 전에 사용자에게 묻는다.
-- 설정이 끝나면 references/agent-ide.md를 읽고 현재 사용 중인 에이전트에 맞춰 biome-eslint-ide-config-skill을 찾아 설치하고 실행한다. 그 스킬의 사용자 확인 절차와 전체 파일 자동 수정 승인 단계를 생략하지 않는다.
-- 외부 쓰기, 발송, 결제, 실제 데이터 변경, Hosting 배포는 별도 사용자의 명시적 요청 전에는 하지 않는다. 작업 범위와 직접 연결된 테스트·빌드만 수행한다.
+- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고 이 플러그인의 모든 Skill(`kp-app-init`, `kp-app-deploy`, `kp-app-api`)을 초기화 대상 저장소의 현재 에이전트용 프로젝트 경로에 설치한다. `--global` 또는 `-g`는 사용하지 않는다. 이미 존재하는 프로젝트 로컬 Skill 경로를 덮어쓰지 말고 버전과 사용자 변경을 확인한다. 설치 후 세 Skill이 프로젝트 로컬 경로에서 확인되는지 검증한다.
+- 이후 references/agent-ide.md를 읽고 초기화 대상 저장소에만 biome-eslint-ide-config-skill을 프로젝트 로컬로 설치하고 실행한다. 사용자의 전역 Skill 설치는 대상 저장소 설치를 대체하지 않는다. 그 스킬의 사용자 확인 절차와 전체 파일 자동 수정 승인 단계를 생략하지 않는다.
+- 초기화할 때는 `package.json`, `firebase.json`, `.firebaserc`, `.env.development*`, `.env.production*`을 먼저 읽고 기존 설정을 보존하며 합친다. Vite 프로젝트의 `package.json`에는 `build:dev`와 `deploy:dev`를 반드시 추가한다. `build:dev`는 `vite build --mode development`를 실행하고, `deploy:dev`는 `npm run build:dev`를 먼저 실행한 뒤 확인된 실제 DEV Firebase 프로젝트 ID를 사용해 `firebase deploy --only hosting:dev --project <확인된 DEV 프로젝트 ID>`를 실행한다. PRD Firebase 프로젝트 ID와 Hosting 사이트 ID를 모두 확인하면 `build:prd`와 `deploy:prd`도 추가한다. `build:prd`는 `vite build --mode production`, `deploy:prd`는 `npm run build:prd` 후 확인된 PRD 프로젝트 ID로 `firebase deploy --only hosting:prd --project <확인된 PRD 프로젝트 ID>`를 실행한다. `<...>` 대체 문구를 스크립트에 남기지 않는다. 같은 이름의 기존 스크립트가 있으면 현재 동작을 확인해 합치고, 안전하게 합칠 수 없을 때만 사용자에게 선택을 요청한다.
+- Firebase Hosting 논리 타깃은 `dev`와 `prd`로 두고, `.firebaserc`에서 각 실제 Firebase 프로젝트의 타깃을 해당 환경 Hosting 사이트 ID에 연결한다. `kingdom-planet-dev`와 `kp-church-website-dev2`는 참조 저장소 값이므로 대상 앱에 복사하지 않는다. 프로젝트 ID와 Hosting 사이트 ID는 대상 저장소에서 확인하거나 사용자에게 받은 값만 사용한다.
+- `firebase.json`은 `assets/templates/firebase.json`을 기준으로 `dist` 출력, SPA rewrite, 캐시 헤더를 설정한다. 기존 Hosting 설정이 있으면 덮어쓰지 말고 합친다. `.firebaserc`가 없을 때만 `assets/templates/.firebaserc.example`을 기반으로 확인된 프로젝트·사이트 값을 채워 생성한다.
+- DEV와 PRD 설정을 함께 다룰 때 각 환경은 해당 환경의 Firebase 프로젝트 ID, Hosting 사이트 ID, Vite mode, Hosting 도메인을 개별 연결한다. 프로젝트별 Hosting 사이트 이름을 추측하거나 다른 앱의 값을 재사용하지 않는다.
+- Git 커밋, push, PR 생성·병합은 `.agents/references/commit-rule.md`와 `.agents/references/pr-rule.md`의 승인·완료 절차를 따른다. 메시지 발송, 결제, 실제 데이터 변경, Firebase Hosting 배포는 사용자가 해당 작업을 별도로 명시적으로 요청하기 전에는 하지 않는다. 그 밖에는 작업 범위와 직접 연결된 테스트·빌드만 수행한다.
 
 ## 마무리
 
 초기화, 코드 연결, 로컬 검증이 끝나면 대상 저장소에서 /init을 실행한다. 생성된 결과를 확인하고 아래 문서 계약에 맞게 보완한다.
 
 - 루트 AGENTS.md에 실제 폴더 트리를 그리고 .agents/references/의 상세 문서와 하위 AGENTS.md로 연결한다.
+- 생성하는 루트 `AGENTS.md`에는 작업마다 최소한 `main`/`dev`가 아닌 별도 작업 브랜치를 사용하고, 권장 방식은 작업별 워크트리와 브랜치를 함께 만드는 것이라고 명시한다. `main`/`dev`에 직접 push하려면 push 직전에 매번 사용자의 명시적 승인을 받도록 한다. GitHub 원격 인증 계정과 Git 커밋 identity가 같은 사용자 계정이어야 하며, `AGENTS.local.md`에 정한 author·committer 이름과 이메일을 커밋 전에 확인하도록 명시한다. author와 committer 이메일은 모두 해당 GitHub 계정에 인증된 이메일 또는 그 계정의 noreply 주소여야 한다.
+- 생성하는 루트 `AGENTS.md`에는 모든 작업을 기능·수정 목적별 맥락으로 나누고, 각 맥락의 구현과 직접 검증이 끝날 때마다 독립 커밋으로 남긴다고 명시한다. 작업 완료는 확인된 base를 대상으로 PR을 만들고 필요한 검사와 리뷰가 끝난 뒤 PR을 base에 병합해야 완료된다고 명시한다. PR 없이 브랜치를 base에 직접 병합하는 작업은 사전에 사용자의 명시적 승인을 받도록 한다.
 - `assets/templates/.agents/references/commit-rule.md`와 `pr-rule.md`를 각각 대상 저장소의 `.agents/references/commit-rule.md`와 `pr-rule.md`로 복사하고, `assets/templates/.references/PULL_REQUEST_TEMPLATE.md`를 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`로 복사한다. 같은 경로의 기존 문서가 있으면 덮어쓰지 말고 내용을 합친다.
-- 루트 `AGENTS.md`에서 `.agents/references/commit-rule.md`, `.agents/references/pr-rule.md`, `.references/PULL_REQUEST_TEMPLATE.md`로 연결한다. 세부 규칙은 해당 참조 문서에 두고 `AGENTS.md`에는 라우팅 링크를 유지한다.
+- 루트 `AGENTS.md`에서 `.agents/references/commit-rule.md`, `.agents/references/pr-rule.md`, `.references/PULL_REQUEST_TEMPLATE.md`로 연결한다. 세부 규칙은 해당 참조 문서에 두고 `AGENTS.md`에는 라우팅 링크를 유지한다. 이 플러그인의 프로젝트 로컬 Skill 설치 경로를 확인해 `kp-app-init`은 초기화·구조 작업에, `kp-app-deploy`는 명시적 Firebase Hosting 배포 요청에, `kp-app-api`는 새 KP API 기능 연동·기존 연동 수정에 사용하도록 안내한다.
 - 각 주요 소스 계층에 해당 코드의 실제 지도와 책임을 담은 AGENTS.md를 만든다. 경로는 최소한 src/api/, src/schema/, src/type/, src/store/, src/hook/, src/provider/, src/router/, src/component/, src/page/, src/config/, src/util/을 조사한다.
 - 루트와 참조 문서에는 모든 새 폴더명·함수명·변수명을 단수로 짓는 Dixsoft 원칙을 기록한다. 배열 등 집합 변수는 userList, memberMap처럼 단수 도메인명 뒤에 자료형 의미를 붙인다. KP wire 필드·endpoint, 외부 라이브러리 계약은 바꾸지 않는다.
 - 빌드, 테스트, 정적 분석 결과와 실제 DEV OAuth·주요 읽기 동작 결과를 나누어 보고한다. 실제 브라우저 동작을 확인하지 못했으면 코드 수준 검증과 구분해 적는다.
@@ -55,6 +62,8 @@ metadata:
 ## 필요한 상세 자료
 
 - 인증·API·저장소 경계: [references/kp-api-and-security.md](references/kp-api-and-security.md)
-- 목표 프로젝트 문서 구조: [references/project-guide.md](references/project-guide.md)
+- 프론트엔드 아키텍처 계약: [references/frontend-architecture.md](references/frontend-architecture.md)
+- 이 플러그인의 전체 Skill 프로젝트 로컬 설치: [references/plugin-skills.md](references/plugin-skills.md)
+- 새 KP API 기능의 계약 확인과 기존 앱 연동: [프로젝트 로컬 `kp-app-api` Skill](../kp-app-api/SKILL.md)
 - 에이전트별 IDE 스킬 설치와 실행: [references/agent-ide.md](references/agent-ide.md)
 - 새 앱 파일로 복사할 코드: assets/templates/
