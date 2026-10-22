@@ -48,9 +48,11 @@ manager 플러그인은 모든 KP Skill의 공통 필수 의존성입니다. 아
 - 새 Skill 버전은 `1.0.0`에서 시작합니다. Skill의 `metadata.version`은 개별 Skill 이력을, `.claude-plugin/plugin.json`과 marketplace의 버전은 해당 플러그인 패키지 이력을 나타냅니다. 한 Skill의 변경도 plugin package에 들어가면 플러그인 버전을 별도로 올립니다. 기존 버전을 임의로 초기화하지 않습니다.
 - 버전 숫자는 사용자가 지정하도록 묻지 않습니다. 릴리스 요청이 승인된 뒤 변경 영향에 따라 SemVer를 정하고 Skill 정본·plugin manifest·marketplace·README를 일치시킵니다. 단순 로컬 편집·검토에서는 버전을 올리지 않습니다.
 
-## 릴리스와 병합 완료 기준
+## 프로젝트 초안, 정본 승격과 계정별 PR 경로
 
-- GitHub 계정이 kp-skill 관리자([bwlee-dix](https://github.com/bwlee-dix))가 아니면 승인된 변경을 PR로 제출합니다. PR 본문과 commit은 저장소 규칙을 따릅니다.
-- 관리자의 “승인 완료”는 PR 리뷰 승인만을 뜻하지 않습니다. PR이 기본 브랜치에 실제로 병합되어 변경이 반영된 상태를 뜻합니다. 리뷰 승인은 병합과 릴리스 완료의 증거가 아닙니다.
-- 병합이 확인되기 전에는 Skill이 배포됐다고 답하거나 프로젝트 설치본을 공개 정본으로 갱신하지 않습니다. 병합 후 원격 정본·버전을 확인하고, 요청된 프로젝트 범위에서 설치 갱신을 진행합니다.
-- 병합은 원격 저장소의 기본 브랜치 변경 증거입니다. marketplace refresh, provider 설치본 변경, 실행 중 세션 reload는 별도로 확인하고 각각 보고합니다.
+- 새 Skill의 기본 결과물은 사용자가 지정한 프로젝트의 `.agents/skills/<skill-name>/`(Codex) 또는 `.claude/skills/<skill-name>/`(Claude Code)에 둡니다. 명시적인 정본 승격 요청 없이 로컬 `kp-skill` clone이나 다른 프로젝트를 수정하지 않습니다.
+- 사용자가 `kp-skill`에 정본으로 추가하거나 배포해 달라고 명시한 경우에만 정본 승격을 시작합니다. 공개 레포 사용자는 자신이 만든 프로젝트 초안에서 시작해 fork를 만들고, 그 fork를 로컬에 가져와 작업 branch와 PR을 만듭니다. PR은 upstream 기본 branch를 대상으로 하며, 정본 관리자가 실제 병합할 때까지 기다립니다.
+- GitHub 로그인 계정이 관리자([bwlee-dix](https://github.com/bwlee-dix))이고 Git author·committer도 같은 계정이면 fork 절차를 건너뜁니다. `kingdompla-net/kp-skill`의 로컬 정본 clone과 일치하는 `origin`을 확인하고 `main`을 fetch합니다. 작업 트리가 깨끗할 때만 `git pull --ff-only origin main`을 실행합니다. 기존 변경이 있으면 보존하고 `origin/main` 기반 별도 작업 branch나 worktree를 사용합니다.
+- 관리자는 승인된 정본 작업에 대해 기능 branch commit·push와 `main` 대상 PR을 진행할 수 있으며, 추가 사용자 승인을 기다리지 않고 PR을 병합할 수 있습니다. 필수 검사가 통과하고 다른 차단 조건이 없을 때만 병합합니다. 리뷰 승인만 요구될 때 관리자 우회를 사용할 수 있지만 실패한 검사는 우회하지 않습니다. 정본 기본 branch에 직접 push하지 않습니다.
+- 계정 확인이 안 되거나 Git identity가 GitHub 로그인과 다르면 계정별 경로를 선택하지 말고 인증과 identity를 바로잡습니다. 정본 PR 제목과 본문은 현재 저장소 지침과 canonical PR template을 따릅니다.
+- PR의 병합, Git tag push, GitHub Release, marketplace 갱신은 서로 다른 상태입니다. 사용자가 릴리스를 요청한 경우에만 해당 범위의 게시 절차를 이어가며, PR이 실제 병합되지 않았다면 정본에 반영되거나 배포됐다고 보고하지 않습니다. 병합 후 원격 정본·버전을 다시 확인하고, 설치 갱신은 요청된 프로젝트 범위에서 별도로 검증합니다.

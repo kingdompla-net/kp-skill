@@ -2,7 +2,7 @@
 name: kp-skill-create
 description: "KP Skill 저장소에서 새 플러그인과 기본 Skill을 함께 만들거나, 지정한 기존 플러그인에 Skill을 추가할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP Skill과 플러그인 생성
@@ -35,8 +35,12 @@ metadata:
 
 ## 계정·권한·배포 경계
 
-- 파일 생성은 로컬 변경으로 마무리합니다. PR 생성, tag push, marketplace 갱신과 배포는 현재 요청과 저장소 승인 규칙이 허용한 범위에서만 진행합니다.
-- PR이나 release가 필요하면 활성 GitHub 계정과 Git author·committer가 일치하는지 확인하고 저장소의 PR 절차를 따릅니다. kp-skill 관리자([bwlee-dix](https://github.com/bwlee-dix))의 Ruleset 우회 권한도 PR, push, merge 또는 release 승인을 대신하지 않습니다.
+- 새 Skill은 기본적으로 사용자가 지정한 프로젝트에 초안으로 만듭니다. Codex는 `<project>/.agents/skills/<skill-name>/`, Claude Code는 `<project>/.claude/skills/<skill-name>/`를 사용하고, 명시적인 요청 없이 전역 경로나 정본 저장소를 수정하지 않습니다.
+- 사용자가 `kp-skill` 정본에 추가하거나 배포해 달라고 명시한 경우에만 초안을 정본 후보로 승격합니다. 먼저 [KP Skill 관계표와 생성·버전·네이밍 원칙](../kp-skill-install/references/kp-skill-catalog-and-authoring.md)을 읽고 정본 반영 범위를 확인합니다.
+- 활성 로그인은 `gh api user --jq .login`으로 확인하고 Git author·committer가 같은 계정인지 검증합니다. 로그인 계정이 관리자([bwlee-dix](https://github.com/bwlee-dix))이면 fork하지 않고 `kingdompla-net/kp-skill`의 로컬 정본 체크아웃을 사용합니다. `origin`이 정본 저장소인지 확인한 뒤 `main`을 fetch합니다. 체크아웃이 깨끗하면 `git pull --ff-only origin main`을 실행하고, 미커밋 변경이 있으면 이를 보존한 채 `origin/main`에서 별도 작업 브랜치나 worktree를 만듭니다.
+- 관리자 계정은 별도 승인 없이 작업 브랜치에 커밋·push하고 정본 `main` 대상 PR을 생성할 수 있습니다. 필수 검사가 통과하고 병합을 막는 조건이 없으면 추가 승인을 기다리지 않고 PR을 병합합니다. 리뷰 승인만 요구되는 경우에만 관리자 우회를 사용하며, 실패한 검사나 다른 필수 병합 조건은 우회하지 않습니다. 정본 branch에 직접 push하지 않습니다.
+- 다른 GitHub 계정이면 먼저 upstream의 fork를 만들고 해당 fork를 로컬에 가져와 작업 브랜치에서 수정합니다. 정본 저장소의 기본 branch를 대상으로 PR을 생성하고, 관리자가 실제 병합할 때까지 기다립니다. 관리자의 로컬 clone이나 사용자의 다른 체크아웃에 의존하지 않습니다.
+- tag push, GitHub Release, marketplace 갱신은 사용자가 명시적으로 릴리스를 요청한 경우에만 진행합니다. PR 생성이나 병합을 릴리스·배포의 증거로 취급하지 않습니다.
 - 변경 전후 파일 목록, 링크와 manifest 정합성, Skill frontmatter 및 버전을 검증합니다. 검증되지 않은 Skill을 marketplace에 등록했다고 보고하지 않습니다.
 
 ## 종료 보고

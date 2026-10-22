@@ -1,9 +1,3 @@
-Target-Delivery-Unit:
-Target-Version:
-Delivery-Profile:
-
-> 승인된 이슈·로드맵·브랜치·base·릴리스 맥락에서 값을 확인하세요. Target-Version은 변경 내용에 맞춰 SemVer를 선택하고 사용자에게 버전 번호를 묻지 마세요.
-
 이번 PR의 목적을 한 문장으로 요약해주세요.
 
 ## 📋 변경 사항
@@ -19,7 +13,7 @@ Delivery-Profile:
 
 > 테스트 방법을 단계별로 작성해주세요.
 
-- [ ] 전달 단위, 브랜치, base, PR 메타데이터가 서로 일치한다.
+- [ ] 변경 범위와 검증 결과를 확인했습니다.
 
 ## 🧾 스크린샷 또는 동영상 (선택)
 

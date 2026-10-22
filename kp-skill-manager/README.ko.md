@@ -1,6 +1,6 @@
 # KP Skill Manager
 
-버전: 1.0.0
+버전: 1.0.1
 
 `kp-skill-manager`는 이 저장소의 플러그인과 Skill을 생성하고, SemVer와 Git 태그로 버전을 관리하며, 승인된 변경을 배포하고, 지정된 프로젝트의 로컬 Skill 설치를 갱신합니다.
 
@@ -8,9 +8,9 @@
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.0` | 새 플러그인과 진입 Skill을 함께 만들거나 기존 플러그인에 Skill을 추가할 때 | 지정된 플러그인의 문서·manifest·버전 관례를 조사하고 새 구성을 정본과 목록에 연결합니다. |
-| [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.0` | Skill 개선 배포, 버전 이력 조회 또는 이전 버전 콘텐츠를 새 버전으로 재발행할 때 | 변경 영향에 따라 버전을 올리고 manifest·README·태그를 맞춘 뒤 계정과 승인 절차에 맞춰 릴리스합니다. |
-| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.0` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 설치 출처와 범위를 확인하고 선택한 플러그인 또는 전체 KP Skill 설치를 갱신한 뒤 실제 파일 버전을 검증합니다. |
+| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.1` | 프로젝트에 Skill 초안을 만들거나 명시적으로 정본 승격을 요청할 때 | 기본적으로 현재 프로젝트에 Skill을 만들고, 관리자·기여자 계정에 맞는 PR 경로를 따릅니다. |
+| [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.1` | Skill 개선 배포, 버전 이력 조회 또는 이전 버전 콘텐츠를 새 버전으로 재발행할 때 | 변경 영향에 따라 버전을 올리고 manifest·README·태그를 맞춘 뒤 계정에 따른 PR·병합 경로를 따릅니다. |
+| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.1` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 설치 출처와 범위를 확인하고 선택한 플러그인 또는 전체 KP Skill 설치를 갱신한 뒤 실제 파일 버전을 검증합니다. |
 
 ## 프로젝트 로컬 설치
 
@@ -40,7 +40,7 @@ GitHub 태그만 만들었다고 모든 에이전트의 marketplace나 설치 �
 
 ## 계정과 PR
 
-릴리스 전에 활성 GitHub 계정과 Git author·committer를 확인합니다. kp-skill 관리자([bwlee-dix](https://github.com/bwlee-dix)) 계정에 Ruleset 우회 권한이 있더라도 저장소 절차에 따라 PR을 만들고 병합한 뒤 릴리스합니다. 관리자 권한은 직접 push·merge·태그 배포 승인을 대신하지 않습니다. 다른 계정으로 인증된 상태에서는 PR 경로를 사용합니다.
+릴리스 전에 활성 GitHub 계정과 Git author·committer가 일치하는지 확인합니다. 로그인 계정이 kp-skill 관리자([bwlee-dix](https://github.com/bwlee-dix))이면 로컬 정본 저장소에서 `main`을 최신화하고 PR을 만든 뒤 필수 검사가 통과하면 추가 승인을 기다리지 않고 병합합니다. 리뷰 승인만 차단 조건인 경우에만 관리자 우회를 사용하며 실패한 검사는 우회하지 않습니다. 다른 계정은 fork를 로컬에 가져와 upstream 대상 PR을 만들고 관리자의 실제 병합을 기다립니다. 두 경로 모두 기본 branch에 직접 push하지 않습니다. tag·GitHub Release·marketplace 게시에는 사용자의 명시적인 릴리스 요청이 필요합니다.
 
 ## 사용 순서
 

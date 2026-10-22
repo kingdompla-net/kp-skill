@@ -8,9 +8,9 @@ KP Skill provides agent-neutral guidance reusable across Kingdom Planet projects
 
 | Plugin | Version | Description |
 | --- | --- | --- |
-| [`kp-app-skill`](kp-app-skill/README.md) | `2.6.0` | Includes [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), and [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md). |
+| [`kp-app-skill`](kp-app-skill/README.md) | `2.6.1` | Includes [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), and [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md). |
 | [`kp-api-skill`](kp-api-skill/README.md) | `1.0.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), and [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md). |
-| [`kp-skill-manager`](kp-skill-manager/README.md) | `1.0.0` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), and [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md). |
+| [`kp-skill-manager`](kp-skill-manager/README.md) | `1.0.1` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), and [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md). |
 
 Install a plugin's complete Skill set directly into an existing repository; initialization is not required. For a new app or API codebase, the relevant init Skill can also install the whole plugin locally at the end of setup. Use the [app guide](kp-app-skill/README.ko.md), [API guide](kp-api-skill/README.ko.md), or [Skill Manager guide](kp-skill-manager/README.ko.md) for skill routing and install commands.
 
@@ -41,7 +41,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
   --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
-For a new app or API repository, install the complete manager set first, then start with that plugin's init Skill. After initialization, `kp-app-init` installs only the other two Skills in `kp-app-skill` into the same project and agent scope; it does not install `kp-api-skill`. `kp-api-init` installs only the other six Skills in `kp-api-skill`; it does not install `kp-app-skill`. This bundle expansion happens when the init Skill runs. Existing repositories can install a full plugin set or a named Skill without reinitialization. Claude native plugin installation is separate from Skills CLI copy installation; check its host for scope support.
+For a new app or API repository, install the complete manager set first, then start with that plugin's init Skill. After initialization, `kp-app-init` installs the other four Skills in `kp-app-skill` into the same project and agent scope; it does not install `kp-api-skill`. `kp-api-init` installs only the other six Skills in `kp-api-skill`; it does not install `kp-app-skill`. This bundle expansion happens when the init Skill runs. Existing repositories can install a full plugin set or a named Skill without reinitialization. Claude native plugin installation is separate from Skills CLI copy installation; check its host for scope support.
 
 ## Repository structure
 
