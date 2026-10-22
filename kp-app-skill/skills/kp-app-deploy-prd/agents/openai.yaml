@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP App Deploy PRD"
+  short_description: "PRD는 빌드 후 실제 배포 승인 확인"
+  default_prompt: "현재 프로젝트의 Firebase Hosting PRD를 검증하고 빌드해 주세요. 실제 배포는 별도 승인 후에만 실행합니다."
+
+policy:
+  allow_implicit_invocation: false

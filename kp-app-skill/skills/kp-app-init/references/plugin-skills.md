@@ -28,11 +28,11 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
   --skill kp-app-init --agent codex --copy --yes
 ~~~
 
-이 명령은 `kp-app-init`만 설치합니다. 초기화가 끝난 뒤 기존 `kp-app-api`, `kp-app-deploy`, `kp-app-preview-release`, `kp-app-preview-delete` 파일·버전·사용자 수정을 확인하고, 없는 Skill만 설치합니다. 네 Skill이 모두 없다면 다음처럼 설치합니다.
+이 명령은 `kp-app-init`만 설치합니다. 초기화가 끝난 뒤 기존 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete` 파일·버전·사용자 수정을 확인하고, 없는 Skill만 설치합니다. 여섯 Skill이 모두 없다면 다음처럼 설치합니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
-  --skill kp-app-api kp-app-deploy kp-app-preview-release kp-app-preview-delete --agent codex --copy --yes
+  --skill kp-app-api kp-app-deploy kp-app-deploy-dev kp-app-deploy-prd kp-app-preview-release kp-app-preview-delete --agent codex --copy --yes
 ~~~
 
 기존 Skill을 자동으로 덮어쓰지 않습니다. 로컬 수정이 있으면 보존해 병합하고 결과를 확인합니다. 설치가 끝난 Codex 경로는 다음과 같습니다.
@@ -45,6 +45,8 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
 ├── kp-app-init/
 ├── kp-app-api/
 ├── kp-app-deploy/
+├── kp-app-deploy-dev/
+├── kp-app-deploy-prd/
 ├── kp-app-preview-release/
 └── kp-app-preview-delete/
 ~~~
@@ -76,5 +78,5 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
 
 - `kp-skill-manager` 세 Skill과 현재 앱 플러그인 버전의 모든 Skill이 현재 에이전트의 프로젝트 로컬 경로에 있는지 확인합니다.
 - 각 Skill 디렉터리에 유효한 `SKILL.md`가 있고 `metadata.version`이 플러그인 README의 개별 버전과 맞는지 확인합니다. Plugin version은 개별 Skill 버전과 별도로 관리합니다.
-- `kp-app-init`은 초기화·구조 연결 작업에, `kp-app-api`는 새 KP API 기능 연동·기존 연동 수정에, `kp-app-deploy`는 사용자가 환경을 명시해 요청한 DEV 또는 PRD Firebase Hosting live 배포에 연결합니다. `kp-app-preview-release`는 검토용 Preview Channel 배포에, `kp-app-preview-delete`는 검토 완료 또는 PR 병합 뒤 해당 Preview 정리에 연결합니다.
+- `kp-app-init`은 초기화·구조 연결 작업에, `kp-app-api`는 새 KP API 기능 연동·기존 연동 수정에, 환경을 지정하지 않은 `kp-app-deploy`는 기본 DEV 배포에 연결합니다. DEV·PRD를 고정해 호출하는 Claude Code 프로젝트 Skill은 각각 `/kp-app-deploy-dev`, `/kp-app-deploy-prd`이며, 플러그인 설치에서는 `/kp-app-skill:kp-app-deploy-dev`, `/kp-app-skill:kp-app-deploy-prd`를 사용합니다. Codex에서는 `$kp-app-deploy-dev`, `$kp-app-deploy-prd`를 선택합니다. `kp-app-preview-release`는 검토용 Preview Channel 배포에, `kp-app-preview-delete`는 검토 완료 또는 PR 병합 뒤 해당 Preview 정리에 연결합니다.
 - 별도 `biome-eslint-ide-config-skill`은 이 플러그인에 포함되지 않습니다. 해당 Skill은 [agent-ide.md](agent-ide.md)의 절차에 따라 같은 대상 저장소의 프로젝트 로컬 경로에 따로 설치합니다.
