@@ -1,78 +1,63 @@
 # KP App Skill
 
-Version: 2.4.0
+Version: 2.5.0
 
-The `kp-app-skill` plugin provides project initialization, API integration, and Firebase Hosting deployment Skills for KP React applications.
+`kp-app-skill` provides project-local Skills for initializing KP React applications, integrating KP APIs, and deploying Firebase Hosting.
 
-| Skill | Purpose |
-| --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | Initialize a designed React source repository as a KP API application, preserving its UI and connecting verified auth, environment, and project guidance. |
-| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | Validate and deploy the requested DEV or PRD Firebase Hosting environment. |
-| [`kp-app-api`](skills/kp-app-api/SKILL.md) | Check the official KP API contract and integrate the requested feature into an initialized app. |
+| Skill | Version | When to use | Purpose |
+| --- | --- | --- | --- |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.5.0` | First connecting a designed React repository as a KP app | Preserve the existing UI, configure verified KP API and Firebase environments, write project guidance, and install all three Skills in the active agent's project directory. |
+| [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.5.0` | Adding a feature or changing a KP API integration in an existing app | Verify the official API contract and connect it to the existing app architecture. |
+| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.5.0` | When the user requests a DEV or PRD Hosting deployment | Verify the target Firebase project and Hosting target, then deploy Hosting only. |
 
-The initialization Skill includes API and security guidance, IDE setup references, and reusable source templates. During initialization, it adds `build:dev` and `deploy:dev` scripts to the target app's `package.json`; it also adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. At the end of initialization, it installs all three Skills in this plugin to the initialized repository's project-local path for the active agent.
+Initialization adds `build:dev` and `deploy:dev` scripts to the app's `package.json`; it adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. Passwords and tokens stay in an OS Keychain or organization secret manager. `AGENTS.local.md` may contain non-secret account and environment references, never credential values.
 
 ## Generated repository rules
 
-The generated repository rules keep each work context in its own commit as implementation and direct verification finish. After all contexts pass, the agent creates a PR against the confirmed base and merges it after required checks and reviews; a direct branch merge without a PR requires explicit user approval in advance. A direct push to `main` or `dev` also requires explicit user approval immediately before the push. Before committing, the active GitHub account and both Git author and committer identities must belong to the same account; each commit email must be verified for that account or be its GitHub noreply address. Account-specific identity details are kept in the target repository's ignored `AGENTS.local.md`. Firebase Hosting uses `vite build --mode development` and `hosting:dev` for DEV, and `vite build --mode production` and `hosting:prd` for PRD. Each target uses its verified Firebase project and Hosting site IDs. The initialization Skill installs all three plugin Skills and the auxiliary Biome/ESLint setup Skill only in the target repository's agent-specific project directory, not in the user's global Skill directory.
+Each work context gets its own commit after implementation and direct verification finish. Once all contexts pass, the agent creates a PR against the confirmed base and merges it after required checks and reviews. A direct base merge without a PR or a direct push to `main` or `dev` requires explicit user approval immediately before the action. Before committing, verify the active GitHub account and Git author/committer identities belong to the same account, and use an email verified for that account or its GitHub noreply address. Firebase Hosting uses `vite build --mode development` and `hosting:dev` for DEV, and `vite build --mode production` and `hosting:prd` for PRD, with each environment's verified project and site IDs.
 
 ## Install
 
-### 1. Portable Skill for all agents (`npx skills`)
-
-This is the portable installation path. It copies the complete bootstrap Skill directory, including references and templates, to the selected user account for the supported agents:
+All KP Skills require the complete three-Skill `kp-skill-manager` set in the same project and agent scope. If it is not installed, explain why and where it will be installed, then install the manager first after the user consents. If the user declines, do not install the app Skills.
 
 ~~~bash
-REMOTE_REPO="${REMOTE_REPO:-https://github.com/kingdompla-net/kp-skill}"
-npx skills add "$REMOTE_REPO" --skill kp-app-init \
-  --agent codex claude-code hermes-agent openclaw --global --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' -a codex --copy --yes
 ~~~
 
-This installs the `kp-app-init` bootstrap Skill for the selected user account. During initialization, it copies `kp-app-init`, `kp-app-deploy`, and `kp-app-api` into the target application's project-local directory for the active agent, without `--global`.
+### Bootstrap a new repository
 
-To install for one agent, pass only one value after `--agent`, for example `--agent codex`.
-
-### 2. Native Codex plugin
+Run from the target repository root. Existing repositories do not need to run initialization.
 
 ~~~bash
-REMOTE_REPO="${REMOTE_REPO:-https://github.com/kingdompla-net/kp-skill}"
-codex plugin marketplace add "$REMOTE_REPO" --ref main
-codex plugin add "kp-app-skill@kp-skill"
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
+  --skill kp-app-init -a codex --copy --yes
 ~~~
 
-Start a new Codex session after installation.
+At the end of initialization, `kp-app-init`, `kp-app-api`, and `kp-app-deploy` are installed in the active agent's project-level directory.
 
-### 3. Native Claude Code plugin
+### Install the full plugin in an existing repository
+
+Run from the repository root. Repeat `-a` for each agent that should see the project-local Skills:
+
+If the manager is missing from the selected agent path, install all manager Skills first with the same `-a` options, then install the app plugin.
 
 ~~~bash
-REMOTE_REPO="${REMOTE_REPO:-https://github.com/kingdompla-net/kp-skill}"
-claude plugin marketplace add "$REMOTE_REPO"
-claude plugin install "kp-app-skill@kp-skill"
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
 ~~~
-
-### 4. Native Hermes Agent Skill
 
 ~~~bash
-RAW_REPO="${RAW_REPO:-https://raw.githubusercontent.com/kingdompla-net/kp-skill/main}"
-hermes skills install "$RAW_REPO/kp-app-skill/skills/kp-app-init/SKILL.md" --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
+  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
 ~~~
 
-The direct URL installs the entry Skill. Use the portable `npx skills` method when the agent needs the complete reference and template directory.
+Remove unused `-a` options if needed. The default scope is the current project. Do not add `--global` or `-g` when the Skills should stay with this repository.
 
-### 5. Native OpenClaw Skill
+### Update or use a native plugin
 
-~~~bash
-REMOTE_REPO="${REMOTE_REPO:-https://github.com/kingdompla-net/kp-skill}"
-repo_dir="$(mktemp -d)/kp-skill"
-git clone --depth 1 "$REMOTE_REPO.git" "$repo_dir"
-target="$HOME/.openclaw/skills/kp-app-init"
-mkdir -p "$target"
-cp -R "$repo_dir/kp-app-skill/skills/kp-app-init/." "$target/"
-openclaw skills list
-~~~
-
-The portable installation keeps the complete directory for all four agents. Native plugin and Skill installers use each agent's supported installation mechanism.
+The canonical Skills live in the `kp-skill` repository. From the target project root, run `npx skills update` and review changed files while preserving local edits. Native plugin installation follows each agent's supported scope; if it only installs to a user profile, use the project installation above for repository-only availability.
 
 ## Use
 
-Invoke `kp-app-init` when initializing a designed source repository, `kp-app-api` when connecting or updating a KP API feature in an existing app, and `kp-app-deploy` when a user explicitly requests a Firebase Hosting deployment and names DEV or PRD.
+Invoke `kp-app-init` to connect a designed source repository for the first time, `kp-app-api` to add or change a KP API integration in an existing app, and `kp-app-deploy` when the user requests a Firebase Hosting deployment and names DEV or PRD.

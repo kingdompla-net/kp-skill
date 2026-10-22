@@ -1,8 +1,8 @@
 ---
 name: kp-app-api
-description: "초기화된 KP React 앱에 새 KP API 기능을 연결하거나 기존 API 연동을 수정할 때 사용한다."
+description: "초기화된 KP React 앱에 새 KP API 기능을 연결하거나 기존 API 연동을 수정할 때 사용합니다."
 metadata:
-  version: "2.4.0"
+  version: "2.5.0"
 ---
 
 # KP 앱 API 연동
@@ -21,3 +21,9 @@ metadata:
 8. 변경된 동작, 참조한 API 계약, 실행한 검사와 남은 한계를 보고한다. 코드·모의 테스트 결과를 실제 외부 서비스 동작 확인으로 표현하지 않는다.
 
 API 계약, 인증, 데이터 소유권의 세부 원칙은 위에 연결한 `kp-app-init` 참조 문서를 기준으로 한다. 계정·프로젝트 환경이 불명확하거나 Developer Center에서 계약을 확인할 수 없으면 해당 연동을 추측 구현하지 말고 필요한 정보와 막힌 범위를 설명한다.
+
+## KP Skill 관계와 관리자 설치
+
+- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
+- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
+- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

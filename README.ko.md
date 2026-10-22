@@ -2,34 +2,50 @@
 
 # KP Skill
 
-KP Skill은 Kingdom Planet 앱을 만들 때 재사용하는 에이전트 중립 지침을 제공합니다. `kp-app-skill` 플러그인은 초기화를 위한 `kp-app-init`, 기존 앱 API 연동을 위한 `kp-app-api`, Firebase Hosting 배포를 위한 `kp-app-deploy`를 제공합니다.
+KP Skill은 Kingdom Planet 프로젝트에서 재사용하는 에이전트 중립 지침을 제공합니다. `kp-app-skill`은 React 앱 초기화·API 연동·Firebase Hosting을, `kp-api-skill`은 Firebase Functions 코드베이스 초기화·endpoint·worker·격리 테스트·배포·API 문서 반영을, `kp-skill-manager`는 Skill 생성·버전 관리·배포·설치 업데이트를 다룹니다.
 
 ## 제공 플러그인
 
 | 플러그인 | 버전 | 설명 |
 | --- | --- | --- |
-| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.4.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md)를 제공합니다. |
+| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.5.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md)를 제공합니다. |
+| [`kp-api-skill`](kp-api-skill/README.ko.md) | `1.0.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md)를 제공합니다. |
+| [`kp-skill-manager`](kp-skill-manager/README.ko.md) | `1.0.0` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md)을 제공합니다. |
 
-생성된 앱 저장소는 작업 맥락별로 구현과 직접 검증이 끝날 때마다 별도 커밋을 남깁니다. 모든 맥락의 검증 후 확인된 base 대상 PR을 만들고 필수 검사와 리뷰가 끝나면 병합합니다. PR 없이 브랜치를 base에 직접 병합하려면 사전에 사용자의 명시적 승인을 받아야 합니다. `main`/`dev` 직접 push도 직전에 명시적 승인을 받아야 합니다. 활성 GitHub 계정과 Git author·committer identity는 같은 계정이어야 하고, 각 커밋 이메일은 해당 계정에 인증되어 있거나 그 계정의 GitHub noreply 주소여야 합니다. 초기화 시 대상 앱 `package.json`에 `build:dev`와 `deploy:dev`를 추가하고, PRD 프로젝트와 사이트가 확인되면 `build:prd`와 `deploy:prd`도 추가합니다. 초기화 후 세 Skill은 현재 에이전트의 프로젝트 로컬 경로에 설치됩니다. Biome·ESLint 설정용 보조 Skill도 같은 대상 저장소 안에 별도로 설치합니다. 자세한 내용은 [플러그인 안내](kp-app-skill/README.ko.md)를 참고하세요.
+새 저장소를 초기화하지 않아도 기존 앱·API 저장소에 해당 플러그인의 전체 Skill 묶음을 프로젝트 로컬로 설치할 수 있습니다. 역할과 설치 방법은 [앱 플러그인 안내](kp-app-skill/README.ko.md), [API 플러그인 안내](kp-api-skill/README.ko.md), [Skill 관리자 안내](kp-skill-manager/README.ko.md)에서 확인해 주세요.
 
-## 지원 에이전트에 공통 Skill 설치
+## 모든 KP Skill의 공통 설치 조건
 
-Codex, Claude Code, Hermes Agent, OpenClaw의 사용자 계정에 초기화용 `kp-app-init`과 참고 자료·템플릿을 설치합니다.
+`kp-skill`의 앱 또는 API Skill을 설치하기 전, 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 플러그인의 세 Skill 전체를 설치합니다. manager가 없으면 필요한 이유와 설치 경로를 설명하고 사용자 동의를 받은 뒤 아래 명령을 실행합니다. 동의를 거절하면 대상 KP Skill을 설치하지 않습니다.
 
 ~~~bash
-REMOTE_REPO="${REMOTE_REPO:-https://github.com/kingdompla-net/kp-skill}"
-npx skills add "$REMOTE_REPO" --skill kp-app-init \
-  --agent codex claude-code hermes-agent openclaw --global --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
 ~~~
 
-여기서는 초기화에 필요한 `kp-app-init`을 먼저 설치합니다. 앱 초기화 과정에서 플러그인의 모든 Skill이 대상 저장소의 현재 에이전트용 프로젝트 로컬 경로에 복사됩니다. 대상 저장소로 복사할 때는 `--global`을 사용하지 않습니다.
+## 기존 저장소에 프로젝트 로컬 설치
 
-에이전트별 네이티브 설치 방법은 [플러그인 안내](kp-app-skill/README.ko.md)를 확인하세요. 네이티브 플러그인 설치와 공용 Skill 설치는 별도 방식으로 안내합니다.
+명령은 대상 저장소 루트에서 실행합니다. 아래 예시는 앱 Skill 전체를 Codex, Claude Code, Hermes Agent, OpenClaw의 프로젝트 로컬 경로에 복사합니다. 사용하지 않는 agent는 명령에서 제외할 수 있습니다.
+
+~~~bash
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
+  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+~~~
+
+기존 API 저장소에서는 API 플러그인 전체를 같은 방식으로 설치합니다.
+
+~~~bash
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
+  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+~~~
+
+새 앱이나 API codebase에서는 초기화 Skill 하나를 프로젝트 로컬로 설치해 시작할 수 있습니다. 초기화가 끝나면 해당 플러그인의 나머지 Skill도 같은 저장소에 설치됩니다. 기존 저장소를 재초기화할 필요는 없습니다. 기본 설치 범위는 현재 저장소이므로 전역 설치가 필요하지 않다면 `--global` 또는 `-g`를 추가하지 마세요. Native plugin의 설치 범위는 각 agent 안내에서 확인해 주세요.
 
 ## 저장소 구조
 
 ~~~text
 kp-skill/
+├── AGENTS.md
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── kp-app-skill/
@@ -42,19 +58,41 @@ kp-skill/
 │       │   ├── agents/openai.yaml
 │       │   ├── assets/templates/
 │       │   │   ├── .agents/references/{commit-rule,pr-rule}.md
+│       │   │   ├── .agents/references/cloud-access.md
 │       │   │   ├── .references/PULL_REQUEST_TEMPLATE.md
+│       │   │   ├── AGENTS.local.md
 │       │   │   ├── firebase.json
 │       │   │   └── .firebaserc.example
 │       │   └── references/
 │       ├── kp-app-deploy/
 │       │   ├── SKILL.md
 │       │   ├── agents/openai.yaml
-│       │   └── references/firebase-hosting.md
+│       │   └── references/{firebase-hosting,access-and-secrets}.md
 │       └── kp-app-api/
 │           ├── SKILL.md
 │           └── agents/openai.yaml
+├── kp-api-skill/
+│   ├── .claude-plugin/plugin.json
+│   ├── README.md
+│   ├── README.ko.md
+│   └── skills/
+│       ├── kp-api-init/
+│       ├── kp-api-endpoint/
+│       ├── kp-api-worker/
+│       ├── kp-api-test-deploy/
+│       ├── kp-api-build/
+│       ├── kp-api-deploy/
+│       └── kp-api-docs/
+├── kp-skill-manager/
+│   ├── .claude-plugin/plugin.json
+│   ├── README.md
+│   ├── README.ko.md
+│   └── skills/
+│       ├── kp-skill-create/
+│       ├── kp-skill-release/
+│       └── kp-skill-install/
 ├── README.md
 └── README.ko.md
 ~~~
 
-Skill 디렉터리를 기준 소스로 유지합니다. 에이전트별 manifest와 설치 명령은 같은 Skill 디렉터리를 사용하므로 에이전트마다 지침을 따로 관리하지 않습니다.
+각 플러그인의 `skills/`가 정본입니다. 각 agent 프로젝트 경로에는 정본 파일을 설치하므로 agent별 지침을 따로 관리하지 않습니다. 루트 `AGENTS.md`는 이 저장소의 Skill과 문서 작성 규칙을 정하고, 초기화 Skill의 `assets/templates/` 아래 `AGENTS.md`는 새 앱/API 저장소에 복사되는 템플릿입니다. 이 저장소에서 새로 만들거나 수정하는 한국어 문서는 존댓말로 작성합니다.

@@ -1,7 +1,7 @@
 interface:
   display_name: "KP App API"
   short_description: "공식 KP API 계약을 확인해 기존 앱 기능에 연결"
-  default_prompt: "요청된 API 계약을 확인하고 기존 KP 앱 구조에 연결할 때 $kp-app-api를 사용해."
+  default_prompt: "요청된 API 계약을 확인하고 기존 KP 앱 구조에 연결할 때 $kp-app-api를 사용해 주세요."
 
 policy:
   allow_implicit_invocation: true
