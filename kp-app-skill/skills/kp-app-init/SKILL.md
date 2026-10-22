@@ -2,7 +2,7 @@
 name: kp-app-init
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용합니다."
 metadata:
-  version: "2.6.0"
+  version: "2.6.1"
 ---
 
 # KP 앱 초기화

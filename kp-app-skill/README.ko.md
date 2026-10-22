@@ -1,12 +1,12 @@
 # KP 앱 Skill
 
-버전: 2.6.0
+버전: 2.6.1
 
 `kp-app-skill`은 KP React 앱 초기화와 API 연동, Firebase Hosting Preview 검토와 live 배포에 필요한 프로젝트 로컬 Skill을 제공합니다.
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.6.0` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고, 호환되는 버전·Node.js 실행 환경을 기록한 `.agents/references/spec.md`를 생성해 모든 작업자 지침에 연결합니다. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.6.1` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고, 호환되는 버전·Node.js 실행 환경을 기록한 `.agents/references/spec.md`를 생성해 모든 작업자 지침에 연결합니다. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.0` | 이미 초기화된 앱에 기능을 추가하거나 KP API 연동을 수정할 때 | 공식 API 계약을 확인해 기존 앱 구조와 query/state 경계에 연결합니다. |
 | [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.6.0` | 사용자가 DEV 또는 PRD Hosting 배포를 요청했을 때 | 대상 Firebase 프로젝트와 Hosting 타깃을 확인하고 Hosting만 배포합니다. |
 | [`kp-app-preview-release`](skills/kp-app-preview-release/SKILL.md) | `1.0.1` | 검토용 Firebase Hosting Preview Channel 배포를 요청했을 때 | 정확한 환경과 Hosting target을 검증해 만료 기간 1일의 Preview를 배포하고, 승인된 경우에만 임시 OAuth callback을 등록·검증합니다. |

@@ -2,7 +2,7 @@
 name: kp-skill-release
 description: "KP Skill을 개선해 적절한 SemVer로 배포하거나, 플러그인·Skill 버전 이력을 확인하고 이전 버전의 Skill 콘텐츠를 더 높은 새 버전으로 재발행할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP Skill 버전 관리와 릴리스
@@ -27,14 +27,13 @@ metadata:
 - `major`: Skill 이름·호출 방식, 주요 입력·결과, plugin 식별자나 기존 동작 계약을 깨뜨립니다.
 - 확실한 호환성 근거가 없으면 보수적으로 더 큰 증가를 선택하고 근거를 변경 요약에 적습니다. 버전 숫자를 사용자에게 묻지 않습니다.
 - 변경한 Skill만 자체 버전을 올립니다. 해당 플러그인의 버전도 영향에 맞게 올리고, `SKILL.md`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, 플러그인 README 양쪽 언어와 저장소 목록에 같은 plugin 버전을 기록합니다. Skill README 표에는 각 개별 Skill의 버전을 기록합니다.
-- PR 본문에는 저장소 지침이 요구하는 `Target-Delivery-Unit`, `Target-Version`, `Delivery-Profile` 필드를 포함하고, 승인된 이슈·로드맵·브랜치·base·릴리스 맥락에서 값을 확인합니다. `Target-Version`은 변경 영향에 맞춰 에이전트가 SemVer로 선택하며 사용자에게 버전 번호를 묻지 않습니다.
-
 ## 계정에 따른 경로
 
-- GitHub 로그인 계정과 Git author·committer가 일치하는지 확인합니다. kp-skill 관리자([bwlee-dix](https://github.com/bwlee-dix))가 Ruleset 우회 권한을 갖더라도 저장소 절차에 따라 PR을 만들고 기본 branch에 병합한 뒤 배포합니다.
-- 관리자 권한은 직접 push, PR 없는 merge, tag push 또는 release 승인을 대신하지 않습니다. 직접 반영은 사용자의 별도 명시적 승인과 저장소 규칙이 허용하는 경우에만 수행합니다.
-- PR 생성 경로에서는 commit 전에 저장소 지침에 따라 scope, 변경 경로, diff, 검증, 위험과 PR 초안을 보고하고 명시적 승인을 받습니다. 승인 뒤 선택된 파일만 stage하고 staged diff를 확인합니다.
-- 사용자가 승인하지 않은 commit, push, merge, GitHub Release 또는 tag push를 실행하지 않습니다. PR을 열었으면 merge 전까지 배포 완료로 보고하지 않습니다.
+- 활성 로그인은 `gh api user --jq .login`으로 확인하고 Git author·committer가 같은 계정인지 검증합니다. 로그인 계정이 관리자([bwlee-dix](https://github.com/bwlee-dix))이면 fork하지 않고 `kingdompla-net/kp-skill`의 로컬 정본 체크아웃을 사용합니다. `origin`이 정본인지 확인하고 `main`을 fetch한 뒤, 작업 트리가 깨끗하면 `git pull --ff-only origin main`을 실행합니다. 기존 변경이 있으면 보존하고 `origin/main` 기반 별도 worktree에서 작업합니다.
+- 사용자가 릴리스를 명시적으로 요청한 범위에서 관리자는 기능 branch에 작업별 commit을 만들고 push한 뒤 정본 `main` 대상 PR을 생성합니다. 필수 검사가 통과하고 차단 조건이 없으면 추가 사용자 승인 없이 병합합니다. 리뷰 승인만 요구될 경우에만 관리자 우회를 사용하며 실패한 검사와 기타 필수 조건은 우회하지 않습니다. `main`에 직접 push하지 않습니다.
+- 다른 계정으로 인증한 경우에는 정본 저장소의 fork를 로컬에 가져와 작업하고 upstream 기본 branch를 대상으로 PR을 생성합니다. 정본 관리자의 실제 병합을 기다립니다. 관리자 계정의 로컬 clone을 사용하거나 접근할 수 있다고 가정하지 않습니다.
+- PR 제목과 본문은 저장소의 현재 지침과 승인된 템플릿을 따릅니다. 변경 범위, 변경 경로, diff, 검증과 위험을 설명합니다.
+- 관리자 작업에서도 직접 base push는 금지합니다. tag push, GitHub Release와 marketplace 갱신은 요청된 릴리스 범위에 포함되는 경우에만 진행합니다. PR을 열었으면 실제 병합 전까지 릴리스 완료로 보고하지 않습니다.
 
 ## 버전 이력 조회
 
@@ -61,7 +60,7 @@ metadata:
 
 릴리스 태그 형식은 `<plugin>/v<plugin-version>`, 개별 Skill은 `<plugin>/<skill>/v<skill-version>`입니다. tag message에 한글 변경 요약을 넣고, 정확한 승인된 commit을 가리키는 annotated tag를 사용합니다.
 
-PR이 실제로 병합된 뒤 default branch의 commit과 버전을 다시 확인하고 tag를 준비합니다. 관리자 계정도 필요한 commit·push 승인을 받기 전에는 branch나 tag를 변경하지 않습니다. tag 생성과 push가 끝나면 연결된 marketplace를 동기화하고 새 버전 노출을 확인합니다. 사용자 설치본 갱신 여부는 설치 범위별로 확인해 따로 보고합니다.
+PR이 실제로 병합된 뒤 default branch의 commit과 버전을 다시 확인합니다. 요청된 릴리스에 tag push가 포함되면 연결된 marketplace를 동기화하고 새 버전 노출을 확인합니다. 사용자 설치본 갱신 여부는 설치 범위별로 확인해 따로 보고합니다.
 
 ## 검증
 

@@ -1,6 +1,6 @@
 # KP Skill Manager
 
-Version: 1.0.0
+Version: 1.0.1
 
 `kp-skill-manager` creates plugins and Skills in this repository, manages their SemVer and Git tags, publishes approved changes, and updates project-local Skill installations.
 
@@ -8,9 +8,9 @@ Version: 1.0.0
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.0` | Creating a plugin and its first Skill together or adding a Skill to an existing plugin | Inspects the target plugin's conventions and connects the new structure to its canonical documentation, manifests, and version records. |
-| [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.0` | Improving and releasing a Skill, viewing version history, or republishing earlier Skill content as a new version | Selects SemVer based on the change, synchronizes manifests and READMEs, and follows the approved release path. |
-| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.0` | Updating KP Skills in the current repository or a specifically requested user scope | Verifies installation sources and scope, updates selected or all KP Skills, and checks the installed file versions. |
+| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.1` | Creating a project-local Skill draft or explicitly promoting one to the canonical repository | Creates drafts in the current project by default and follows the account-specific PR path for promotion. |
+| [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.1` | Improving and releasing a Skill, viewing version history, or republishing earlier Skill content as a new version | Selects SemVer, synchronizes manifests and READMEs, and follows the account-specific PR and merge path. |
+| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.1` | Updating KP Skills in the current repository or a specifically requested user scope | Verifies installation sources and scope, updates selected or all KP Skills, and checks the installed file versions. |
 
 ## Project-local installation
 
@@ -40,7 +40,7 @@ A GitHub tag alone does not update every agent marketplace or installed Skill. T
 
 ## Account and PR policy
 
-Before a release, verify that the active GitHub account matches the Git author and committer. Even when the KP Skill manager ([bwlee-dix](https://github.com/bwlee-dix)) can bypass a ruleset, follow the repository workflow: create and merge a PR before release. Manager access does not replace explicit approval for direct pushes, merges, or tag publication. Use the PR route when authenticated with another account.
+Before a release, verify that the active GitHub account matches the Git author and committer. When the account is the KP Skill manager ([bwlee-dix](https://github.com/bwlee-dix)), update the local canonical checkout and use a PR; merge it without another user approval after required checks pass. Use an administrator bypass only for a review-only requirement, never for failed checks. Other accounts work from a local clone of their fork, open a PR to upstream, and wait for the manager to merge it. Neither path pushes directly to the default branch. Tags, GitHub Releases, and marketplace publishing require an explicit release request.
 
 ## Routing
 
