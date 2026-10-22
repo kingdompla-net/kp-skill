@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP Skill Release"
+  short_description: "KP Skill 릴리스와 이전 콘텐츠의 새 버전 재발행 관리"
+  default_prompt: "KP Skill을 개선해 배포하거나 버전 이력을 조회하고 이전 Skill 콘텐츠를 더 높은 새 버전으로 재발행할 때 $kp-skill-release를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

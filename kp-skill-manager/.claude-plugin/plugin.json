@@ -1,0 +1,9 @@
+{
+  "name": "kp-skill-manager",
+  "description": "KP Skill 플러그인과 개별 Skill을 생성하고 버전 관리·배포하며 프로젝트 로컬 설치를 갱신합니다.",
+  "author": {
+    "name": "Kingdom Planet",
+    "url": "https://github.com/kingdompla-net"
+  },
+  "version": "1.0.0"
+}
