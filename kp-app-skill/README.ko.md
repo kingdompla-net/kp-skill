@@ -1,18 +1,20 @@
 # KP 앱 Skill
 
-버전: 2.6.1
+버전: 2.7.0
 
 `kp-app-skill`은 KP React 앱 초기화와 API 연동, Firebase Hosting Preview 검토와 live 배포에 필요한 프로젝트 로컬 Skill을 제공합니다.
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.6.1` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고, 호환되는 버전·Node.js 실행 환경을 기록한 `.agents/references/spec.md`를 생성해 모든 작업자 지침에 연결합니다. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.7.0` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고, 호환되는 버전·Node.js 실행 환경을 기록한 `.agents/references/spec.md`를 생성해 모든 작업자 지침에 연결합니다. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.0` | 이미 초기화된 앱에 기능을 추가하거나 KP API 연동을 수정할 때 | 공식 API 계약을 확인해 기존 앱 구조와 query/state 경계에 연결합니다. |
-| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.6.0` | 사용자가 DEV 또는 PRD Hosting 배포를 요청했을 때 | 대상 Firebase 프로젝트와 Hosting 타깃을 확인하고 Hosting만 배포합니다. |
+| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.7.0` | 환경을 지정하지 않고 기본 배포를 요청했을 때 | DEV를 기본값으로 선택하고 Firebase Hosting 공통 배포 규칙을 안내합니다. |
+| [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.0.0` | DEV 배포 Skill을 직접 호출할 때 | DEV Hosting만 검증·빌드·배포합니다. |
+| [`kp-app-deploy-prd`](skills/kp-app-deploy-prd/SKILL.md) | `1.0.0` | PRD 배포 Skill을 직접 호출할 때 | PRD를 검증·빌드하고, 별도 승인을 받은 뒤에만 live 배포합니다. |
 | [`kp-app-preview-release`](skills/kp-app-preview-release/SKILL.md) | `1.0.1` | 검토용 Firebase Hosting Preview Channel 배포를 요청했을 때 | 정확한 환경과 Hosting target을 검증해 만료 기간 1일의 Preview를 배포하고, 승인된 경우에만 임시 OAuth callback을 등록·검증합니다. |
 | [`kp-app-preview-delete`](skills/kp-app-preview-delete/SKILL.md) | `1.0.0` | 검토 완료 또는 PR 병합 뒤 해당 Preview를 정리할 때 | 해당 배포에서 추가한 callback과 Firebase Hosting Preview Channel만 확인해 정리합니다. |
 
-초기화 과정에서 대상 앱 `package.json`에 `build:dev`·`deploy:dev`를 만들고, PRD 프로젝트 ID와 Hosting 사이트 ID가 확인되면 `build:prd`·`deploy:prd`도 추가합니다. `kp-app-init`은 초기화가 끝난 뒤 `kp-app-skill`의 다섯 Skill만 같은 프로젝트·에이전트 경로에 설치합니다. `kp-api-skill`은 자동 설치 대상이 아닙니다. 비밀번호와 token은 `AGENTS.local.md`에 기록하지 않고 OS Keychain이나 조직 비밀 저장소에 두며, 필요한 프로세스에만 전달합니다.
+초기화 과정에서 대상 앱 `package.json`에 `build:dev`·`deploy:dev`를 만들고, PRD 프로젝트 ID와 Hosting 사이트 ID가 확인되면 `build:prd`·`deploy:prd`도 추가합니다. `kp-app-init`은 초기화가 끝난 뒤 `kp-app-skill`의 일곱 Skill을 같은 프로젝트·에이전트 경로에 설치합니다. `kp-api-skill`은 자동 설치 대상이 아닙니다. 비밀번호와 token은 `AGENTS.local.md`에 기록하지 않고 OS Keychain이나 조직 비밀 저장소에 두며, 필요한 프로세스에만 전달합니다.
 
 ## 생성 저장소의 Git 규칙
 
@@ -45,7 +47,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
   --skill kp-app-init --agent codex --copy --yes
 ~~~
 
-이 명령은 `kp-app-init` 하나만 설치합니다. 초기화가 완료되면 해당 Skill이 `kp-app-api`, `kp-app-deploy`, `kp-app-preview-release`, `kp-app-preview-delete`를 같은 프로젝트·에이전트 경로에 설치해 다섯 Skill을 갖춥니다. `kp-api-skill`의 일곱 Skill은 설치하지 않습니다. manager 전체를 아직 설치하지 않았다면 위의 절차에 따라 먼저 동의를 받고 설치해야 합니다.
+이 명령은 `kp-app-init` 하나만 설치합니다. 초기화가 완료되면 해당 Skill이 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete`를 같은 프로젝트·에이전트 경로에 설치해 일곱 Skill을 갖춥니다. `kp-api-skill`의 일곱 Skill은 설치하지 않습니다. manager 전체를 아직 설치하지 않았다면 위의 절차에 따라 먼저 동의를 받고 설치해야 합니다.
 
 Codex에서 초기화가 끝난 뒤의 구성은 다음과 같습니다.
 
@@ -57,6 +59,8 @@ Codex에서 초기화가 끝난 뒤의 구성은 다음과 같습니다.
 ├── kp-app-init/
 ├── kp-app-api/
 ├── kp-app-deploy/
+├── kp-app-deploy-dev/
+├── kp-app-deploy-prd/
 ├── kp-app-preview-release/
 └── kp-app-preview-delete/
 ~~~
@@ -89,4 +93,4 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
 
 검토용 Preview channel 생성과 callback 승인·등록은 `kp-app-preview-release`, PR 병합 또는 검토 완료 뒤 정리는 `kp-app-preview-delete`를 사용합니다.
 
-설계 소스를 처음 연결할 때 `kp-app-init`, 기존 앱에 KP API 기능을 연결할 때 `kp-app-api`, 사용자가 환경을 지정해 Hosting 배포를 요청할 때 `kp-app-deploy`를 사용합니다.
+설계 소스를 처음 연결할 때 `kp-app-init`, 기존 앱에 KP API 기능을 연결할 때 `kp-app-api`, 환경을 지정하지 않은 기본 DEV Hosting 배포는 `kp-app-deploy`를 사용합니다. 고정된 호출은 프로젝트 로컬 Skill을 직접 설치한 Claude Code에서 `/kp-app-deploy-dev` 또는 `/kp-app-deploy-prd`, Claude Code 플러그인 설치에서는 `/kp-app-skill:kp-app-deploy-dev` 또는 `/kp-app-skill:kp-app-deploy-prd`, Codex에서는 `$kp-app-deploy-dev` 또는 `$kp-app-deploy-prd`를 사용합니다. PRD는 production 빌드 뒤 실제 배포 승인을 확인합니다.

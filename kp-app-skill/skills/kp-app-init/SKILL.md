@@ -2,7 +2,7 @@
 name: kp-app-init
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용합니다."
 metadata:
-  version: "2.6.1"
+  version: "2.7.0"
 ---
 
 # KP 앱 초기화
@@ -40,7 +40,7 @@ metadata:
 - Zod가 없으면 저장소의 package manager를 확인해 런타임 의존성으로 추가한다. npm 저장소라면 npm i zod를 사용하고 lockfile을 함께 갱신한다.
 - 기존 파일을 덮어쓰지 않는다. 같은 경로에 기존 코드가 있으면 소비자와 테스트를 확인하고 필요한 동작을 합친다.
 - 화면 요청은 hook/query/에 TanStack Query key·query·mutation을 두고, 전역 클라이언트 상태는 store/의 Zustand에 둔다. 서버 응답을 Zustand에 중복 보관하지 않는다. 확정 구조에 없는 서비스 계층은 임의로 추가하지 않는다. 여러 API 호출로 이루어진 흐름도 우선 query/mutation에서 조정하되, 새 계층이 필요해 보이면 구조를 바꾸기 전에 사용자에게 묻는다.
-- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고, 작업을 시작하기 전에 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager 설치가 필요한 이유와 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 결과를 확인합니다. 초기화가 끝나면 이미 설치된 파일과 사용자 변경을 확인한 뒤 `kp-app-api`, `kp-app-deploy`, `kp-app-preview-release`, `kp-app-preview-delete` 중 누락된 Skill만 같은 프로젝트 경로에 설치합니다. `kp-api-skill`은 설치하지 않습니다. 거부하면 필요한 manager를 포함한 KP Skill 설치와 작업을 진행하지 않습니다. `--global` 또는 `-g`는 사용하지 않습니다. 설치 후 manager와 앱 Skill이 선택된 프로젝트·에이전트 경로에 있는지 검증합니다.
+- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고, 작업을 시작하기 전에 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager 설치가 필요한 이유와 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 결과를 확인합니다. 초기화가 끝나면 이미 설치된 파일과 사용자 변경을 확인한 뒤 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete` 중 누락된 Skill만 같은 프로젝트 경로에 설치합니다. `kp-api-skill`은 설치하지 않습니다. 거부하면 필요한 manager를 포함한 KP Skill 설치와 작업을 진행하지 않습니다. `--global` 또는 `-g`는 사용하지 않습니다. 설치 후 manager와 앱 Skill이 선택된 프로젝트·에이전트 경로에 있는지 검증합니다.
 - `.agents/references/cloud-access.md`의 템플릿을 대상 저장소에 복사하고, 루트 `AGENTS.md`에서 해당 문서와 `AGENTS.local.md`를 읽도록 연결합니다. 기존 문서는 덮어쓰지 않고 필요한 규칙만 병합합니다.
 - 이후 references/agent-ide.md를 읽고 초기화 대상 저장소에만 biome-eslint-ide-config-skill을 프로젝트 로컬로 설치하고 실행한다. 사용자의 전역 Skill 설치는 대상 저장소 설치를 대체하지 않는다. 그 스킬의 사용자 확인 절차와 전체 파일 자동 수정 승인 단계를 생략하지 않는다.
 - 초기화할 때는 `package.json`, `firebase.json`, `.firebaserc`, `.env.development*`, `.env.production*`을 먼저 읽고 기존 설정을 보존하며 합친다. Vite 프로젝트의 `package.json`에는 `build:dev`와 `deploy:dev`를 반드시 추가한다. `build:dev`는 `vite build --mode development`를 실행하고, `deploy:dev`는 `npm run build:dev`를 먼저 실행한 뒤 확인된 실제 DEV Firebase 프로젝트 ID를 사용해 `firebase deploy --only hosting:dev --project <확인된 DEV 프로젝트 ID>`를 실행한다. PRD Firebase 프로젝트 ID와 Hosting 사이트 ID를 모두 확인하면 `build:prd`와 `deploy:prd`도 추가한다. `build:prd`는 `vite build --mode production`, `deploy:prd`는 `npm run build:prd` 후 확인된 PRD 프로젝트 ID로 `firebase deploy --only hosting:prd --project <확인된 PRD 프로젝트 ID>`를 실행한다. `<...>` 대체 문구를 스크립트에 남기지 않는다. 같은 이름의 기존 스크립트가 있으면 현재 동작을 확인해 합치고, 안전하게 합칠 수 없을 때만 사용자에게 선택을 요청한다.
@@ -59,7 +59,7 @@ metadata:
 - 생성하는 루트 `AGENTS.md`에는 작업마다 최소한 `main`/`dev`가 아닌 별도 작업 브랜치를 사용하고, 권장 방식은 작업별 워크트리와 브랜치를 함께 만드는 것이라고 명시한다. `main`/`dev`에 직접 push하려면 push 직전에 매번 사용자의 명시적 승인을 받도록 한다. GitHub 원격 인증 계정과 Git 커밋 identity가 같은 사용자 계정이어야 하며, `AGENTS.local.md`에 정한 author·committer 이름과 이메일을 커밋 전에 확인하도록 명시한다. author와 committer 이메일은 모두 해당 GitHub 계정에 인증된 이메일 또는 그 계정의 noreply 주소여야 한다.
 - 생성하는 루트 `AGENTS.md`에는 모든 작업을 기능·수정 목적별 맥락으로 나누고, 각 맥락의 구현과 직접 검증이 끝날 때마다 독립 커밋으로 남긴다고 명시한다. 작업 완료는 확인된 base를 대상으로 PR을 만들고 필요한 검사와 리뷰가 끝난 뒤 PR을 base에 병합해야 완료된다고 명시한다. PR 없이 브랜치를 base에 직접 병합하는 작업은 사전에 사용자의 명시적 승인을 받도록 한다.
 - `assets/templates/.agents/references/commit-rule.md`와 `pr-rule.md`를 각각 대상 저장소의 `.agents/references/commit-rule.md`와 `pr-rule.md`로 복사하고, `assets/templates/.references/PULL_REQUEST_TEMPLATE.md`를 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`로 복사한다. 같은 경로의 기존 문서가 있으면 덮어쓰지 말고 내용을 합친다.
-- 루트 `AGENTS.md`에서 `.agents/references/commit-rule.md`, `.agents/references/pr-rule.md`, `.references/PULL_REQUEST_TEMPLATE.md`로 연결합니다. 세부 규칙은 해당 참조 문서에 두고 `AGENTS.md`에는 라우팅 링크를 유지합니다. 이 플러그인의 프로젝트 로컬 Skill 설치 경로를 확인해 `kp-app-init`은 초기화·구조 작업에, `kp-app-deploy`는 명시적 Firebase Hosting live 배포 요청에, `kp-app-api`는 새 KP API 기능 연동·기존 연동 수정에, `kp-app-preview-release`와 `kp-app-preview-delete`는 각각 요청된 Preview 배포와 검토 완료 후 정리에 사용하도록 안내합니다.
+- 루트 `AGENTS.md`에서 `.agents/references/commit-rule.md`, `.agents/references/pr-rule.md`, `.references/PULL_REQUEST_TEMPLATE.md`로 연결합니다. 세부 규칙은 해당 참조 문서에 두고 `AGENTS.md`에는 라우팅 링크를 유지합니다. 이 플러그인의 프로젝트 로컬 Skill 설치 경로를 확인해 `kp-app-init`은 초기화·구조 작업에, 환경을 지정하지 않은 `kp-app-deploy`는 기본 DEV 배포에, `kp-app-deploy-dev`와 `kp-app-deploy-prd`는 각각 해당 환경을 고정한 slash 호출에, `kp-app-api`는 새 KP API 기능 연동·기존 연동 수정에, `kp-app-preview-release`와 `kp-app-preview-delete`는 각각 요청된 Preview 배포와 검토 완료 후 정리에 사용하도록 안내합니다.
 - 각 주요 소스 계층에 해당 코드의 실제 지도와 책임을 담은 AGENTS.md를 만든다. 경로는 최소한 src/api/, src/schema/, src/type/, src/store/, src/hook/, src/provider/, src/router/, src/component/, src/page/, src/config/, src/util/을 조사한다.
 - 루트와 참조 문서에는 모든 새 폴더명·함수명·변수명을 단수로 짓는 Dixsoft 원칙을 기록한다. 배열 등 집합 변수는 userList, memberMap처럼 단수 도메인명 뒤에 자료형 의미를 붙인다. KP wire 필드·endpoint, 외부 라이브러리 계약은 바꾸지 않는다.
 - `assets/templates/.agents/references/spec.md`를 대상 저장소의 `.agents/references/spec.md`로 복사하고 실제 프로젝트 값으로 채웁니다. 런타임과 패키지 관리자, 직접 의존성의 선언 범위와 잠금 버전, 도구 역할, build·lint·format·test 명령, Node.js 고정 여부를 기록합니다. lockfile이나 런타임 선언이 없는 값은 추측하지 말고 `미고정` 또는 `없음`으로 적습니다. 마지막으로 루트 `AGENTS.md`에서 이 명세를 연결하고 모든 작업자가 기술 스택·Node·패키지 버전 변경 전에 읽고 변경 뒤 함께 갱신하도록 명시합니다.

@@ -1,7 +1,7 @@
 interface:
   display_name: "KP App Deploy"
-  short_description: "DEV 또는 PRD Firebase Hosting 배포 전 환경을 검증"
-  default_prompt: "요청한 DEV 또는 PRD 배포 환경과 Hosting 타깃을 확인한 뒤 $kp-app-deploy 절차를 사용해."
+  short_description: "기본값은 DEV, PRD는 빌드 후 배포 승인을 확인"
+  default_prompt: "환경을 지정하지 않은 기본 요청은 DEV입니다. Codex에서는 DEV는 $kp-app-deploy-dev, PRD는 $kp-app-deploy-prd Skill을 실행해 주세요."
 
 policy:
   allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP App Deploy DEV"
+  short_description: "Firebase Hosting DEV만 검증하고 배포"
+  default_prompt: "현재 프로젝트의 Firebase Hosting DEV를 검증하고 배포해 주세요."
+
+policy:
+  allow_implicit_invocation: true

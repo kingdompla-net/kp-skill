@@ -2,7 +2,7 @@
 name: kp-skill-install
 description: "특정 KP 플러그인이나 Skill 또는 kp-skill 저장소의 전체 KP Skill을 실제 배포 버전으로 맞추기 위해 프로젝트·명시된 사용자 설치를 갱신할 때 사용합니다."
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # KP Skill 설치 갱신
