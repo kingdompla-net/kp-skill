@@ -5,11 +5,15 @@
 ## 필수 관리자 플러그인과 설치 동의
 
 - `kp-skill`에서 제공하는 Skill을 프로젝트에 하나라도 설치할 때는 같은 프로젝트와 같은 에이전트 범위에 `kp-skill-manager` 플러그인의 Skill 전체를 함께 설치합니다. Codex 프로젝트 경로는 `.agents/skills/`, Claude Code 프로젝트 경로는 `.claude/skills/`입니다. 다른 에이전트는 해당 에이전트의 프로젝트 경로를 확인합니다.
+- Skills CLI 복사 설치에서는 플러그인 이름으로 디렉터리를 중첩하지 않습니다. 각 Skill은 `<agent-project-skill-dir>/<skill-name>/SKILL.md`에 바로 설치합니다. 예를 들어 Codex는 `<project>/.agents/skills/kp-app-init/SKILL.md`, Claude Code는 `<project>/.claude/skills/kp-app-init/SKILL.md`를 사용합니다. `.agents/skills/kp-app-skill/kp-app-init/`처럼 플러그인 아래에 넣지 않습니다.
+- `npx skills add`는 명령을 실행한 저장소를 기본 project scope로 사용합니다. 대상 프로젝트 루트에서 실행하고 `--global`/`-g`는 사용자가 전역 설치를 명시한 경우에만 지정합니다. global/project 경로 차이는 [Skills CLI 지원 에이전트 안내](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)에서 확인합니다.
 - `kp-skill-manager`가 없으면 대상 Skill을 먼저 설치하거나 실행하지 말고, `kp-skill-manager` 플러그인이 이 프로젝트의 해당 에이전트에 필요하다는 점과 설치 경로를 설명한 뒤 설치 동의를 구합니다. 동의하면 manager의 Skill 전체를 먼저 설치하고 설치 결과를 확인한 뒤 대상 Skill을 설치합니다. 거부하면 KP Skill 설치나 그에 의존하는 작업을 시작하지 않습니다.
 - 사용자가 `kp-skill-manager`를 직접 설치해 달라고 요청한 경우에는 manager 자체 설치가 동의 범위에 포함됩니다. manager 플러그인 전체를 프로젝트 로컬로 설치하며 전역 경로를 사용하지 않습니다.
 - 다른 KP Skill이 필요해지면 아래 관계표에서 해당 Skill을 확인합니다. 필요한 Skill이 같은 에이전트의 프로젝트 경로에 없으면 필요한 이유와 이름을 알려드리고 추가 설치 동의를 구합니다. 동의받은 Skill만 같은 프로젝트·에이전트 범위에 설치합니다. 필요하지 않은 선택 Skill을 미리 설치하지 않습니다.
 - 설치된 Skill은 현재 에이전트가 지원하는 호출 방법으로 사용합니다. 직접 호출할 수 없는 환경에서는 해당 Skill의 `SKILL.md`를 읽어 그 절차를 적용합니다. 절차를 중복 구현하거나 전역 Skill을 대신 사용하지 않습니다.
 - Skills CLI로 개별 Skill을 복사하는 설치 방식은 플러그인 의존성을 자동 설치하지 않습니다. 따라서 설치 안내는 manager를 먼저 설치하고 대상 플러그인을 설치하도록 안내하며, Skill 실행 시에도 이 절의 설치 여부를 확인합니다. Claude Code native plugin 설치는 앱·API 플러그인 manifest의 `kp-skill-manager` 의존성을 따릅니다.
+- `kp-app-init`은 초기화 후 `kp-app-skill`에 속한 누락된 Skill만 같은 project·agent 경로에 설치합니다. `kp-api-init`은 `kp-api-skill`의 누락된 Skill만 설치합니다. 두 초기화 Skill은 서로의 플러그인을 설치하지 않으며, manager는 별도 필수 선행 설치입니다. 이미 존재하는 대상 Skill은 사용자 수정과 버전을 확인하지 않고 덮어쓰지 않습니다.
+- 프로젝트 scope는 `<project>/.agents/skills/<skill-name>/`(Codex), `<project>/.claude/skills/<skill-name>/`(Claude Code)입니다. 사용자 scope는 `--global`/`-g`로 별도 선택하며 해당 agent의 global path를 사용합니다. plugin 전체 또는 선택 Skill 설치 명령은 각 plugin README를 기준으로 합니다.
 
 ## KP Skill 참조 관계표
 

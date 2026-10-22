@@ -20,8 +20,10 @@ Before installing an app or API Skill from `kp-skill`, install all three Skills 
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
+
+Run `npx skills add` from the target repository root; its default scope is the current project. Codex project Skills go in `.agents/skills/<skill-name>/` and Claude Code project Skills go in `.claude/skills/<skill-name>/`. Use `--global`/`-g` only when a user-wide installation is requested. Skills CLI does not add a parent directory named after the plugin: it installs `.agents/skills/kp-app-init/`, not `.agents/skills/kp-app-skill/kp-app-init/`. See the [official supported-agent table](https://github.com/vercel-labs/skills/blob/main/docs/agents.md) for user-wide paths and other agents' project paths.
 
 ## Install in a repository for supported agents
 
@@ -29,17 +31,17 @@ Run the command from the target repository root. This example installs all app S
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
 For an existing API repository, install the API Skill set the same way:
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
-The CLI's default scope is the current project. Do not add `--global` or `-g` when Skills should stay with this repository. See the [app guide](kp-app-skill/README.ko.md) and [API guide](kp-api-skill/README.ko.md) for bootstrap-only and update workflows.
+For a new app or API repository, install the complete manager set first, then start with that plugin's init Skill. After initialization, `kp-app-init` installs only the other two Skills in `kp-app-skill` into the same project and agent scope; it does not install `kp-api-skill`. `kp-api-init` installs only the other six Skills in `kp-api-skill`; it does not install `kp-app-skill`. This bundle expansion happens when the init Skill runs. Existing repositories can install a full plugin set or a named Skill without reinitialization. Claude native plugin installation is separate from Skills CLI copy installation; check its host for scope support.
 
 ## Repository structure
 

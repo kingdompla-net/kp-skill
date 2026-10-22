@@ -21,7 +21,16 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-man
   --skill '*' --agent codex --copy --yes
 ~~~
 
-Repeat `--agent` to install for multiple agents. Do not use `--global` or `-g` for a project-only installation.
+`npx skills add` uses the current working directory as the project scope. Run it from the target repository root and leave out `--global` or `-g` for a repository-only installation.
+
+| Agent | Project path | User-wide path (`--global`/`-g`) |
+| --- | --- | --- |
+| Codex | `.agents/skills/<skill-name>/` | `~/.agents/skills/<skill-name>/` |
+| Claude Code | `.claude/skills/<skill-name>/` | `~/.claude/skills/<skill-name>/` |
+
+For Codex, the manager Skills are installed directly as `.agents/skills/kp-skill-create/`, `.agents/skills/kp-skill-release/`, and `.agents/skills/kp-skill-install/`. Claude Code uses the same Skill-named folders directly under `.claude/skills/`. There is no parent folder named after the plugin. See the [official supported-agent table](https://github.com/vercel-labs/skills/blob/main/docs/agents.md) for other project paths.
+
+Skills CLI copy installation does not resolve plugin dependencies. If a required manager set is missing while installing an app or API Skill, explain the reason and path and ask for consent, then install the three manager Skills first. Claude native plugin installation follows the dependency in `.claude-plugin/plugin.json` and is separate from Skills CLI installation. Use a user-wide path only when that scope is explicitly requested.
 
 ## Version and release rules
 

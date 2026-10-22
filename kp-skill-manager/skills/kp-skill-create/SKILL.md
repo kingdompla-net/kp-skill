@@ -48,3 +48,4 @@ metadata:
 - 새 Skill을 만들거나 프로젝트 로컬 Skill을 정본 후보로 가져오기 전에 [KP Skill 관계표와 생성·버전·네이밍 원칙](../kp-skill-install/references/kp-skill-catalog-and-authoring.md)을 읽고 적용합니다.
 - 이 Skill은 `kp-skill-manager` 플러그인의 일부이므로 manager 자체의 설치 동의를 다시 요구하지 않습니다. 사용자가 manager 설치를 요청하면 전체 manager Skill을 같은 프로젝트·에이전트 범위에 설치합니다.
 - 다른 KP Skill이 필요해지면 관계표를 따라 연결합니다. 해당 Skill이 현재 프로젝트·에이전트 경로에 없으면 필요한 이유와 이름을 설명하고 설치 동의를 받은 뒤에만 설치합니다. 전역 설치는 하지 않습니다.
+- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-skill-create/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-skill-create/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 전체 설치 절차는 [플러그인 안내](../../README.ko.md)를 확인합니다.

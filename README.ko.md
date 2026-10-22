@@ -20,8 +20,10 @@ KP Skill은 Kingdom Planet 프로젝트에서 재사용하는 에이전트 중�
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
+
+`npx skills add` 명령은 대상 저장소 루트에서 실행하며 기본 설치 범위는 현재 프로젝트입니다. Codex 프로젝트는 `.agents/skills/<skill-name>/`, Claude Code 프로젝트는 `.claude/skills/<skill-name>/`에 Skill을 둡니다. `--global`/`-g`는 사용자 전역 설치를 요청할 때만 사용합니다. Skills CLI는 플러그인 이름으로 중첩 폴더를 만들지 않으므로 `.agents/skills/kp-app-skill/kp-app-init/` 대신 `.agents/skills/kp-app-init/`에 설치됩니다. 사용자 전역 경로와 다른 에이전트의 프로젝트 경로는 [공식 지원 에이전트 표](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)를 확인해 주세요.
 
 ## 기존 저장소에 프로젝트 로컬 설치
 
@@ -29,17 +31,17 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-man
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
 기존 API 저장소에서는 API 플러그인 전체를 같은 방식으로 설치합니다.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
-새 앱이나 API codebase에서는 초기화 Skill 하나를 프로젝트 로컬로 설치해 시작할 수 있습니다. 초기화가 끝나면 해당 플러그인의 나머지 Skill도 같은 저장소에 설치됩니다. 기존 저장소를 재초기화할 필요는 없습니다. 기본 설치 범위는 현재 저장소이므로 전역 설치가 필요하지 않다면 `--global` 또는 `-g`를 추가하지 마세요. Native plugin의 설치 범위는 각 agent 안내에서 확인해 주세요.
+새 앱이나 API codebase에서는 먼저 manager 전체를 설치한 뒤 해당 플러그인의 초기화 Skill 하나로 시작할 수 있습니다. `kp-app-init`은 초기화가 끝나면 `kp-app-skill`의 나머지 두 Skill만 같은 프로젝트·에이전트 경로에 설치하며 `kp-api-skill`은 설치하지 않습니다. `kp-api-init`은 `kp-api-skill`의 나머지 여섯 Skill만 설치하며 `kp-app-skill`은 설치하지 않습니다. 이 Skill 묶음 확장은 초기화 Skill을 실행한 뒤 일어납니다. 기존 저장소는 재초기화하지 않고 필요한 플러그인의 전체 묶음이나 지명한 Skill을 직접 설치할 수 있습니다. Claude native plugin은 Skills CLI 복사 설치와 별도이며 설치 범위는 각 agent 호스트에서 확인해 주세요.
 
 ## 저장소 구조
 
