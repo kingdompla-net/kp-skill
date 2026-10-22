@@ -1,6 +1,6 @@
 # KP Skill Manager
 
-Version: 1.0.1
+Version: 1.0.2
 
 `kp-skill-manager` creates plugins and Skills in this repository, manages their SemVer and Git tags, publishes approved changes, and updates project-local Skill installations.
 
@@ -8,7 +8,7 @@ Version: 1.0.1
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.1` | Creating a project-local Skill draft or explicitly promoting one to the canonical repository | Creates drafts in the current project by default and follows the account-specific PR path for promotion. |
+| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.2` | Creating a project-local Skill draft or explicitly promoting one to the canonical repository | Follows the shared Skill template and plugin README style while using the correct PR path for promotion. |
 | [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.1` | Improving and releasing a Skill, viewing version history, or republishing earlier Skill content as a new version | Selects SemVer, synchronizes manifests and READMEs, and follows the account-specific PR and merge path. |
 | [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.1` | Updating KP Skills in the current repository or a specifically requested user scope | Verifies installation sources and scope, updates selected or all KP Skills, and checks the installed file versions. |
 
