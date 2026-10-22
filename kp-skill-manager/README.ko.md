@@ -1,6 +1,6 @@
 # KP Skill Manager
 
-버전: 1.0.1
+버전: 1.0.2
 
 `kp-skill-manager`는 이 저장소의 플러그인과 Skill을 생성하고, SemVer와 Git 태그로 버전을 관리하며, 승인된 변경을 배포하고, 지정된 프로젝트의 로컬 Skill 설치를 갱신합니다.
 
@@ -8,7 +8,7 @@
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.1` | 프로젝트에 Skill 초안을 만들거나 명시적으로 정본 승격을 요청할 때 | 기본적으로 현재 프로젝트에 Skill을 만들고, 관리자·기여자 계정에 맞는 PR 경로를 따릅니다. |
+| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.2` | 프로젝트에 Skill 초안을 만들거나 명시적으로 정본 승격을 요청할 때 | 공통 Skill 템플릿과 플러그인 README 기준에 맞춰 작성하고, 관리자·기여자 계정에 맞는 PR 경로를 따릅니다. |
 | [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.1` | Skill 개선 배포, 버전 이력 조회 또는 이전 버전 콘텐츠를 새 버전으로 재발행할 때 | 변경 영향에 따라 버전을 올리고 manifest·README·태그를 맞춘 뒤 계정에 따른 PR·병합 경로를 따릅니다. |
 | [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.1` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 설치 출처와 범위를 확인하고 선택한 플러그인 또는 전체 KP Skill 설치를 갱신한 뒤 실제 파일 버전을 검증합니다. |
 
