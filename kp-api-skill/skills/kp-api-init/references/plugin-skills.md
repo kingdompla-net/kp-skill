@@ -1,6 +1,6 @@
 # KP API Skill 프로젝트 로컬 설치
 
-`kp-api-init`을 마칠 때 `kp-api-skill` 플러그인의 일곱 Skill을 초기화 대상 저장소에 설치합니다. 이미 운영 중인 저장소에서도 초기화 없이 전체 Skill 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
+`kp-api-init`이 끝나면 이 문서에 따라 `kp-api-skill`의 누락된 Skill만 초기화 대상 저장소에 설치합니다. `kp-api-init`은 앱 플러그인이나 다른 KP 플러그인의 Skill을 설치하지 않습니다. 이미 운영 중인 저장소에서도 초기화 없이 API Skill 전체 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
 
 ## 필수 관리자 Skill
 
@@ -14,15 +14,43 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-man
 ## 새 API 저장소 초기화
 
 1. 설치 대상이 저장소 루트인지 확인합니다. 기존 API codebase만 추가하더라도 저장소 루트의 프로젝트 Skill 경로를 사용합니다.
-2. 대상 agent를 확인하고 `npx skills`가 현재 지원하는 프로젝트 경로를 사용합니다. Codex는 `.agents/skills/`, Claude Code는 `.claude/skills/`를 사용하며, 다른 agent는 [공식 CLI agent 목록](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)을 확인합니다.
+2. 대상 agent를 확인합니다. `npx skills add`는 명령을 실행한 저장소를 기본 프로젝트 범위로 사용합니다. Codex는 `.agents/skills/`, Claude Code는 `.claude/skills/`를 사용합니다. 사용자 전역 설치에는 `--global` 또는 `-g`가 필요하므로 명시적 요청 없이 사용하지 않습니다. 다른 agent는 [공식 CLI agent 목록](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)을 확인합니다.
 3. 현재 `kp-api-init`, 원격 `kp-api-skill` plugin과 각 Skill의 version이 일치하는지 확인합니다. 다른 버전을 섞지 않습니다.
 4. 기존 `kp-api-*` Skill 경로와 사용자 수정 내용을 확인합니다. 로컬 변경을 자동으로 덮어쓰지 않고 보존해 병합합니다.
-5. 플러그인의 일곱 Skill 전체를 대상 agent 프로젝트에 복사합니다.
+5. 초기 진입 단계에서는 `kp-api-init`만 대상 agent 프로젝트에 복사합니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
-  --skill '*' --agent codex --copy --yes
+  --skill kp-api-init --agent codex --copy --yes
 ~~~
+
+Skills CLI는 플러그인 이름으로 디렉터리를 중첩하지 않습니다. 각 Skill은 `<agent-project-skill-dir>/<skill-name>/` 아래에 직접 놓입니다. 예를 들어 Codex에서는 `.agents/skills/kp-api-init/`, Claude Code에서는 `.claude/skills/kp-api-init/`입니다.
+
+초기화가 끝난 뒤 기존 API Skill 파일·버전·사용자 수정을 확인하고, 없는 Skill만 설치합니다. 다른 여섯 Skill이 모두 없다면 다음 명령을 사용합니다.
+
+~~~sh
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
+  --skill kp-api-endpoint kp-api-worker kp-api-test-deploy kp-api-build kp-api-deploy kp-api-docs \
+  --agent codex --copy --yes
+~~~
+
+이미 존재하는 Skill을 자동으로 덮어쓰지 않습니다. 로컬 수정이 있으면 보존해 병합하고 결과를 확인합니다. 설치가 끝난 Codex 경로는 다음과 같습니다.
+
+~~~text
+<project>/.agents/skills/
+├── kp-skill-create/
+├── kp-skill-release/
+├── kp-skill-install/
+├── kp-api-init/
+├── kp-api-endpoint/
+├── kp-api-worker/
+├── kp-api-test-deploy/
+├── kp-api-build/
+├── kp-api-deploy/
+└── kp-api-docs/
+~~~
+
+Claude Code에서는 같은 Skill 이름의 폴더가 `.claude/skills/` 바로 아래에 놓입니다. plugin 이름을 위한 상위 폴더는 없습니다.
 
 Claude Code이면 `--agent claude-code`, Hermes Agent이면 `--agent hermes-agent`, OpenClaw이면 `--agent openclaw`를 사용합니다. 여러 agent 디렉터리에 설치할 때는 `--agent` 옵션을 반복합니다.
 

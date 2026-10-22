@@ -12,14 +12,15 @@ metadata:
 ## 설치 범위 확인
 
 1. 현재 작업 프로젝트의 루트, `AGENTS.md`, branch와 `git status --short --branch`를 확인합니다. 설치 파일이 tracked/untracked 변경인지와 기존 로컬 편집을 보존합니다.
-2. `npx skills list`, `npx skills check`, 프로젝트의 Skills lock file 및 agent별 설치 경로를 확인해 source URL·ref·plugin/skill 이름·project/global scope를 찾습니다. 경로가 보이지 않는다는 이유로 미설치라 단정하지 않습니다.
-3. 업데이트 대상은 다음 범위로 해석합니다.
+2. Skills CLI의 복사 설치는 에이전트 Skill 디렉터리 바로 아래에 `<skill-name>/`을 만듭니다. Codex는 `<project>/.agents/skills/`, Claude Code는 `<project>/.claude/skills/`를 사용하며 plugin 이름의 상위 폴더를 만들지 않습니다. `npx skills add`는 현재 작업 디렉터리를 프로젝트 대상으로 사용하고, `--global`/`-g`만 사용자 범위로 전환합니다. 정확한 경로는 [공식 지원 에이전트 표](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)를 확인합니다.
+3. `npx skills list`, `npx skills check`, 프로젝트의 Skills lock file 및 agent별 설치 경로를 확인해 source URL·ref·plugin/skill 이름·project/global scope를 찾습니다. 경로가 보이지 않는다는 이유로 미설치라 단정하지 않습니다.
+4. 업데이트 대상은 다음 범위로 해석합니다.
    - “지명한 Skill”: 그 Skill의 프로젝트 설치만 갱신합니다.
    - “지명한 플러그인”: 해당 plugin README/manifest가 나열하는 Skill만 갱신합니다.
    - “전체 KP Skill”: 현재 지정된 project 또는 명시된 global scope에서 `kp-skill` 출처로 설치한 모든 KP plugin/Skill을 갱신합니다.
    - 다른 프로젝트나 무관한 agent Skills는 포함하지 않습니다. 여러 저장소 전체 갱신을 요청했지만 경로가 지정되지 않았다면 검색 범위를 정할 수 있도록 보고합니다.
-4. 설치 source가 `kingdompla-net/kp-skill`이고 선택된 branch/ref가 실제 최신 release를 가리키는지 확인합니다. 이름이 같은 다른 source를 갱신하지 않습니다. source가 이전 Git tag에 고정되어 있으면 고정 ref와 최신 버전 차이를 보여드리고 임의로 ref를 바꾸지 않습니다.
-5. 범위·설치 경로·예상 버전이 확인되면 그 범위에서만 진행합니다. global 사용자 경로, workspace plugin이나 설치 scope를 바꾸지 않습니다.
+5. 설치 source가 `kingdompla-net/kp-skill`이고 선택된 branch/ref가 실제 최신 release를 가리키는지 확인합니다. 이름이 같은 다른 source를 갱신하지 않습니다. source가 이전 Git tag에 고정되어 있으면 고정 ref와 최신 버전 차이를 보여드리고 임의로 ref를 바꾸지 않습니다.
+6. 범위·설치 경로·예상 버전이 확인되면 그 범위에서만 진행합니다. global 사용자 경로, workspace plugin이나 설치 scope를 바꾸지 않습니다.
 
 ## KP Skill 관계표와 필수 관리자 설치
 
@@ -61,3 +62,7 @@ Claude Code, Codex 또는 조직 관리형 workspace marketplace에서 설치한
 - 프로젝트 범위의 설치가 요청되었는데 user/global 설정이 변경되면 원인을 확인하고 해당 설정을 되돌려도 되는지 사용자의 승인을 받습니다.
 - workspace 관리자 동작이 필요한 marketplace는 local CLI 결과로 완료를 주장하지 말고 관리자 갱신이 필요한 상태를 보고합니다.
 - 완료 보고에는 요청된 project/global 범위, 각 agent의 설치 방식, 이전·이후 Skill 버전, provider refresh/reload 여부와 남은 작업을 구분합니다.
+
+## 프로젝트 로컬 경로
+
+이 Skill은 Codex에서 `<project>/.agents/skills/kp-skill-install/SKILL.md`, Claude Code에서 `<project>/.claude/skills/kp-skill-install/SKILL.md`에 설치됩니다. plugin 이름의 상위 폴더는 만들지 않습니다. manager 전체를 처음 설치하는 명령은 [플러그인 안내](../../README.ko.md)를 확인합니다.

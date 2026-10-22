@@ -73,4 +73,5 @@ PR이 실제로 병합된 뒤 default branch의 commit과 버전을 다시 확�
 ## KP Skill 연결과 관리자 기준
 
 - 이 Skill은 `kp-skill-manager` 플러그인의 일부이므로 manager 자체 설치 동의를 다시 요구하지 않습니다. 다른 KP Skill이 필요하면 관계표에서 확인하고, 현재 프로젝트·에이전트 경로에 없을 때는 필요한 이유와 이름을 설명한 뒤 설치 동의를 구합니다.
+- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-skill-release/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-skill-release/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 전체 설치 절차는 [플러그인 안내](../../README.ko.md)를 확인합니다.
 - 관리자가 PR 리뷰를 승인한 것만으로 배포가 완료된 것은 아닙니다. PR이 기본 브랜치에 실제로 병합되어 정본에 반영된 뒤에만 배포 완료로 보고합니다.

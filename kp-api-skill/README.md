@@ -26,39 +26,66 @@ Review changes in a DEV Hosting Preview Channel before a live release. Set the p
 
 ## Bootstrap a new API repository
 
-All KP Skills require the complete three-Skill `kp-skill-manager` set in the same project and agent scope. If it is not installed, explain why and where it will be installed, then install the manager first after the user consents. If the user declines, do not install the API Skills.
+Every KP app or API Skill requires the complete three-Skill `kp-skill-manager` set in the same project and agent scope. If the manager is missing, explain why it is required and where it will be installed, then ask for consent before installing it. Install and verify the manager first; if the user declines, do not install the requested KP Skill.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
-  --skill '*' -a codex --copy --yes
+  --skill '*' --agent codex --copy --yes
 ~~~
+
+Run the following commands from the target repository root. `npx skills add` uses the current working directory as the project scope by default. Leave out `--global` or `-g` for a repository-only installation.
+
+| Agent | Project path | User-wide path (`--global`/`-g`) |
+| --- | --- | --- |
+| Codex | `.agents/skills/<skill-name>/` | `~/.agents/skills/<skill-name>/` |
+| Claude Code | `.claude/skills/<skill-name>/` | `~/.claude/skills/<skill-name>/` |
+
+Skills CLI does not create a plugin-name directory. Codex installs each Skill directly under a path such as `.agents/skills/kp-api-init/`, not `.agents/skills/kp-api-skill/kp-api-init/`. See the [official supported-agent table](https://github.com/vercel-labs/skills/blob/main/docs/agents.md) for other agents.
 
 Run from the target repository root to install the project-local entry Skill:
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
-  --skill kp-api-init -a codex --copy --yes
+  --skill kp-api-init --agent codex --copy --yes
 ~~~
 
-Initialization installs all seven Skills into the active agent's project directory. Test the initial router with `$kp-api-test-deploy`; deploying it to DEV or PRD still requires an explicit request and follows `$kp-api-deploy`.
+This command installs only `kp-api-init`. When initialization finishes, that Skill installs the other six Skills in `kp-api-skill` into the same project and agent scope. It does not install `kp-app-skill`. A Codex project tree looks like this:
+
+~~~text
+<project>/.agents/skills/
+├── kp-skill-create/
+├── kp-skill-release/
+├── kp-skill-install/
+├── kp-api-init/
+├── kp-api-endpoint/
+├── kp-api-worker/
+├── kp-api-test-deploy/
+├── kp-api-build/
+├── kp-api-deploy/
+└── kp-api-docs/
+~~~
+
+Claude Code uses `.claude/skills/` instead of `.agents/skills/`. Test the initial router with `$kp-api-test-deploy`; deploying it to DEV or PRD still requires an explicit request and follows `$kp-api-deploy`.
 
 ## Use in an existing API repository
 
 Initialization is not required. Install the whole plugin set into the target project:
 
-If the manager is missing from the selected agent path, install all manager Skills first with the same `-a` options, then install the API plugin.
+If the manager is missing from the selected agent path, install all manager Skills first with the same `--agent` options, then install the API plugin.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
-  --skill '*' -a codex -a claude-code -a hermes-agent -a openclaw --copy --yes
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
-The default scope is the current project. Leave out `--global` and `-g` when the Skills should stay with this repository. The canonical source is `kp-api-skill/skills/` in `kp-skill`; after an upstream update, run `npx skills update` and review the diff.
+Keep only the `--agent` options you use. To install a single API Skill, replace `--skill '*'` with its name. The default scope is the current project. Leave out `--global` and `-g` when the Skills should stay with this repository. The canonical source is `kp-api-skill/skills/` in `kp-skill`; after an upstream update, run `npx skills update` and review the diff.
+
+Claude native plugin installation uses the manager dependency declared in `.claude-plugin/plugin.json` and is separate from Skills CLI copy installation. Verify native plugin scope with its host; use the Skills CLI steps above when the Skills must stay with one repository.
 
 ## Accounts, access, and secrets
 

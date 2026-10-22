@@ -21,7 +21,16 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-man
   --skill '*' --agent codex --copy --yes
 ~~~
 
-Claude Code, Hermes Agent, OpenClaw 등 여러 에이전트에서 사용하려면 `--agent`를 반복합니다. 저장소에만 설치하려면 `--global`/`-g`를 사용하지 않습니다.
+`npx skills add`는 현재 작업 디렉터리를 프로젝트 설치 대상으로 사용합니다. Codex나 Claude Code에서 저장소에만 설치하려면 프로젝트 루트에서 실행하고 `--global`/`-g`를 사용하지 않습니다.
+
+| 에이전트 | 프로젝트 로컬 경로 | 사용자 전역 경로(`--global`/`-g`) |
+| --- | --- | --- |
+| Codex | `.agents/skills/<skill-name>/` | `~/.agents/skills/<skill-name>/` |
+| Claude Code | `.claude/skills/<skill-name>/` | `~/.claude/skills/<skill-name>/` |
+
+Codex 프로젝트에 manager를 설치하면 `.agents/skills/kp-skill-create/`, `.agents/skills/kp-skill-release/`, `.agents/skills/kp-skill-install/`이 만들어집니다. Claude Code에서는 같은 이름의 폴더가 `.claude/skills/` 바로 아래에 생깁니다. 플러그인 이름을 감싸는 상위 폴더는 만들지 않습니다. 다른 에이전트는 [공식 지원 에이전트 표](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)에서 프로젝트 경로를 확인해 주세요.
+
+Skills CLI 복사 설치는 plugin 의존성을 자동으로 설치하지 않습니다. 앱·API Skill을 추가할 때 manager가 없다면 설치 이유와 경로를 설명하고 동의를 받은 뒤 manager 세 Skill을 먼저 설치합니다. Claude native plugin 설치는 `.claude-plugin/plugin.json`의 의존성 선언을 따르며, Skills CLI 설치와 별도입니다. 사용자 전역 설치는 사용자가 해당 범위를 명시한 경우에만 선택합니다.
 
 ## 버전과 배포 기준
 

@@ -55,7 +55,7 @@ metadata:
 
 - unit tests, lint, format check를 실행합니다. HTTP/API 연동은 [`kp-api-test-deploy`](../kp-api-test-deploy/SKILL.md)를 사용해 unit test 다음에 격리된 Local Emulator Suite 검증을 진행합니다. emulator가 없는 외부 service는 mock/stub 처리합니다.
 - 격리된 전용 test Firebase project가 확인되지 않으면 test function을 원격 배포하지 않습니다. `test*Router`는 별도 GCP sandbox가 아닐 수 있으므로 먼저 [테스트 환경 참조](../kp-api-test-deploy/references/test-environments.md)를 확인합니다.
-- 초기화 종료 전에 [프로젝트 로컬 설치 지침](references/plugin-skills.md)을 읽고, 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager가 필요한 이유와 설치 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 검증한 뒤 API plugin의 일곱 Skill을 설치합니다. 거부하면 API Skill 설치를 진행하지 않습니다. `--global`/`-g`를 쓰지 않고 기존 local 수정사항을 보존합니다.
+- 작업을 시작하기 전에 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager가 필요한 이유와 설치 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 검증합니다. 초기화 종료 전에 [프로젝트 로컬 설치 지침](references/plugin-skills.md)을 읽고, 기존 API Skill과 사용자 수정을 확인한 뒤 `kp-api-init`을 제외한 이 플러그인의 누락된 여섯 Skill만 설치합니다. `kp-app-skill`은 설치하지 않습니다. 거부하면 필요한 manager를 포함한 KP Skill 설치와 작업을 진행하지 않습니다. `--global`/`-g`를 쓰지 않고 기존 local 수정사항을 보존합니다.
 - 초기화는 실제 DEV·PRD 배포를 포함하지 않습니다. 사용자가 환경·함수 범위를 명시해 배포를 요청했을 때만 `kp-api-test-deploy` 결과를 먼저 확인한 뒤 `kp-api-deploy`를 사용합니다.
 
 ## 종료 보고
@@ -75,4 +75,5 @@ metadata:
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
 - 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
+- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-api-init/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-api-init/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 초기화 후 설치 범위는 [플러그인 안내](../../README.ko.md)를 확인합니다.
 - 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.
