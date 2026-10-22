@@ -1,0 +1,10 @@
+{
+  "name": "kp-api-skill",
+  "description": "KP Firebase Functions 초기화, endpoint·worker 구현, 격리 테스트, 범위 지정 배포와 Developer Center API 문서화를 돕는 Skill을 제공합니다.",
+  "author": {
+    "name": "Kingdom Planet",
+    "url": "https://github.com/kingdompla-net"
+  },
+  "version": "1.0.0",
+  "dependencies": ["kp-skill-manager@kp-skill"]
+}

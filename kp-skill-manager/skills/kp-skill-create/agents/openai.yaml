@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP Skill Create"
+  short_description: "KP 플러그인과 Skill을 규칙에 맞게 생성"
+  default_prompt: "새 KP 플러그인과 Skill을 만들거나 기존 플러그인에 Skill을 추가할 때 $kp-skill-create를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

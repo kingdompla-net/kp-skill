@@ -7,7 +7,7 @@
 - `kingdompla-net/kingdom-planet-center` 저장소는 사용자가 다른 base를 지정하지 않는 한 `dev`를 PR base로 사용한다.
 - 기본 PR 템플릿은 `/Users/byungskersmacbook/.codex/templates/PULL_REQUEST_TEMPLATE.md`를 사용한다. 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`에는 같은 템플릿을 보관하고 정본과 일치시킨다.
 - 저장소에 `.github/PULL_REQUEST_TEMPLATE.md`가 있으면 GitHub PR에는 그 저장소 로컬 사본을 사용하고 정본과 일치시킨다.
-- 모든 PR 본문에는 정확한 메타데이터 필드 `Target-Delivery-Unit`과 `Delivery-Profile`을 포함한다. 값을 추측하지 말고 승인된 이슈, 로드맵, 브랜치, base 또는 릴리스 맥락에서 확인한다.
+- 모든 PR 본문에는 정확한 메타데이터 필드 `Target-Delivery-Unit`, `Target-Version`, `Delivery-Profile`을 포함한다. 값을 추측하지 말고 승인된 이슈, 로드맵, 브랜치, base 또는 릴리스 맥락에서 확인한다. `Target-Version`은 변경 내용에 맞춰 에이전트가 SemVer로 선택하며, 사용자에게 버전 번호를 지정해 달라고 묻지 않는다.
 - PR 하나는 하나의 전달 맥락에 집중한다. 구현과 직접 테스트를 함께 포함하고, 해당 전달 단위에 필요하지 않은 정리·증거·문서·생성 파일은 제외한다.
 - 커밋 전에 제안하는 PR 범위, 변경 경로, diff 요약, 검증 결과, 위험, 완성된 PR 템플릿 초안을 보고하고 사용자의 명시적 승인을 기다린다.
 - 승인 후 승인된 범위의 각 작업 맥락이 구현·직접 검증될 때마다 해당 경로나 hunk만 stage하고 staged diff를 검토해 독립 커밋으로 남긴다. 모든 맥락의 검증이 끝나면 승인된 템플릿으로 확인된 base 대상 PR을 생성하고, 필수 검사와 리뷰 요청이 해결된 뒤 PR을 base에 병합한다. 이 PR 생성·병합은 승인받은 작업을 완료하는 기본 절차다.

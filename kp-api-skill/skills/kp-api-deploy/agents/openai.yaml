@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Deploy"
+  short_description: "요청한 환경의 Firebase Functions를 범위 제한해 배포"
+  default_prompt: "환경과 function 배포 범위를 검증하고 배포할 때 $kp-api-deploy를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

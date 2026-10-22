@@ -1,7 +1,8 @@
 Target-Delivery-Unit:
+Target-Version:
 Delivery-Profile:
 
-> 승인된 이슈·로드맵·브랜치·base·릴리스 맥락을 기준으로 두 값을 채워주세요. 값을 추측하지 마세요.
+> 승인된 이슈·로드맵·브랜치·base·릴리스 맥락에서 값을 확인하세요. Target-Version은 변경 내용에 맞춰 SemVer를 선택하고 사용자에게 버전 번호를 묻지 마세요.
 
 이번 PR의 목적을 한 문장으로 요약해주세요.
 

@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP Skill Install"
+  short_description: "KP Skill 설치를 실제 배포 버전에 맞춰 갱신"
+  default_prompt: "지정된 KP 플러그인이나 전체 KP Skill 설치를 최신 배포 버전으로 맞출 때 $kp-skill-install을 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

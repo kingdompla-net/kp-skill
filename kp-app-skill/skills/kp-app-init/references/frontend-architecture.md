@@ -68,7 +68,8 @@ src/
 - .agents/references/project-overview.md: 앱 목적, 실제 계층 구조, 엔트리 포인트, 라우팅과 Provider 조립.
 - .agents/references/api-contract.md: 도메인 API map, KP endpoint·인증·권한·Zod schema 문서의 위치와 Developer Center 문서 링크. API 문서 로그인 계정은 AGENTS.local.md에서 확인한다.
 - .agents/references/auth-and-data.md: OAuth·세션 수명주기, Query/Zustand 경계, 원본 데이터와 로컬 데이터 규칙.
-- .agents/references/local-setup.md: mode별 환경 변수 이름, 로컬 명령, AGENTS.local.md의 계정 정보 위치와 비밀값 취급 규칙. 실제 비밀값은 적지 않는다.
+- .agents/references/local-setup.md: mode별 환경 변수 이름과 로컬 명령을 기록합니다. 실제 비밀값은 적지 않습니다.
+- .agents/references/cloud-access.md: 비밀 저장소, Firebase·GCP 주체, 환경 분리와 권한 관리자에게 요청할 정보를 설명합니다.
 - 각 주요 src/{layer}/AGENTS.md: 그 계층의 책임, 핵심 실제 파일·export·소비자, 테스트 위치, 해당 계층에서 금지할 의존 방향. src/hook/은 query/와 ui/ 사용법도 정리한다.
 
 ## 생성 프로젝트의 규칙 템플릿
@@ -84,10 +85,10 @@ src/
 
 ## 실행 환경과 계정 정보
 
-- Git identity나 GitHub 원격 인증, Firebase/GCP 작업, 로컬·개발 서버 테스트, KP API 문서 열람을 시작하기 전에 대상 저장소 루트의 AGENTS.local.md를 확인한다.
-- 필요한 계정 정보가 없거나 해당 환경에 필요한 정보가 빠졌으면 사용자에게 필요한 항목만 요청하고, 답변을 받아 AGENTS.local.md를 추가하거나 갱신한다. 이 파일이 .gitignore에 포함되어 있는지 확인한다.
+- Git identity나 GitHub 원격 인증, Firebase/GCP 작업, 로컬·개발 서버 테스트, KP API 문서 열람을 시작하기 전에 대상 저장소 루트의 AGENTS.local.md를 확인합니다. 비밀·권한 기준은 [.agents/references/cloud-access.md 템플릿](../assets/templates/.agents/references/cloud-access.md)을 대상 저장소에 복사해 사용합니다.
+- 필요한 계정 식별자나 환경 정보가 없으면 사용자에게 해당 값만 요청해 AGENTS.local.md를 갱신합니다. 비밀번호·token·API key는 입력받아 이 파일에 기록하지 않습니다. 파일이 .gitignore에 포함되어 있는지 확인합니다.
 - 커밋 전 활성 GitHub 계정과 `git var GIT_AUTHOR_IDENT`, `git var GIT_COMMITTER_IDENT`를 확인한다. author·committer의 이름은 AGENTS.local.md에 정한 값을 사용하고, 두 이메일이 모두 같은 GitHub 계정에 인증된 이메일 또는 그 계정의 noreply 주소인지 검증한다. 계정이 다르거나 확인할 수 없으면 커밋하지 않는다.
-- 계정 비밀번호와 테스트 자격 증명은 AGENTS.local.md에만 둔다. 추적되는 AGENTS.md와 .agents/references/ 문서에는 자격 증명을 복사하지 않는다.
+- AGENTS.local.md에는 비밀 저장소의 이름과 환경 변수 이름만 둡니다. 비밀값은 OS Keychain 또는 조직 비밀 저장소에 보관하고 필요한 명령 프로세스에만 주입합니다. GitHub 계정, Firebase CLI 계정, gcloud CLI 계정, ADC 주체와 프로젝트 IAM 권한을 각각 확인합니다.
 - KP API 계약은 [DEV Developer Center](https://developer-kpcenter-dev.web.app/api)와 [PRD Developer Center](https://developer-kpcenter.web.app/api)에서 확인한다. 사용할 환경의 문서를 읽고, 로그인 계정은 AGENTS.local.md의 Developer Center 항목을 따른다.
 
 ## Firebase Hosting 구성과 배포 Skill 연결

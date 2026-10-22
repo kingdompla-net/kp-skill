@@ -1,7 +1,7 @@
 interface:
   display_name: "KP App Init"
   short_description: "화면 설계 소스를 KP API 웹 앱으로 초기화하고 문서화"
-  default_prompt: "이 화면 설계 소스를 KP API 웹 앱으로 초기화하기 위해 $kp-app-init을 사용해."
+  default_prompt: "이 화면 설계 소스를 KP API 웹 앱으로 초기화하기 위해 $kp-app-init을 사용해 주세요."
 
 policy:
   allow_implicit_invocation: true
