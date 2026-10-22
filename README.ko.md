@@ -2,13 +2,13 @@
 
 # KP Skill
 
-KP Skill은 Kingdom Planet 프로젝트에서 재사용하는 에이전트 중립 지침을 제공합니다. `kp-app-skill`은 React 앱 초기화·API 연동·Firebase Hosting을, `kp-api-skill`은 Firebase Functions 코드베이스 초기화·endpoint·worker·격리 테스트·배포·API 문서 반영을, `kp-skill-manager`는 Skill 생성·버전 관리·배포·설치 업데이트를 다룹니다.
+KP Skill은 Kingdom Planet 프로젝트에서 재사용하는 에이전트 중립 지침을 제공합니다. `kp-app-skill`은 React 앱 초기화·API 연동·Firebase Hosting 프리뷰·live 배포를, `kp-api-skill`은 Firebase Functions 코드베이스 초기화·endpoint·worker·격리 테스트·배포·API 문서 반영을, `kp-skill-manager`는 Skill 생성·버전 관리·배포·설치 업데이트를 다룹니다.
 
 ## 제공 플러그인
 
 | 플러그인 | 버전 | 설명 |
 | --- | --- | --- |
-| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.5.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md)를 제공합니다. |
+| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.6.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md)를 제공합니다. |
 | [`kp-api-skill`](kp-api-skill/README.ko.md) | `1.0.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md)를 제공합니다. |
 | [`kp-skill-manager`](kp-skill-manager/README.ko.md) | `1.0.0` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md)을 제공합니다. |
 

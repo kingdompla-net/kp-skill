@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP App Preview Delete"
+  short_description: "검토가 끝난 Hosting 프리뷰와 임시 callback을 정리"
+  default_prompt: "대상 PR과 Preview 배포 기록을 확인한 뒤 $kp-app-preview-delete 절차에 따라 해당 callback과 Hosting channel을 정리합니다."
+
+policy:
+  allow_implicit_invocation: true

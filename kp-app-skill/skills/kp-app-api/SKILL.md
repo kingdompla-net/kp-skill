@@ -2,7 +2,7 @@
 name: kp-app-api
 description: "초기화된 KP React 앱에 새 KP API 기능을 연결하거나 기존 API 연동을 수정할 때 사용합니다."
 metadata:
-  version: "2.5.0"
+  version: "2.6.0"
 ---
 
 # KP 앱 API 연동

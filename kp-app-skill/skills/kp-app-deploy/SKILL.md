@@ -2,7 +2,7 @@
 name: kp-app-deploy
 description: "초기화된 KP React 앱을 사용자가 지정한 DEV 또는 PRD Firebase Hosting 환경에 사전 검증하고 배포할 때 사용합니다."
 metadata:
-  version: "2.5.0"
+  version: "2.6.0"
 ---
 
 # KP 앱 Firebase Hosting 배포

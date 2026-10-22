@@ -10,8 +10,8 @@
     {
       "name": "kp-app-skill",
       "source": "./kp-app-skill",
-      "description": "KP React 앱 초기화, API 연동, Firebase Hosting 배포를 돕는 프로젝트 로컬 Skill을 제공합니다.",
-      "version": "2.5.0"
+      "description": "KP React 앱 초기화, API 연동, Firebase Hosting 프리뷰 검토와 배포를 돕는 프로젝트 로컬 Skill을 제공합니다.",
+      "version": "2.6.0"
     },
     {
       "name": "kp-api-skill",
