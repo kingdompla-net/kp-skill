@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Docs"
+  short_description: "배포된 공개 API를 Developer Center에 문서화"
+  default_prompt: "배포된 공개 KP API를 Center API Docs에 반영하고 임시 Preview를 준비할 때 $kp-api-docs를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

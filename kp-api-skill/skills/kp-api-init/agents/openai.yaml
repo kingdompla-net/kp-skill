@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Init"
+  short_description: "새 KP Firebase Functions codebase와 router를 준비"
+  default_prompt: "새 도메인의 KP API codebase와 최초 router를 준비할 때 $kp-api-init을 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

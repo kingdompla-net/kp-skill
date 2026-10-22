@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Worker"
+  short_description: "필요한 비동기 worker와 retry 경계를 구현"
+  default_prompt: "긴 처리, 재시도 또는 예약 실행이 필요한 KP API worker를 만들 때 $kp-api-worker를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

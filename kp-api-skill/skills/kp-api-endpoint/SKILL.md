@@ -1,0 +1,30 @@
+---
+name: kp-api-endpoint
+description: "기존 KP Firebase Functions codebase와 router에 동기 HTTP endpoint를 추가하거나 수정할 때 사용합니다."
+metadata:
+  version: "1.0.0"
+---
+
+# KP API endpoint 구현
+
+사용자가 요청한 동기 HTTP endpoint를 기존 API 구조에 추가하거나 수정합니다. 새 codebase가 필요한 요청은 `kp-api-init`, 비동기·예약 실행이 필요한 작업은 `kp-api-worker`, 여러 API를 끝까지 만드는 요청은 `kp-api-build`에서 처리합니다.
+
+## 작업 절차
+
+1. 저장소의 `AGENTS.md`, 필요한 경우 `AGENTS.local.md`, 현재 codebase, Firebase config, route exports, 테스트와 `git status --short --branch`를 확인합니다.
+2. [`kp-api-init` 저장소 분석](../kp-api-init/references/api-project-architecture.md)을 읽고 기존 API contract, auth middleware, error envelope, schema validator와 log convention을 조사합니다. 현재 API 문서가 필요하면 승인된 source를 확인합니다.
+3. method, path, 인증 주체, 호출자 권한, request schema, response schema, 오류, pagination과 부작용을 정리합니다. 필요한 필드나 권한을 추측하지 않습니다. KP 사용자, API key를 쓰는 backend, public request를 구분합니다.
+4. 기존 도메인 router에 요청 경로를 등록합니다. 있는 middleware와 schema를 재사용하고 사업 로직 전에 요청을 검증합니다. 새 router/export가 필요하다면 별도 배포 또는 IAM 경계가 필요한 이유를 확인합니다.
+5. handler의 입력과 외부 의존성을 명확히 하고, public response에서 raw exception, token, 개인정보를 제거합니다. 서버 API key를 browser나 client에 전달하지 않습니다.
+6. 정상 경로, 인증·권한 거부, 잘못된 body, 외부 실패, 중복 또는 재시도 위험을 검증하는 unit test를 작성하거나 갱신합니다. 실제 결제·발송·삭제·대량 변경 API를 test에서 호출하지 않습니다.
+7. 해당 codebase의 lint·format check·unit test를 실행하고 필요한 경우 [`kp-api-test-deploy`](../kp-api-test-deploy/SKILL.md)로 emulator test를 추가합니다. 이 Skill 자체는 DEV·PRD 배포를 포함하지 않습니다. 사용자가 환경을 지정해 배포를 요청한 경우 `kp-api-deploy`를 사용합니다.
+
+## 완료 보고
+
+추가한 route와 인증·schema 결정, 테스트 결과, 미확인 외부 contract를 보고합니다. local test를 provider 배포나 live response로 표현하지 않습니다. 운영 key, 사용자 token, secret을 로그나 결과에 출력하지 않습니다.
+
+## KP Skill 관계와 관리자 설치
+
+- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
+- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
+- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

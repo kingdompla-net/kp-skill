@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Endpoint"
+  short_description: "기존 router에 동기 HTTP API를 구현"
+  default_prompt: "기존 KP API router에 endpoint를 추가하거나 수정할 때 $kp-api-endpoint를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

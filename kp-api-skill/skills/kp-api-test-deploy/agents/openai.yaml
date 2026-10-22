@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Test Deploy"
+  short_description: "DEV·PRD와 분리된 API 테스트 환경을 실행"
+  default_prompt: "KP API를 격리된 로컬 emulator 또는 전용 test project에서 검증할 때 $kp-api-test-deploy를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true

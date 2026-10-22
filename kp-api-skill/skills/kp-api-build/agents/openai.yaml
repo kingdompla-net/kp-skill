@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP API Build"
+  short_description: "요청에 필요한 API codebase, route, worker를 조합"
+  default_prompt: "이 KP API 기능을 기존 구조에 맞게 끝까지 구현할 때 $kp-api-build를 사용해 주세요."
+
+policy:
+  allow_implicit_invocation: true
