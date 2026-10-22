@@ -64,6 +64,7 @@ src/
 
 /init 실행 후 실제 구현을 기준으로 다음 문서 지도를 만든다.
 
+- `.agents/references/spec.md`: 대상 저장소의 실제 프레임워크·라이브러리·검사 도구, 선언 범위와 lockfile 버전, Node.js·패키지 관리자 고정 여부, 검증 명령을 기록합니다. 루트 `AGENTS.md`에서 연결하고 모든 작업자가 기술 스택을 변경하기 전에 읽고 함께 갱신하도록 합니다.
 - 루트 AGENTS.md: 한두 문장 개요, 실제 폴더 트리, 개발·검증 명령, `.agents/references/`와 하위 `AGENTS.md` 링크, 범용 규칙을 둔다. 작업마다 최소한 `main`/`dev`가 아닌 별도 작업 브랜치를 사용하고, 권장 방식은 작업별 워크트리와 브랜치를 함께 만드는 것이라고 명시한다. 모든 작업을 목적 맥락별로 나눠 각 맥락의 구현·직접 검증 후 독립 커밋을 남기고, 최종 완료 시 확인된 base 대상 PR을 생성해 필수 검사와 리뷰가 끝나면 병합한다고 명시한다. PR 없이 작업 브랜치를 base에 직접 병합하려면 사용자의 사전 명시적 승인을 받도록 한다. `main`/`dev`에 직접 push하려면 push 직전에 매번 사용자의 명시적 승인을 받도록 한다. GitHub 원격 인증 계정과 Git 커밋 identity가 같은 사용자 계정이어야 하며, `AGENTS.local.md`에 정한 author·committer 이름과 이메일을 커밋 전에 확인하도록 명시한다. author와 committer 이메일은 모두 해당 GitHub 계정에 인증된 이메일 또는 그 계정의 noreply 주소여야 한다. 커밋·PR 작업은 `.agents/references/commit-rule.md`와 `.agents/references/pr-rule.md`로 연결하고, PR 템플릿은 `.references/PULL_REQUEST_TEMPLATE.md`로 연결한다. 세부 규칙은 해당 참조 문서에 두고 AGENTS.md에는 라우팅 링크를 유지한다. 설치된 KP Skill의 실제 프로젝트 로컬 경로를 기록하고, 초기화·구조 연결은 `kp-app-init`, 명시적으로 요청한 Firebase Hosting 배포는 `kp-app-deploy`로 연결한다. Git identity나 원격 인증, Firebase/GCP, 로컬·개발 서버 테스트, KP API 문서 열람에 계정이 필요한 경우 `AGENTS.local.md`를 먼저 확인한다. 정보가 없거나 불완전하면 사용자가 필요한 정보를 제공하도록 요청하고, 무시 규칙이 적용된 `AGENTS.local.md`를 추가·갱신한 뒤 진행한다. 계정 정보를 추적 문서에 복사하지 않는다.
 - .agents/references/project-overview.md: 앱 목적, 실제 계층 구조, 엔트리 포인트, 라우팅과 Provider 조립.
 - .agents/references/api-contract.md: 도메인 API map, KP endpoint·인증·권한·Zod schema 문서의 위치와 Developer Center 문서 링크. API 문서 로그인 계정은 AGENTS.local.md에서 확인한다.

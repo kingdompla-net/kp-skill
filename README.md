@@ -2,13 +2,13 @@
 
 # KP Skill
 
-KP Skill packages reusable, agent-neutral guidance for Kingdom Planet applications. The `kp-app-skill` plugin supports React app initialization, API integration, and Firebase Hosting. The `kp-api-skill` plugin supports Firebase Functions codebase initialization, synchronous endpoints, background workers, isolated testing, scoped deployment, and Developer Center API documentation. The `kp-skill-manager` plugin creates, versions, publishes, republishes earlier Skill content as a new version, and updates project-local KP Skill installations.
+KP Skill provides agent-neutral guidance reusable across Kingdom Planet projects. `kp-app-skill` covers React app initialization, API integration, Firebase Hosting previews, and live deployment; `kp-api-skill` covers Firebase Functions initialization, endpoints, workers, isolated testing, deployment, and API documentation; `kp-skill-manager` covers Skill creation, versioning, publishing, and project-local updates.
 
 ## Available plugins
 
 | Plugin | Version | Description |
 | --- | --- | --- |
-| [`kp-app-skill`](kp-app-skill/README.md) | `2.5.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), and [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md). |
+| [`kp-app-skill`](kp-app-skill/README.md) | `2.6.0` | Includes [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), and [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md). |
 | [`kp-api-skill`](kp-api-skill/README.md) | `1.0.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), and [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md). |
 | [`kp-skill-manager`](kp-skill-manager/README.md) | `1.0.0` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), and [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md). |
 

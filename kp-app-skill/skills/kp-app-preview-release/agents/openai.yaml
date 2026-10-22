@@ -1,0 +1,7 @@
+interface:
+  display_name: "KP App Preview Release"
+  short_description: "승인된 환경에 Hosting 프리뷰를 배포하고 확인"
+  default_prompt: "요청한 환경과 Hosting target을 확인한 뒤 $kp-app-preview-release 절차에 따라 Firebase Preview Channel을 배포합니다."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,16 +1,18 @@
 # KP App Skill
 
-Version: 2.5.0
+Version: 2.6.0
 
-`kp-app-skill` provides project-local Skills for initializing KP React applications, integrating KP APIs, and deploying Firebase Hosting.
+`kp-app-skill` provides project-local Skills for initializing KP React apps, integrating APIs, reviewing Firebase Hosting previews, and deploying live sites.
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.5.0` | First connecting a designed React repository as a KP app | Preserve the existing UI, configure verified KP API and Firebase environments, write project guidance, and install the app plugin's three Skills in the active agent's project directory. |
-| [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.5.0` | Adding a feature or changing a KP API integration in an existing app | Verify the official API contract and connect it to the existing app architecture. |
-| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.5.0` | When the user requests a DEV or PRD Hosting deployment | Verify the target Firebase project and Hosting target, then deploy Hosting only. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.6.0` | When connecting a designed React repository to KP for the first time | Preserves existing screens and baseline tooling, then records compatible tools and Node.js settings in `.agents/references/spec.md`. |
+| [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.0` | Adding a feature or changing a KP API integration in an existing app | Verify the official API contract and connect it to the existing app architecture. |
+| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.6.0` | When the user requests a DEV or PRD Hosting deployment | Verify the target Firebase project and Hosting target, then deploy Hosting only. |
+| [`kp-app-preview-release`](skills/kp-app-preview-release/SKILL.md) | `1.0.1` | When a Firebase Hosting preview channel is requested for review | Verifies the environment and Hosting target, deploys a preview that expires after one day, and registers a temporary OAuth callback only when approved. |
+| [`kp-app-preview-delete`](skills/kp-app-preview-delete/SKILL.md) | `1.0.0` | After review is complete or the PR is merged | Verifies and removes only the callback and Firebase Hosting preview channel added for that deployment. |
 
-Initialization adds `build:dev` and `deploy:dev` scripts to the app's `package.json`; it adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. After initialization, `kp-app-init` installs only the three Skills in `kp-app-skill` into the same project and agent scope. It does not install `kp-api-skill`. Passwords and tokens stay in an OS Keychain or organization secret manager. `AGENTS.local.md` may contain non-secret account and environment references, never credential values.
+Initialization adds `build:dev` and `deploy:dev` scripts to the app's `package.json`; it adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. After initialization, `kp-app-init` installs all five Skills from `kp-app-skill` into the same project and agent scope. It does not install `kp-api-skill`. Passwords and tokens belong in an OS Keychain or organization secret manager, never in `AGENTS.local.md`.
 
 ## Generated repository rules
 
@@ -43,7 +45,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
   --skill kp-app-init --agent codex --copy --yes
 ~~~
 
-This command installs only `kp-app-init`. After initialization completes, that Skill installs `kp-app-api` and `kp-app-deploy` into the same project and agent scope. It does not install the seven Skills from `kp-api-skill`. Install the complete manager set first if it is not already present.
+This command installs only `kp-app-init`. After initialization, that Skill installs the other four `kp-app-skill` Skills into the same project and agent scope. It does not install the seven Skills from `kp-api-skill`. If the complete manager set is not installed, ask for consent and install it first.
 
 After setup, the Codex project tree looks like this:
 
@@ -54,7 +56,9 @@ After setup, the Codex project tree looks like this:
 ├── kp-skill-install/
 ├── kp-app-init/
 ├── kp-app-api/
-└── kp-app-deploy/
+├── kp-app-deploy/
+├── kp-app-preview-release/
+└── kp-app-preview-delete/
 ~~~
 
 Claude Code uses `.claude/skills/` instead of `.agents/skills/`. Each directory is named after an individual Skill, not its plugin.
@@ -83,4 +87,4 @@ The canonical Skills live in the `kp-skill` repository. From the target project 
 
 ## Use
 
-Invoke `kp-app-init` to connect a designed source repository for the first time, `kp-app-api` to add or change a KP API integration in an existing app, and `kp-app-deploy` when the user requests a Firebase Hosting deployment and names DEV or PRD.
+Use `kp-app-init` to connect a designed repository for the first time, `kp-app-api` to add or change a KP API integration in an existing app, `kp-app-deploy` for live Hosting deployment, and `kp-app-preview-release` or `kp-app-preview-delete` to create or clean up a preview.
