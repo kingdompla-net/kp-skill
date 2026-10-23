@@ -1,12 +1,12 @@
 # KP App Skill
 
-Version: 2.7.0
+Version: 2.8.0
 
 `kp-app-skill` provides project-local Skills for initializing KP React apps, integrating APIs, reviewing Firebase Hosting previews, and deploying live sites.
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.7.0` | When connecting a designed React repository to KP for the first time | Preserves existing screens and baseline tooling, then records compatible tools and Node.js settings in `.agents/references/spec.md`. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.8.0` | When connecting a designed React repository to KP for the first time | Preserves existing screens and baseline tooling, records compatible tools and Node.js settings in `.agents/references/spec.md`, and tracks Firebase Hosting targets, environment-specific Preview system App IDs, URLs, callbacks, and cleanup. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.0` | Adding a feature or changing a KP API integration in an existing app | Verify the official API contract and connect it to the existing app architecture. |
 | [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.7.0` | When requesting a default deployment without specifying the environment | Selects DEV as the default and provides shared Firebase Hosting deployment guidance. |
 | [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.0.0` | When directly invoking the DEV deployment Skill | Validates, builds, and deploys DEV Hosting only. |

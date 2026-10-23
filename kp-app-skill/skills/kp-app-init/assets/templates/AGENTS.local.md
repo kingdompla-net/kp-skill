@@ -12,10 +12,10 @@
 
 ## Firebase·Google Cloud 환경
 
-| 환경 | Firebase CLI 계정 | gcloud CLI 계정 | ADC 주체 | Firebase 프로젝트 ID | Hosting 사이트 ID |
-| --- | --- | --- | --- | --- | --- |
-| DEV | {계정 이메일} | {계정 이메일} | {사용자 또는 서비스 계정 주체} | {DEV 프로젝트 ID} | {DEV 사이트 ID} |
-| PRD | {계정 이메일 또는 별도 승인 계정} | {계정 이메일 또는 별도 승인 계정} | {사용자 또는 서비스 계정 주체} | {PRD 프로젝트 ID} | {PRD 사이트 ID} |
+| 환경 | Firebase CLI 계정 | gcloud CLI 계정 | ADC 주체 | Firebase 프로젝트 ID | Hosting 사이트 ID | Hosting target |
+| --- | --- | --- | --- | --- | --- | --- |
+| DEV | {계정 이메일} | {계정 이메일} | {사용자 또는 서비스 계정 주체} | {DEV 프로젝트 ID} | {DEV 사이트 ID} | {DEV Hosting target} |
+| PRD | {계정 이메일 또는 별도 승인 계정} | {계정 이메일 또는 별도 승인 계정} | {사용자 또는 서비스 계정 주체} | {PRD 프로젝트 ID} | {PRD 사이트 ID} | {PRD Hosting target} |
 
 gcloud CLI 로그인 계정과 Application Default Credentials(ADC)는 별도로 확인합니다. 하나의 gcloud configuration을 바꿔도 ADC 주체가 바뀌지 않을 수 있습니다. 계정 이메일이 프로젝트의 IAM 권한을 뜻하지 않으므로 요청된 환경과 실제 권한을 각각 확인합니다.
 
@@ -25,6 +25,23 @@ gcloud CLI 로그인 계정과 Application Default Credentials(ADC)는 별도로
 | --- | --- | --- | --- |
 | DEV | {사용자 계정} | {Keychain 항목 또는 조직 비밀 저장소 경로} | {필요 시} |
 | PRD | {사용자 계정 또는 DEV와 동일} | {Keychain 항목 또는 조직 비밀 저장소 경로} | {필요 시} |
+
+## KP System App ID
+
+`KP_SYSTEM_APP_ID`는 Preview의 `appSetApp` 및 `appGetApp` 요청에서 query parameter `app_id`에 사용하는 시스템 앱 식별자입니다. Request Body의 `app_id`는 변경 대상 앱 식별자이므로 별도로 확인합니다. API key와 token은 기록하지 말고 비밀 저장소의 항목 이름만 기록합니다.
+
+| 환경 | KP 앱 이름 | `KP_SYSTEM_APP_ID` |
+| --- | --- | --- |
+| DEV | {DEV KP 앱 이름} | {DEV KP_SYSTEM_APP_ID} |
+| PRD | {PRD KP 앱 이름} | {PRD KP_SYSTEM_APP_ID} |
+
+## KP App Preview 작업 기록
+
+Preview channel과 callback을 추적하고 검토가 끝난 뒤 정리할 수 있도록 기록합니다. 실제 token, API key, 비밀번호는 기록하지 않습니다.
+
+| 환경 | Firebase project / site / target | Channel ID | Branch / commit / PR | Preview URL / 만료 | Callback URL | 배포 전 callback 상태 | 정리 상태 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| {DEV 또는 승인된 PRD} | {project / site / target} | {channel ID} | {branch / commit / PR} | {Preview URL / 만료 시각} | {callback URL 또는 해당 없음} | {기존 / 이번에 추가 / 해당 없음} | {미정리 / 정리 완료} |
 
 ## {KP 앱} 테스트 계정 정보
 

@@ -1,12 +1,12 @@
 # KP 앱 Skill
 
-버전: 2.7.0
+버전: 2.8.0
 
 `kp-app-skill`은 KP React 앱 초기화와 API 연동, Firebase Hosting Preview 검토와 live 배포에 필요한 프로젝트 로컬 Skill을 제공합니다.
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.7.0` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고, 호환되는 버전·Node.js 실행 환경을 기록한 `.agents/references/spec.md`를 생성해 모든 작업자 지침에 연결합니다. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.8.0` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고 호환되는 도구·Node.js 설정을 `.agents/references/spec.md`에 기록하며 Firebase Hosting target, 환경별 Preview 시스템 App ID, URL·callback·정리 상태를 추적합니다. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.0` | 이미 초기화된 앱에 기능을 추가하거나 KP API 연동을 수정할 때 | 공식 API 계약을 확인해 기존 앱 구조와 query/state 경계에 연결합니다. |
 | [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.7.0` | 환경을 지정하지 않고 기본 배포를 요청했을 때 | DEV를 기본값으로 선택하고 Firebase Hosting 공통 배포 규칙을 안내합니다. |
 | [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.0.0` | DEV 배포 Skill을 직접 호출할 때 | DEV Hosting만 검증·빌드·배포합니다. |
