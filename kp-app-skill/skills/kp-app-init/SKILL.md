@@ -2,7 +2,7 @@
 name: kp-app-init
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용합니다."
 metadata:
-  version: "2.7.0"
+  version: "2.8.0"
 ---
 
 # KP 앱 초기화
@@ -20,12 +20,13 @@ metadata:
 1. 대상 저장소 루트, 적용되는 AGENTS.md, 현재 브랜치와 git status --short --branch를 확인한다. 기존 수정·미추적 파일은 보존하고, 화면 설계 소스를 인벤토리해 새 구조에 매핑한다.
 2. 사용자가 이미 준 값을 다시 묻지 않는다. 다음 값 중 저장소나 대화에서 확인할 수 없는 값은 한 번에 묶어 요청한다.
    - KP APP_ID: 사용자가 KP Developer Center에서 직접 확인해 제공해야 한다. 앱 ID를 추측하거나 다른 저장소에서 가져오지 않는다. DEV/PRD가 다르면 각 값을 받고, 같으면 양쪽 환경에 같은 값을 쓴다는 확인을 받는다.
+   - Preview callback 설정에 필요한 환경별 `KP_SYSTEM_APP_ID`: `appSetApp`·`appGetApp` 요청의 query parameter `app_id`에 사용하는 값이며, 대상 KP 앱의 `KP APP_ID`와 구분합니다. API 계약에서 확인할 수 없으면 사용자에게 요청하고 추측하지 않습니다. callback 설정 변경이 작업 범위에 포함되지 않으면 요청하지 않습니다.
    - 로컬 OAuth callback: 기본값은 http://localhost:3000/auth/callback이다. 개발 서버 포트가 다르면 실제 URL을 받는다. localhost와 127.0.0.1은 서로 다른 redirect URI다.
    - DEV/PRD OAuth callback 및 Firebase 프로젝트 ID·Hosting 사이트 ID·도메인. 대상 저장소의 기존 Firebase 설정에서 확인할 수 없는 값만 환경별로 요청한다.
    - KP Developer Center 로그인 계정: API 문서 열람에 필요한 계정 이메일과 인증 수단의 로컬 참조를 AGENTS.local.md에서 확인합니다. 비밀번호·세션 쿠키·토큰은 그 파일에 기록하지 않습니다.
    - 확정 구조의 store/slices/와 모든 폴더명 단수 원칙이 충돌한다. 이 초기화에서 해당 경로가 필요하면 store/slice/로 바꿀지, 기존 경로의 예외로 둘지 확인한다.
 3. VITE_APP_NAME은 package.json의 name에서 만들고, VITE_APP_DESCRIPTION은 package 설명·README·화면의 실제 목적에 맞춰 쓴다. 앱 이름 변환이 PascalCase인지 공백으로 구분한 이름인지 불명확하면 예시를 제시해 확인한다. 설명을 지어낼 근거가 없으면 사용자에게 목적을 묻는다.
-4. AGENTS.local.md는 assets/templates/AGENTS.local.md를 바탕으로 GitHub/Git identity, 환경별 프로젝트 ID와 계정 이메일, 테스트 계정 이메일·역할, Secret Manager·Keychain 항목 이름처럼 비밀이 아닌 로컬 설정을 기록합니다. 실제 비밀번호·세션·액세스 토큰·API key·개인 키는 이 파일, 셸 설정, 저장소 파일에 넣지 않습니다. 실제 비밀은 OS Keychain 또는 조직 Secret Manager에 두고 필요한 명령의 프로세스에만 환경 변수로 주입합니다. AGENTS.local.md가 .gitignore에 포함되어 `git check-ignore -v AGENTS.local.md`로 확인되는지 검증합니다.
+4. AGENTS.local.md는 assets/templates/AGENTS.local.md를 바탕으로 GitHub/Git identity, 환경별 프로젝트 ID·Hosting target·`KP_SYSTEM_APP_ID`, 계정 이메일, 테스트 계정 이메일·역할, Secret Manager·Keychain 항목 이름처럼 비밀이 아닌 로컬 설정을 기록합니다. 실제 비밀번호·세션·액세스 토큰·API key·개인 키는 이 파일, 셸 설정, 저장소 파일에 넣지 않습니다. 실제 비밀은 OS Keychain 또는 조직 Secret Manager에 두고 필요한 명령의 프로세스에만 환경 변수로 주입합니다. AGENTS.local.md가 .gitignore에 포함되어 `git check-ignore -v AGENTS.local.md`로 확인되는지 검증합니다.
    - KP API 문서를 읽을 때는 Developer Center 계정 이메일과 인증 수단의 로컬 참조를 확인합니다. 정보가 없으면 사용자에게 필요한 항목만 요청하며 비밀번호를 입력받아 문서에 보관하지 않습니다.
    - Git identity나 GitHub 원격 인증, Firebase/GCP 작업, 로컬·개발 서버 테스트에 필요한 계정·권한·환경을 확인합니다. 로그인 계정과 프로젝트 권한은 서로 다르므로 403이나 IAM 오류가 나면 실제 주체·프로젝트·리소스·거부된 permission을 기록해 권한 관리자에게 필요한 최소 권한 수정을 안내합니다.
 
