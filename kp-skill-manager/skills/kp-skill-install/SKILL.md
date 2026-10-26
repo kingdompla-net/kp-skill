@@ -63,6 +63,15 @@ Claude Code, Codex 또는 조직 관리형 workspace marketplace에서 설치한
 - workspace 관리자 동작이 필요한 marketplace는 local CLI 결과로 완료를 주장하지 말고 관리자 갱신이 필요한 상태를 보고합니다.
 - 완료 보고에는 요청된 project/global 범위, 각 agent의 설치 방식, 이전·이후 Skill 버전, provider refresh/reload 여부와 남은 작업을 구분합니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | 업무 API | 호출하지 않습니다. Native marketplace 설치·갱신은 agent/provider의 관리 기능으로 처리합니다. | — |
+| CLI | Skills CLI: 범위 확인 | `npx skills list`와 `npx skills check`로 설치 상태를 확인합니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) |
+| CLI | Skills CLI: 설치·갱신 | 설치는 `npx skills add <SOURCE_URL> --skill <SKILL_NAME> --agent <AGENT> --copy --yes`, project update는 `npx skills update <SKILL_NAME> --project --yes`입니다. global update는 명시적 요청이 있을 때만 `--global`을 사용합니다. 여러 Skill은 `--skill` 뒤에 이름을 추가합니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md), [지원 agent](https://github.com/vercel-labs/skills/blob/main/docs/agents.md) |
+| 기타 | Lock file·agent Skill 경로·manifest·marketplace catalog | 설치 결과를 대조합니다. Native plugin 갱신은 해당 agent 절차로 별도 확인합니다. | — |
+
 ## 프로젝트 로컬 경로
 
 이 Skill은 Codex에서 `<project>/.agents/skills/kp-skill-install/SKILL.md`, Claude Code에서 `<project>/.claude/skills/kp-skill-install/SKILL.md`에 설치됩니다. plugin 이름의 상위 폴더는 만들지 않습니다. manager 전체를 처음 설치하는 명령은 [플러그인 안내](../../README.ko.md)를 확인합니다.

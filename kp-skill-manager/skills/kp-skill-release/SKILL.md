@@ -69,6 +69,16 @@ PR이 실제로 병합된 뒤 default branch의 commit과 버전을 다시 확�
 - 변경에 맞는 validator, 포맷·문서 링크 검사를 실행하고 결과와 범위를 기록합니다.
 - tag를 생성할 때 `git check-ref-format`으로 이름을 확인하고, push한 뒤 원격 tag와 대상 commit을 조회합니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | GitHub REST `GET /user`·Releases | `gh api user --jq .login`으로 인증 계정을 확인합니다. Release 생성은 승인된 범위에서 수행합니다. | [Get the authenticated user](https://docs.github.com/en/rest/users/users#get-the-authenticated-user), [gh api](https://cli.github.com/manual/gh_api), [Releases REST API](https://docs.github.com/en/rest/releases/releases) |
+| CLI | Git | 상태·동기화는 `git status --short --branch`, `git pull --ff-only origin main`; stage·검토·commit은 승인된 파일에 한해 `git add <APPROVED_PATHS>`, `git diff --cached`, `git commit -m "<TYPE>(agents): <DESCRIPTION>"`; branch push는 `git push --set-upstream <PUSH_REMOTE> <WORK_BRANCH>`입니다. | [git status](https://git-scm.com/docs/git-status), [git pull](https://git-scm.com/docs/git-pull), [git add](https://git-scm.com/docs/git-add), [git diff](https://git-scm.com/docs/git-diff), [git commit](https://git-scm.com/docs/git-commit), [git push](https://git-scm.com/docs/git-push) |
+| CLI | Git tag | 조회는 `git tag --list '<PLUGIN>/v*'`, 검증은 `git check-ref-format refs/tags/<TAG>`, 승인된 merge commit의 tag 생성·게시에는 `git tag -a <TAG> -m "<한글 변경 요약>" <MERGED_COMMIT>`와 `git push origin <TAG>`를 사용합니다. | [git tag](https://git-scm.com/docs/git-tag), [git check-ref-format](https://git-scm.com/docs/git-check-ref-format), [git push](https://git-scm.com/docs/git-push) |
+| CLI | GitHub CLI | PR은 `gh pr create --base <BASE_BRANCH> --title "<CONVENTIONAL_TITLE>" --body-file <PR_BODY_FILE>`, 이미 게시한 tag의 Release는 `gh release create <TAG> --title <TITLE> --notes-file <RELEASE_NOTES_FILE> --verify-tag`로 생성합니다. | [gh pr create](https://cli.github.com/manual/gh_pr_create), [gh release create](https://cli.github.com/manual/gh_release_create) |
+| 기타 | Frontmatter·plugin manifest·marketplace JSON·README·tag metadata | 파일 간 버전 정합성을 확인합니다. Validator는 저장소에서 실제 확인한 명령만 실행합니다. | — |
+
 ## KP Skill 연결과 관리자 기준
 
 - 이 Skill은 `kp-skill-manager` 플러그인의 일부이므로 manager 자체 설치 동의를 다시 요구하지 않습니다. 다른 KP Skill이 필요하면 관계표에서 확인하고, 현재 프로젝트·에이전트 경로에 없을 때는 필요한 이유와 이름을 설명한 뒤 설치 동의를 구합니다.

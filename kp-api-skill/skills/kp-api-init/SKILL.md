@@ -71,6 +71,17 @@ metadata:
 - 생성 저장소 지침과 계정 템플릿: [AGENTS.md](assets/templates/AGENTS.md), [AGENTS.local.md](assets/templates/AGENTS.local.md), [.agents/references/cloud-access.md](assets/templates/.agents/references/cloud-access.md)
 - 프로젝트 전체 Skill 설치: [plugin-skills.md](references/plugin-skills.md)
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Functions | 새 HTTP router와 function export 계약을 확인합니다. | [Functions](https://firebase.google.com/docs/functions), [Functions API reference](https://firebase.google.com/docs/reference/functions) |
+| API | KP 인증 | 기존 repository 구현과 환경별 API 문서를 대조합니다. 초기화 중 외부 API를 호출하거나 DEV·PRD에 배포하지 않습니다. | [DEV Developer Center](https://developer-kpcenter-dev.web.app/api/), [PRD Developer Center](https://developer-kpcenter.web.app/api/) |
+| CLI | Git | `git status --short --branch`와 `git check-ignore -v AGENTS.local.md`로 상태와 ignore 여부를 확인합니다. | [git status](https://git-scm.com/docs/git-status), [git check-ignore](https://git-scm.com/docs/git-check-ignore) |
+| CLI | Package manager | lockfile에서 manager를 확인하고 기존 script를 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | emulator script는 `firebase emulators:exec --config <FIREBASE_CONFIG> --project demo-<TEST_PROJECT_ID> --only <EMULATOR_LIST> "<TEST_COMMAND>"` 형식으로 구성합니다. 배포 scripts는 실행하지 않습니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [emulator 설정](https://firebase.google.com/docs/emulator-suite/install_and_configure) |
+| 기타 | Node.js·test runner·lint·format·emulator | 프로젝트 설정을 확인하며, HTTP integration test는 필요하면 `kp-api-test-deploy`의 Local Emulator Suite로 수행합니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

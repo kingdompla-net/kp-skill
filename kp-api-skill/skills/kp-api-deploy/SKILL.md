@@ -43,6 +43,17 @@ source branch/commit, 검사 결과, 인증 principal, Firebase project, config/
 - codebase/함수 단위 `--only` 배포와 QT 관찰 범위: [`kp-api-init` 구조 레퍼런스](../kp-api-init/references/api-project-architecture.md)
 - Firebase 공식 문서: [Functions 배포·관리](https://firebase.google.com/docs/functions/manage-functions), [Functions codebase 구성](https://firebase.google.com/docs/functions/organize-functions), [Firebase IAM 권한](https://firebase.google.com/docs/projects/iam/permissions)
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Functions | 배포 절차와 대상 export를 확인합니다. HTTP endpoint는 요청 또는 무해한 조회로 확인된 경우에만 호출합니다. | [Functions 배포](https://firebase.google.com/docs/functions/manage-functions) |
+| API | IAM·Secret Manager·queue·schedule | 실제 배포 설정에 포함된 권한, secret binding, queue 및 schedule contract(계약)를 확인합니다. | [IAM](https://cloud.google.com/iam/docs), [Secret Manager](https://cloud.google.com/secret-manager/docs), [Cloud Tasks API](https://cloud.google.com/tasks/docs/reference/rest), [Cloud Scheduler API](https://cloud.google.com/scheduler/docs/reference/rest) |
+| CLI | Git | 저장소 상태를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
+| CLI | Package manager | `package.json`에 검증된 배포 script가 있으면 `<PACKAGE_MANAGER> run <DEPLOY_SCRIPT>`로 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | 승인된 직접 배포는 `firebase deploy --config <CONFIG_PATH> --only functions:<FUNCTION_EXPORT> --project <FIREBASE_PROJECT_ID>`로 범위를 고정합니다. export와 project/config 값은 저장소 설정에서 확인합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [Functions 배포](https://firebase.google.com/docs/functions/manage-functions) |
+| 기타 | Firebase 설정·emulator·unit test | 배포 대상과 인증 주체를 대상 저장소 설정 및 emulator 결과와 대조합니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

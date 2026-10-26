@@ -23,6 +23,17 @@ API 기능 요청의 진입점입니다. 기존 저장소를 먼저 읽어 현�
 
 요청한 HTTP contract가 구현되고 관련 테스트가 통과했으며, 필요한 worker가 있을 때만 구현·검증되고, 배포를 요청하지 않았다면 source-only 결과를 provider 상태와 구분해 보고했을 때 완료입니다. 계정·권한이 막히면 실제 차단 주체·프로젝트·permission과 관리자에게 요청할 항목을 제시합니다. 권한을 임의로 넓히거나 부여하지 않습니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Functions | 기본 작업에서는 live API를 호출하지 않습니다. Functions contract(계약)은 문서와 대상 codebase에서 확인합니다. | [Functions](https://firebase.google.com/docs/functions) |
+| API | Handler가 사용하는 외부 API | 정확한 service와 endpoint를 대상 저장소에서 식별하고 해당 API 계약을 확인합니다. 검증에는 emulator 또는 mock을 사용합니다. | 실제 endpoint를 식별한 뒤 해당 service의 공식 문서를 연결합니다. |
+| CLI | Git | 저장소 상태를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
+| CLI | Package manager | lockfile과 `package.json`에서 script를 확인하고 `npm run <SCRIPT_NAME>`, `pnpm run <SCRIPT_NAME>`, `yarn <SCRIPT_NAME>` 또는 `bun run <SCRIPT_NAME>`으로 test·lint·format을 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | emulator 검증을 별도 수행할 때 `firebase emulators:exec --config <FIREBASE_CONFIG> --project demo-<TEST_PROJECT_ID> --only <EMULATOR_LIST> "<TEST_COMMAND>"`를 실행합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [emulator 설정](https://firebase.google.com/docs/emulator-suite/install_and_configure) |
+| 기타 | Runtime·test runner·lint·format·emulator | 대상 codebase의 `package.json`과 설정을 확인합니다. 필요하면 `kp-api-test-deploy`의 Firebase Local Emulator Suite를 사용합니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

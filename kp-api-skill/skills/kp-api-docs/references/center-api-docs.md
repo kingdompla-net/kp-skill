@@ -28,7 +28,7 @@
 - Center `src/kp-dev`에서 `oauth_redirect_uri_list`를 편집하는 화면은 로컬 검색에서 확인되지 않았습니다. 임시 callback은 승인된 Developer Center/app 설정 경로나 관리 권한이 있는 절차를 사용합니다. API key 또는 Firestore 직접 쓰기를 새 도구에서 임의 구현하지 않습니다.
 - 추가할 값은 Preview URL의 origin이 아니라 정확한 callback `https://<preview-host>/auth/callback`입니다. 변경 전 기존 목록을 기록하고, 검토 종료 후 이번 실행에서 추가한 값만 제거합니다.
 - Firebase Hosting CLI preview deploy가 Auth authorized domain을 추가·동기화하는지 CLI 문서와 실제 실행 옵션을 확인합니다. 바뀐 항목이 있으면 원본 상태와 분리해 기록하며 기존 도메인은 삭제하지 않습니다.
-- Preview channel은 기본 7일 만료지만 이 작업은 `--expires 1d`로 제한합니다. 사용자가 검토를 마친 후 `firebase hosting:channel:delete <채널-ID>`를 실행하고, Firebase가 채널·release·version 삭제를 최대 24시간 안에 예약할 수 있음을 알립니다. Callback과 이번 실행에서 추가된 authorized domain은 별도로 제거합니다.
+- Preview channel은 기본 7일 만료지만 이 작업은 `--expires 1d`로 제한합니다. 사용자가 검토를 마친 후 `firebase hosting:channel:delete <CHANNEL_ID> --site <SITE_ID> --project <DEV_PROJECT_ID>`를 실행하고, Firebase가 채널·release·version 삭제를 최대 24시간 안에 예약할 수 있음을 알립니다. Callback과 이번 실행에서 추가된 authorized domain은 별도로 제거합니다.
 
 ## 공식 Firebase 참고 자료
 

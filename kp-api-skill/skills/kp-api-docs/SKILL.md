@@ -52,7 +52,7 @@ Preview는 사용자 검토를 위한 임시 외부 배포이며 URL을 아는 �
 5. DEV용 Developer Center app 설정의 `oauth_redirect_uri_list`를 확인합니다. 기존 목록과 추가할 정확한 Preview callback URL을 사용자에게 보여드리고 승인받은 뒤에만 임시로 추가합니다. 공개 API key, DB 직접 조작, PRD 앱 설정 변경을 사용하지 않습니다. 승인된 앱 설정 경로가 없거나 쓰기 권한이 부족하면 실제 차단 항목과 관리자 요청을 안내하고 임의 우회하지 않습니다.
 6. 사용자에게 Preview URL과 만료 시각을 제공하고 문서 내용과 로그인 흐름을 검토하도록 합니다. 사용자가 확인하기 전에는 Preview와 임시 callback을 제거하지 않습니다. Preview는 기본적으로 1일 후 만료되지만, TTL은 callback 정리까지 대신하지 않습니다.
 7. 검토가 끝나면 먼저 임시 callback URL만 DEV app의 `oauth_redirect_uri_list`에서 제거하고 변경 후 목록을 확인합니다. Preview를 위해 Firebase Auth authorized domain이 추가된 경우 이번 실행에서 추가한 도메인만 정리합니다. 기존에 있던 항목은 삭제하지 않습니다.
-8. `firebase hosting:channel:delete <채널-ID> --project <DEV-Center-project-ID>`로 이번 작업의 channel을 삭제합니다. Firebase는 channel과 연결된 release·version의 삭제를 24시간 안에 예약할 수 있으므로 URL이 즉시 비활성화됐다고 추정하지 말고 channel 상태를 다시 확인합니다. 삭제 결과를 확인하고 callback, Auth domain, channel의 정리 결과를 각각 기록합니다.
+8. `firebase hosting:channel:delete <채널-ID> --site <DEV-Center-site-ID> --project <DEV-Center-project-ID>`로 이번 작업의 channel을 삭제합니다. Firebase는 channel과 연결된 release·version의 삭제를 24시간 안에 예약할 수 있으므로 URL이 즉시 비활성화됐다고 추정하지 말고 channel 상태를 다시 확인합니다. 삭제 결과를 확인하고 callback, Auth domain, channel의 정리 결과를 각각 기록합니다.
 
 Firebase Preview Channel은 만료를 지정해도 공개 URL이고 연결된 backend resource를 사용할 수 있습니다. 따라서 DEV 설정만 쓰고, Preview를 불특정 사용자에게 공유하지 않으며, 외부 부작용이 있는 요청으로 로그인 테스트를 하지 않습니다.
 
@@ -75,6 +75,17 @@ Firebase Preview Channel은 만료를 지정해도 공개 URL이고 연결된 ba
 - Preview URL 공개 범위와 실제 backend 연결: [로컬 테스트, 공유 Preview, live 배포](https://firebase.google.com/docs/hosting/test-preview-deploy)
 - 특정 Hosting site의 Preview target 지정: [Firebase Hosting 다중 site](https://firebase.google.com/docs/hosting/multisites)
 - API codebase/router/source 패턴: [`kp-api-init` 저장소 분석](../kp-api-init/references/api-project-architecture.md)
+
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | 공개 KP API | 배포 근거가 있는 endpoint별 contract(계약)를 확인합니다. | [DEV Developer Center](https://developer-kpcenter-dev.web.app/api/), [PRD Developer Center](https://developer-kpcenter.web.app/api) |
+| API | `appGetApp`·`appSetApp` | Preview callback을 readback하고, `appSetApp`은 명시적 승인 뒤에만 변경합니다. | [`appGetApp`](https://developer-kpcenter-dev.web.app/api/app#app-appGetApp-/v2/app/), [`appSetApp`](https://developer-kpcenter-dev.web.app/api/app#app-appSetApp-/v2/app/edit) |
+| API | Firebase Auth `authorizedDomains` | Preview domain을 다룰 때 redirect 및 authorized domain 계약을 확인합니다. | [redirect·authorized domain](https://firebase.google.com/docs/auth/web/redirect-best-practices) |
+| CLI | Git·package manager | `git status --short --branch`로 확인하고, Center 저장소에서 확인한 script를 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 실행합니다. | [git status](https://git-scm.com/docs/git-status), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | Preview 배포: `firebase hosting:channel:deploy <CHANNEL_ID> --only <HOSTING_TARGET> --expires 1d --project <DEV_PROJECT_ID>`<br>삭제: `firebase hosting:channel:delete <CHANNEL_ID> --site <DEV_SITE_ID> --project <DEV_PROJECT_ID>` | [CLI reference](https://firebase.google.com/docs/cli), [Preview Channel 관리](https://firebase.google.com/docs/hosting/manage-hosting-resources), [다중 site](https://firebase.google.com/docs/hosting/multisites) |
+| 기타 | `api-docs-v2.json`·renderer·검사 도구·Aside Browser | JSON과 기존 renderer를 확인하고 Developer Center 및 Preview 화면을 프로젝트 브라우저 규칙에 따라 살펴봅니다. | — |
 
 ## KP Skill 관계와 관리자 설치
 

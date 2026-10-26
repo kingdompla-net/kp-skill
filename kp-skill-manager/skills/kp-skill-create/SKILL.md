@@ -28,6 +28,7 @@ metadata:
 - Skill 폴더 이름, frontmatter 이름, `agents/openai.yaml`에서 호출하는 이름을 일치시킵니다.
 - README는 [플러그인 README 작성 기준](../../../references/plugin-readme-style.md)에 따라 `README.ko.md`와 `README.md`의 구조·Skill 표·설치 절차·사용 순서를 맞춥니다.
 - 요청 기능을 수행하는 데 필요한 `SKILL.md`만 작성합니다. 조건부 절차, 자료표, 긴 예시는 필요한 경우에만 연결된 references로 나눕니다.
+- `SKILL.md`에 `## 사용하는 API·CLI·도구` 섹션을 표로 추가합니다. 열은 `구분`, `API·CLI·도구`, `실제 사용 방식과 명령`, `공식 문서`로 구성합니다. API는 service와 endpoint/operation, 직접 호출 여부를 적고 각 API 문서를 연결합니다. 내부 KP API도 Developer Center의 해당 endpoint 문서를 연결하며, `appSetApp`처럼 endpoint 문서가 있으면 문서 홈 대신 직접 링크합니다. CLI는 실행 파일, 정확한 subcommand와 사용 옵션을 기록합니다. project·site·export·script 등 대상에 따라 달라지는 값은 `<...>`로 표시하고 확인 위치를 씁니다. 대상 저장소에서 정해지는 script는 `npm run <SCRIPT_NAME>`처럼 호출 형식과 `package.json` 등 확인 위치를 기록합니다. 여러 API나 명령은 행을 나누며, API가 없으면 `없음`으로 표시하고 기타 SDK·emulator·테스트 도구와 확인 기준도 적습니다.
 - 새 한국어 설명은 존댓말로 작성합니다. 표준 식별자, command, path, URL과 고정된 API 필드명은 필요한 경우 원문을 유지합니다.
 - 대상 플러그인의 양쪽 README 표에 Skill 링크, 버전, 사용 시점과 역할을 추가하고, 플러그인 버전은 manifest·README·marketplace에서 일치시킵니다. 각 Skill 버전은 해당 Skill의 `metadata.version`과 표를 맞춥니다.
 - 새 KP 플러그인의 `.claude-plugin/plugin.json`에는 `dependencies: ["kp-skill-manager@kp-skill"]`를 선언합니다. `kp-skill-manager` 플러그인 자체에는 자기 의존성을 추가하지 않습니다. Skills CLI를 쓰는 프로젝트 로컬 설치 안내에는 manager 전체를 같은 agent 경로에 먼저 설치하는 명령과 동의 절차를 포함합니다.
@@ -47,6 +48,16 @@ metadata:
 ## 종료 보고
 
 추가한 플러그인 또는 Skill의 경로, 버전, 바뀐 목록 문서, 검증 결과와 남은 승인·배포 단계를 구분해 보고합니다.
+
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | GitHub REST `GET /user` | `gh api user --jq .login`으로 인증 계정을 확인합니다. 업무 API는 호출하지 않습니다. | [Get the authenticated user](https://docs.github.com/en/rest/users/users#get-the-authenticated-user), [gh api](https://cli.github.com/manual/gh_api) |
+| CLI | Git·GitHub CLI | 상태·동기화·branch 확인은 `git status --short --branch`, `git pull --ff-only origin main`, `git check-ref-format refs/heads/<BRANCH_NAME>`입니다. | [git status](https://git-scm.com/docs/git-status), [git pull](https://git-scm.com/docs/git-pull), [git check-ref-format](https://git-scm.com/docs/git-check-ref-format) |
+| CLI | Git 변경·PR | 승인된 경로만 `git add <APPROVED_PATHS>`, `git diff --cached`, `git commit -m "<TYPE>(agents): <DESCRIPTION>"`으로 처리합니다. Fork는 `gh repo fork kingdompla-net/kp-skill --clone`, branch push는 `git push --set-upstream <PUSH_REMOTE> <WORK_BRANCH>`, PR은 `gh pr create --base <BASE_BRANCH> --title "<CONVENTIONAL_TITLE>" --body-file <PR_BODY_FILE>`입니다. | [git add](https://git-scm.com/docs/git-add), [git diff](https://git-scm.com/docs/git-diff), [git commit](https://git-scm.com/docs/git-commit), [git push](https://git-scm.com/docs/git-push), [gh repo fork](https://cli.github.com/manual/gh_repo_fork), [gh pr create](https://cli.github.com/manual/gh_pr_create) |
+| CLI | Skills CLI | 프로젝트 Skill 설치가 별도 범위에 포함된 경우 `npx skills add <SOURCE_URL> --skill <SKILL_NAME> --agent <AGENT> --copy --yes`를 실행합니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) |
+| 기타 | Frontmatter·Markdown·manifest·README·marketplace JSON | metadata 및 파일 간 정합성을 확인합니다. `kp-skill-release` 절차 없이 tag나 marketplace를 게시하지 않습니다. | — |
 
 ## KP Skill 연결과 관리자 기준
 

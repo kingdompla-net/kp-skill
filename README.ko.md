@@ -8,7 +8,7 @@ KP Skill은 Kingdom Planet 프로젝트에서 재사용하는 에이전트 중�
 
 | 플러그인 | 버전 | 설명 |
 | --- | --- | --- |
-| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.8.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-deploy-dev`](kp-app-skill/skills/kp-app-deploy-dev/SKILL.md), [`kp-app-deploy-prd`](kp-app-skill/skills/kp-app-deploy-prd/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md)를 제공합니다. |
+| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.9.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-deploy-dev`](kp-app-skill/skills/kp-app-deploy-dev/SKILL.md), [`kp-app-deploy-prd`](kp-app-skill/skills/kp-app-deploy-prd/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md), [`kp-app-image-optimize`](kp-app-skill/skills/kp-app-image-optimize/SKILL.md)를 제공합니다. |
 | [`kp-api-skill`](kp-api-skill/README.ko.md) | `1.0.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md)를 제공합니다. |
 | [`kp-skill-manager`](kp-skill-manager/README.ko.md) | `1.0.3` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md)을 제공합니다. |
 
@@ -41,7 +41,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
   --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
-새 앱이나 API codebase에서는 먼저 manager 전체를 설치한 뒤 해당 플러그인의 초기화 Skill 하나로 시작할 수 있습니다. `kp-app-init`은 초기화가 끝나면 `kp-app-skill`의 나머지 여섯 Skill을 같은 프로젝트·에이전트 경로에 설치하며 `kp-api-skill`은 설치하지 않습니다. `kp-api-init`은 `kp-api-skill`의 나머지 여섯 Skill만 설치하며 `kp-app-skill`은 설치하지 않습니다. 이 Skill 묶음 확장은 초기화 Skill을 실행한 뒤 일어납니다. 기존 저장소는 재초기화하지 않고 필요한 플러그인의 전체 묶음이나 지명한 Skill을 직접 설치할 수 있습니다. Claude native plugin은 Skills CLI 복사 설치와 별도이며 설치 범위는 각 agent 호스트에서 확인해 주세요.
+새 앱이나 API codebase에서는 먼저 manager 전체를 설치한 뒤 해당 플러그인의 초기화 Skill 하나로 시작할 수 있습니다. `kp-app-init`은 초기화가 끝나면 `kp-app-skill`의 나머지 일곱 Skill을 같은 프로젝트·에이전트 경로에 설치하며 `kp-api-skill`은 설치하지 않습니다. `kp-api-init`은 `kp-api-skill`의 나머지 여섯 Skill만 설치하며 `kp-app-skill`은 설치하지 않습니다. 이 Skill 묶음 확장은 초기화 Skill을 실행한 뒤 일어납니다. 기존 저장소는 재초기화하지 않고 필요한 플러그인의 전체 묶음이나 지명한 Skill을 직접 설치할 수 있습니다. Claude native plugin은 Skills CLI 복사 설치와 별도이며 설치 범위는 각 agent 호스트에서 확인해 주세요.
 
 ## 저장소 구조
 
