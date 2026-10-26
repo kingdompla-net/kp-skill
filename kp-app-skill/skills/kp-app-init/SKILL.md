@@ -2,7 +2,7 @@
 name: kp-app-init
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용합니다."
 metadata:
-  version: "2.8.0"
+  version: "2.8.1"
 ---
 
 # KP 앱 초기화
@@ -41,7 +41,7 @@ metadata:
 - Zod가 없으면 저장소의 package manager를 확인해 런타임 의존성으로 추가한다. npm 저장소라면 npm i zod를 사용하고 lockfile을 함께 갱신한다.
 - 기존 파일을 덮어쓰지 않는다. 같은 경로에 기존 코드가 있으면 소비자와 테스트를 확인하고 필요한 동작을 합친다.
 - 화면 요청은 hook/query/에 TanStack Query key·query·mutation을 두고, 전역 클라이언트 상태는 store/의 Zustand에 둔다. 서버 응답을 Zustand에 중복 보관하지 않는다. 확정 구조에 없는 서비스 계층은 임의로 추가하지 않는다. 여러 API 호출로 이루어진 흐름도 우선 query/mutation에서 조정하되, 새 계층이 필요해 보이면 구조를 바꾸기 전에 사용자에게 묻는다.
-- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고, 작업을 시작하기 전에 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager 설치가 필요한 이유와 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 결과를 확인합니다. 초기화가 끝나면 이미 설치된 파일과 사용자 변경을 확인한 뒤 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete` 중 누락된 Skill만 같은 프로젝트 경로에 설치합니다. `kp-api-skill`은 설치하지 않습니다. 거부하면 필요한 manager를 포함한 KP Skill 설치와 작업을 진행하지 않습니다. `--global` 또는 `-g`는 사용하지 않습니다. 설치 후 manager와 앱 Skill이 선택된 프로젝트·에이전트 경로에 있는지 검증합니다.
+- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고, 작업을 시작하기 전에 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager 설치가 필요한 이유와 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 결과를 확인합니다. 초기화가 끝나면 이미 설치된 파일과 사용자 변경을 확인한 뒤 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete`, `kp-app-image-optimize` 중 누락된 Skill만 같은 프로젝트 경로에 설치합니다. `kp-api-skill`은 설치하지 않습니다. 거부하면 필요한 manager를 포함한 KP Skill 설치와 작업을 진행하지 않습니다. `--global` 또는 `-g`는 사용하지 않습니다. 설치 후 manager와 앱 Skill이 선택된 프로젝트·에이전트 경로에 있는지 검증합니다.
 - `.agents/references/cloud-access.md`의 템플릿을 대상 저장소에 복사하고, 루트 `AGENTS.md`에서 해당 문서와 `AGENTS.local.md`를 읽도록 연결합니다. 기존 문서는 덮어쓰지 않고 필요한 규칙만 병합합니다.
 - 이후 references/agent-ide.md를 읽고 초기화 대상 저장소에만 biome-eslint-ide-config-skill을 프로젝트 로컬로 설치하고 실행한다. 사용자의 전역 Skill 설치는 대상 저장소 설치를 대체하지 않는다. 그 스킬의 사용자 확인 절차와 전체 파일 자동 수정 승인 단계를 생략하지 않는다.
 - 초기화할 때는 `package.json`, `firebase.json`, `.firebaserc`, `.env.development*`, `.env.production*`을 먼저 읽고 기존 설정을 보존하며 합친다. Vite 프로젝트의 `package.json`에는 `build:dev`와 `deploy:dev`를 반드시 추가한다. `build:dev`는 `vite build --mode development`를 실행하고, `deploy:dev`는 `npm run build:dev`를 먼저 실행한 뒤 확인된 실제 DEV Firebase 프로젝트 ID를 사용해 `firebase deploy --only hosting:dev --project <확인된 DEV 프로젝트 ID>`를 실행한다. PRD Firebase 프로젝트 ID와 Hosting 사이트 ID를 모두 확인하면 `build:prd`와 `deploy:prd`도 추가한다. `build:prd`는 `vite build --mode production`, `deploy:prd`는 `npm run build:prd` 후 확인된 PRD 프로젝트 ID로 `firebase deploy --only hosting:prd --project <확인된 PRD 프로젝트 ID>`를 실행한다. `<...>` 대체 문구를 스크립트에 남기지 않는다. 같은 이름의 기존 스크립트가 있으면 현재 동작을 확인해 합치고, 안전하게 합칠 수 없을 때만 사용자에게 선택을 요청한다.
@@ -75,6 +75,18 @@ metadata:
 - 새 KP API 기능의 계약 확인과 기존 앱 연동: [프로젝트 로컬 `kp-app-api` Skill](../kp-app-api/SKILL.md)
 - 에이전트별 IDE 스킬 설치와 실행: [references/agent-ide.md](references/agent-ide.md)
 - 새 앱 파일로 복사할 코드: assets/templates/
+
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | KP 앱 API | 새 앱의 endpoint 계약을 환경별로 확인합니다. | [DEV Developer Center](https://developer-kpcenter-dev.web.app/api/), [PRD Developer Center](https://developer-kpcenter.web.app/api/)의 해당 endpoint 문서 |
+| API | `appGetApp`·`appSetApp` | Preview callback readback·변경에 사용합니다. `appSetApp`은 명시적으로 승인된 경우에만 호출합니다. | [`appGetApp`](https://developer-kpcenter-dev.web.app/api/app#app-appGetApp-/v2/app/), [`appSetApp`](https://developer-kpcenter-dev.web.app/api/app#app-appSetApp-/v2/app/edit) |
+| API | Firebase Auth redirect domain | OAuth redirect의 authorized domain 설정을 확인합니다. | [authorized domain 안내](https://firebase.google.com/docs/auth/web/redirect-best-practices) |
+| CLI | Git·npm·Vite | 상태·ignore 확인은 `git status --short --branch`, `git check-ignore -v AGENTS.local.md`입니다. npm 설치는 `npm install zod`, build는 `vite build --mode development` 또는 `vite build --mode production`, scripts는 `npm run build:dev`, `npm run deploy:dev`, 필요 시 `npm run build:prd`, `npm run deploy:prd`입니다. | [git status](https://git-scm.com/docs/git-status), [git check-ignore](https://git-scm.com/docs/git-check-ignore), [npm install](https://docs.npmjs.com/cli/v11/commands/npm-install), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script), [Vite CLI](https://vite.dev/guide/cli) |
+| CLI | Firebase CLI | 생성하는 deploy script는 `firebase deploy --only hosting:dev --project <DEV_FIREBASE_PROJECT_ID>` 또는 `firebase deploy --only hosting:prd --project <PRD_FIREBASE_PROJECT_ID>`입니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
+| CLI | Skills CLI | 설치가 승인되면 manager를 먼저 `npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills --skill '*' --agent <AGENT> --copy --yes`, 앱 Skill은 `npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills --skill <SKILL_NAME> --agent <AGENT> --copy --yes`로 설치합니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) |
+| 기타 | React·TypeScript·Zod·TanStack Query·Zustand·lint·format·브라우저 | 대상 저장소 설정을 확인하고 Developer Center·브라우저 작업은 프로젝트의 브라우저 규칙을 따릅니다. | — |
 
 ## KP Skill 관계와 관리자 설치
 

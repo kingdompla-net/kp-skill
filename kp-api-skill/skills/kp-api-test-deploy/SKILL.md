@@ -49,6 +49,16 @@ metadata:
 - emulator 및 demo project 경계: [테스트 환경 참조](references/test-environments.md)
 - DEV·PRD 배포 요청이 별도로 승인된 경우: [`kp-api-deploy`](../kp-api-deploy/SKILL.md)
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Functions·Auth·Firestore·Storage·Messaging·Pub/Sub·Cloud Tasks | 설정된 emulator가 지원하는 service만 검증합니다. 외부 API는 mock/stub으로 대체하고 DEV·PRD에 연결하지 않습니다. | [Functions](https://firebase.google.com/docs/functions), [Firebase Auth](https://firebase.google.com/docs/auth), [Firestore](https://firebase.google.com/docs/firestore), [Storage](https://firebase.google.com/docs/storage), [Messaging](https://firebase.google.com/docs/cloud-messaging), [Pub/Sub](https://cloud.google.com/pubsub/docs/reference/rest), [Cloud Tasks](https://cloud.google.com/tasks/docs/reference/rest) |
+| CLI | Firebase CLI: emulator | `firebase emulators:exec --config <FIREBASE_CONFIG> --project demo-<TEST_PROJECT_ID> --only <EMULATOR_LIST> "<TEST_COMMAND>"`를 실행합니다. emulator 목록은 handler와 `firebase.json`에서 선택합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [emulator 설정](https://firebase.google.com/docs/emulator-suite/install_and_configure) |
+| CLI | Package manager | lockfile에서 manager를 확인한 뒤 `<PACKAGE_MANAGER> run <TEST_SCRIPT>` 및 `<PACKAGE_MANAGER> run <LINT_SCRIPT>` 형식으로 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI: 원격 test deploy | 전용 test project가 확인되고 요청된 경우에만 `firebase deploy --config <CONFIG_PATH> --only functions:<FUNCTION_EXPORT> --project <TEST_PROJECT_ID>`를 실행합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [Functions 배포](https://firebase.google.com/docs/functions/manage-functions) |
+| 기타 | Local Emulator Suite·test runner·mock/stub | emulator 미지원 동작은 별도 승인된 test harness로 구분합니다. | [Emulator Suite](https://firebase.google.com/docs/emulator-suite) |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

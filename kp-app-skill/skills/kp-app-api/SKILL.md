@@ -22,6 +22,15 @@ metadata:
 
 API 계약, 인증, 데이터 소유권의 세부 원칙은 위에 연결한 `kp-app-init` 참조 문서를 기준으로 한다. 계정·프로젝트 환경이 불명확하거나 Developer Center에서 계약을 확인할 수 없으면 해당 연동을 추측 구현하지 말고 필요한 정보와 막힌 범위를 설명한다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | KP API endpoint | 앱의 `kpClient`를 통해 호출합니다. method·path·auth·request·response는 endpoint별로 확인하며, 부작용이 있는 endpoint는 별도 요청 없이 호출하지 않습니다. | [DEV Developer Center](https://developer-kpcenter-dev.web.app/api/), [PRD Developer Center](https://developer-kpcenter.web.app/api/)의 해당 endpoint 문서 |
+| CLI | Git | 저장소 상태를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
+| CLI | Package manager | lockfile과 `package.json`에서 manager 및 script를 확인하고 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 test·lint·format을 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| 기타 | TypeScript·Zod·TanStack Query·test 도구·브라우저 | 대상 앱의 기존 의존성과 브라우저 규칙을 따릅니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

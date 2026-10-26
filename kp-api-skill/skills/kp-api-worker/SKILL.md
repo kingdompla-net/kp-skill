@@ -25,6 +25,15 @@ Runtime service account는 worker가 실제로 호출하는 서비스에 필요�
 
 worker를 실제 배포하려면 사용자가 환경을 지정해 요청해야 하며, `$kp-api-deploy`에서 해당 function 또는 codebase 범위를 확인합니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Functions·Firestore·queue·schedule·secret | worker와 trigger는 Functions, queue는 Cloud Tasks, schedule은 Cloud Scheduler, secret은 Secret Manager 계약을 따릅니다. DB와 외부 API는 repository에서 실제 사용하는 endpoint를 확인합니다. | [Functions](https://firebase.google.com/docs/functions), [Firestore](https://cloud.google.com/firestore/docs), [Cloud Tasks](https://cloud.google.com/tasks/docs/reference/rest), [Cloud Scheduler](https://cloud.google.com/scheduler/docs/reference/rest), [Secret Manager](https://cloud.google.com/secret-manager/docs/reference/rest) |
+| CLI | Git·package manager | `git status --short --branch`로 상태를 확인하고 test·lint는 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 실행합니다. | [git status](https://git-scm.com/docs/git-status), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI: emulator·deploy | emulator는 `firebase emulators:exec --config <FIREBASE_CONFIG> --project demo-<TEST_PROJECT_ID> --only <EMULATOR_LIST> "<TEST_COMMAND>"`, 승인된 deploy는 `firebase deploy --config <CONFIG_PATH> --only functions:<FUNCTION_EXPORT> --project <FIREBASE_PROJECT_ID>`를 사용합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [`kp-api-test-deploy`](../kp-api-test-deploy/SKILL.md), [`kp-api-deploy`](../kp-api-deploy/SKILL.md) |
+| 기타 | Queue·database SDK·schema validation·test runner·mock | 대상 repository 설정을 확인합니다. 운영 queue나 외부 부작용은 검증을 위해 실행하지 않습니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

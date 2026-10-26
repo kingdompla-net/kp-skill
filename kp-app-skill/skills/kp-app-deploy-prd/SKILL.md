@@ -25,6 +25,16 @@ metadata:
 - 저장소·브랜치·작업 트리 상태, 검사와 빌드 결과, Firebase 프로젝트·Hosting 타깃, 승인 여부, CLI 결과와 HTTP 상태를 구분해 보고합니다.
 - 승인받지 않은 경우에는 production build 완료와 실제 배포 대기 상태를 명확히 알립니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Hosting | Firebase CLI로 배포하며 Hosting API를 직접 호출하지 않습니다. 확인된 PRD domain의 HTTP response만 읽습니다. | [Firebase Hosting](https://firebase.google.com/docs/hosting) |
+| CLI | Git | 변경 범위를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
+| CLI | Package manager | lockfile에서 확인한 manager의 `run` command로 `build:prd`와 `deploy:prd`를 실행합니다. npm 저장소에서는 `npm run build:prd`, `npm run deploy:prd`입니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | `deploy:prd` script는 `firebase deploy --only hosting:prd --project <PRD_FIREBASE_PROJECT_ID>`를 실행합니다. 실제 live 배포는 명시적 승인 또는 현재 요청의 명시적 지시 뒤에만 합니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
+| 기타 | `package.json`·`firebase.json`·`.firebaserc`·build·검사 도구 | 설정에서 PRD project·site·target을 대조합니다. | — |
+
 ## 관련 Skill
 
 - 공통 Firebase 배포 절차와 계정 검증은 [`kp-app-deploy`](../kp-app-deploy/SKILL.md)를 따릅니다.

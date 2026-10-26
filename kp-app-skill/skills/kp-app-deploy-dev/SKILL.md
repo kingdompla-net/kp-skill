@@ -23,6 +23,16 @@ metadata:
 - 저장소·브랜치·작업 트리 상태, 검사와 빌드 결과, Firebase 프로젝트·Hosting 타깃, CLI 결과와 HTTP 상태를 구분해 보고합니다.
 - 브라우저에서 확인하지 않은 화면을 시각 검증했다고 말하지 않습니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Hosting | Firebase CLI로 배포하며 Hosting API를 직접 호출하지 않습니다. 확인된 DEV domain의 HTTP response만 읽습니다. | [Firebase Hosting](https://firebase.google.com/docs/hosting) |
+| CLI | Git | 변경 범위를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
+| CLI | Package manager | lockfile에서 확인한 manager의 `run` command로 `build:dev`와 `deploy:dev`를 실행합니다. npm 저장소에서는 `npm run build:dev`, `npm run deploy:dev`입니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | `deploy:dev` script는 `firebase deploy --only hosting:dev --project <DEV_FIREBASE_PROJECT_ID>`를 실행합니다. ID와 target mapping은 `.firebaserc`·`firebase.json`에서 확인합니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
+| 기타 | `package.json`·`firebase.json`·`.firebaserc`·build·lint·test·브라우저 | project 설정으로 DEV 범위를 확인하고 화면은 프로젝트 브라우저 규칙에 따라 검증합니다. | — |
+
 ## 관련 Skill
 
 - 공통 Firebase 배포 절차와 계정 검증은 [`kp-app-deploy`](../kp-app-deploy/SKILL.md)를 따릅니다.

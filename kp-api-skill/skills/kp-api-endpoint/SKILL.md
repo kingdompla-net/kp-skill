@@ -23,6 +23,16 @@ metadata:
 
 추가한 route와 인증·schema 결정, 테스트 결과, 미확인 외부 contract를 보고합니다. local test를 provider 배포나 live response로 표현하지 않습니다. 운영 key, 사용자 token, secret을 로그나 결과에 출력하지 않습니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Functions HTTP handler | HTTP handler의 request·response 계약을 구현하며 live endpoint는 호출하지 않습니다. | [HTTP events](https://firebase.google.com/docs/functions/http-events), [Functions API reference](https://firebase.google.com/docs/reference/functions) |
+| API | KP 인증 및 downstream API | 해당 endpoint의 계약을 기존 codebase 및 환경별 Developer Center 문서에서 확인합니다. | [DEV Developer Center](https://developer-kpcenter-dev.web.app/api/), [PRD Developer Center](https://developer-kpcenter.web.app/api/) |
+| CLI | Git·package manager | `git status --short --branch`로 상태를 확인하고 lockfile에서 확인한 manager의 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 lint·format·unit test를 실행합니다. | [git status](https://git-scm.com/docs/git-status), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | emulator가 필요하면 `kp-api-test-deploy`의 `firebase emulators:exec` 명령을 따릅니다. 이 Skill에서는 deploy하지 않습니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
+| 기타 | Runtime·schema validation·test runner·mock | 대상 codebase의 기존 설정과 의존성을 확인해 사용합니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

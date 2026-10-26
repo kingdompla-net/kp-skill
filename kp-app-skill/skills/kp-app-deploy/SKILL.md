@@ -30,6 +30,16 @@ PRD 실제 배포는 이 기본 Skill의 호출만으로 승인된 것으로 보
 
 소스 브랜치와 커밋, 배포 전 작업 트리 상태, 빌드·검사 결과, Firebase 프로젝트와 Hosting 타깃, PRD 배포 승인 여부, CLI 배포 결과, 배포 후 HTTP 상태를 구분해 보고합니다. PRD 배포 승인을 받지 않은 경우 build 완료와 배포 대기 상태를 명확히 알립니다. 브라우저에서 확인하지 않은 화면은 시각 검증했다고 말하지 않습니다. 이 Skill은 배포만 담당하며 커밋, push, PR 생성·병합은 대상 저장소의 `AGENTS.md`와 참조 규칙을 따릅니다.
 
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Hosting·IAM | 배포는 Firebase CLI로 수행하며 Hosting REST API를 직접 호출하지 않습니다. 대상 도메인의 HTTP response는 read-only로 확인합니다. | [Firebase Hosting](https://firebase.google.com/docs/hosting), [Google Cloud IAM](https://cloud.google.com/iam/docs) |
+| CLI | Git | 저장소 상태를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
+| CLI | Package manager | `package.json`의 실제 script를 확인하고 `<PACKAGE_MANAGER> run <BUILD_SCRIPT>` 및 `<PACKAGE_MANAGER> run <DEPLOY_SCRIPT>`를 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | 직접 배포가 승인된 경우 `firebase deploy --only hosting:<HOSTING_TARGET> --project <FIREBASE_PROJECT_ID>`로 Hosting만 배포합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [Hosting 배포](https://firebase.google.com/docs/hosting) |
+| 기타 | `package.json`·`firebase.json`·`.firebaserc`·build·검사 도구·브라우저 | 설정 파일로 target을 확인하고 화면 검증은 해당 저장소의 브라우저 절차를 따릅니다. | — |
+
 ## KP Skill 관계와 관리자 설치
 
 - 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.

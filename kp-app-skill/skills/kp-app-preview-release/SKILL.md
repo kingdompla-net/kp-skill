@@ -24,7 +24,7 @@ Preview URL은 링크를 아는 사람이 접근할 수 있는 공개 URL이며,
 1. Preview용 channel ID가 요청에 포함되지 않았다면 PR 번호를 우선 사용하고, 없으면 현재 브랜치에서 공백 없는 소문자 kebab-case ID를 정합니다. 대상 Hosting site의 channel 목록을 확인해 같은 ID의 기존 channel이 이 작업의 것인지 확인합니다. 출처를 확인할 수 없는 기존 channel은 덮어쓰지 않습니다.
 2. 선택한 환경의 프로젝트 build와 관련 검사를 실행합니다. 앱에 검증된 Preview 전용 스크립트가 있으면 실제 명령과 project·target 범위를 확인한 뒤 사용합니다. 그렇지 않으면 프로젝트 지침에 지정된 DEV 또는 명시된 PRD build를 실행합니다.
 3. Firebase 기본 만료 기간에 의존하지 말고, 이 Skill에서 생성하거나 갱신하는 모든 Preview channel의 만료 기간을 1일로 제한합니다. 배포할 때마다 `--expires 1d`를 반드시 지정합니다. 검토가 하루를 넘기면 사용자가 요청한 경우에만 같은 1일 만료값으로 다시 배포합니다.
-4. `firebase hosting:channel:deploy`로 요청한 target에만 배포합니다. 다중 Hosting site에서 `--only`에는 target 이름을 지정하고, 항상 대상 프로젝트를 `--project`로 명시합니다. `firebase deploy`나 live channel을 사용하지 않습니다.
+4. `firebase hosting:channel:deploy`로 요청한 Hosting target에만 배포합니다. 다중 Hosting site에서 `--only`에는 target 이름을 지정하고, 항상 대상 project를 `--project`로 명시합니다. `firebase deploy`나 live channel을 사용하지 않습니다.
 
 ~~~sh
 firebase hosting:channel:deploy <CHANNEL_ID> --only <HOSTING_TARGET> --expires 1d --project <FIREBASE_PROJECT_ID>
@@ -46,6 +46,16 @@ Preview 로그인에 callback 등록이 필요할 때만 진행합니다. Previe
 - PR을 생성하더라도 검토용 Preview와 이번 작업의 callback을 유지합니다. PR 병합을 확인하면 별도 검수 완료 요청을 기다리지 말고 `kp-app-preview-delete`를 사용해 정리합니다. 병합 전에 사용자가 검토 완료나 정리를 요청한 경우에도 같은 Skill을 사용합니다.
 - 다음 정리를 위해 프로젝트에서 정한 무시 처리된 로컬 설정 위치에 channel ID, 환경, Firebase project·site·target, branch·commit·PR, Preview URL·만료일, callback URL과 callback이 이번 작업에서 추가됐는지를 기록합니다. 저장 위치가 없으면 `.gitignore`에서 무시되는 `AGENTS.local.md`에 비밀값 없이 기록합니다. 실제 토큰·API key는 기록하지 않습니다.
 - Preview URL, 환경, project·site·target, channel ID와 만료일, branch·commit, build·검사·HTTP·브라우저 결과, callback 변경 승인·readback, 후속 정리 기준을 구분해 보고합니다. Preview 배포를 live 배포로 표현하지 않습니다.
+
+## 사용하는 API·CLI·도구
+
+| 구분 | API·CLI·도구 | 실제 사용 방식과 명령 | 공식 문서 |
+| --- | --- | --- | --- |
+| API | Firebase Hosting Preview Channel | Hosting REST API를 직접 호출하지 않고 CLI로 관리합니다. | [Preview Channel 관리](https://firebase.google.com/docs/hosting/manage-hosting-resources) |
+| API | `appGetApp`·`appSetApp`·Firebase Auth | callback을 readback하고, 등록은 명시적 승인 뒤에 수행합니다. authorized domain 설정은 별도로 확인합니다. | [`appGetApp`](https://developer-kpcenter-dev.web.app/api/app#app-appGetApp-/v2/app/), [`appSetApp`](https://developer-kpcenter-dev.web.app/api/app#app-appSetApp-/v2/app/edit), [Firebase Auth domain](https://firebase.google.com/docs/auth/web/redirect-best-practices) |
+| CLI | Git·package manager | `git status --short --branch`로 확인하고 build·검증은 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 실행합니다. | [git status](https://git-scm.com/docs/git-status), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
+| CLI | Firebase CLI | 목록: `firebase hosting:channel:list --site <SITE_ID> --project <FIREBASE_PROJECT_ID>`<br>배포: `firebase hosting:channel:deploy <CHANNEL_ID> --only <HOSTING_TARGET> --expires 1d --project <FIREBASE_PROJECT_ID>` | [CLI reference](https://firebase.google.com/docs/cli), [Preview Channel 관리](https://firebase.google.com/docs/hosting/manage-hosting-resources), [다중 site](https://firebase.google.com/docs/hosting/multisites) |
+| 기타 | 프로젝트 인터페이스·HTTP·브라우저 | `.agents/references/kp-app-preview-interface.md`와 프로젝트의 브라우저 규칙을 따릅니다. Preview URL은 CLI 출력에서 가져옵니다. | — |
 
 ## 공식 자료
 

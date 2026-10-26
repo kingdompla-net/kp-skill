@@ -28,11 +28,11 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
   --skill kp-app-init --agent codex --copy --yes
 ~~~
 
-이 명령은 `kp-app-init`만 설치합니다. 초기화가 끝난 뒤 기존 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete` 파일·버전·사용자 수정을 확인하고, 없는 Skill만 설치합니다. 여섯 Skill이 모두 없다면 다음처럼 설치합니다.
+이 명령은 `kp-app-init`만 설치합니다. 초기화가 끝난 뒤 기존 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete`, `kp-app-image-optimize` 파일·버전·사용자 수정을 확인하고, 없는 Skill만 설치합니다. 일곱 Skill이 모두 없다면 다음처럼 설치합니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills \
-  --skill kp-app-api kp-app-deploy kp-app-deploy-dev kp-app-deploy-prd kp-app-preview-release kp-app-preview-delete --agent codex --copy --yes
+  --skill kp-app-api kp-app-deploy kp-app-deploy-dev kp-app-deploy-prd kp-app-preview-release kp-app-preview-delete kp-app-image-optimize --agent codex --copy --yes
 ~~~
 
 기존 Skill을 자동으로 덮어쓰지 않습니다. 로컬 수정이 있으면 보존해 병합하고 결과를 확인합니다. 설치가 끝난 Codex 경로는 다음과 같습니다.
@@ -48,7 +48,8 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
 ├── kp-app-deploy-dev/
 ├── kp-app-deploy-prd/
 ├── kp-app-preview-release/
-└── kp-app-preview-delete/
+├── kp-app-preview-delete/
+└── kp-app-image-optimize/
 ~~~
 
 Claude Code에서는 같은 Skill 이름의 폴더가 `.claude/skills/` 바로 아래에 놓입니다. plugin 이름을 위한 상위 폴더는 없습니다.
