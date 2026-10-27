@@ -2,17 +2,19 @@
 name: kp-app-deploy-dev
 description: "초기화된 KP React 앱을 요청된 Firebase Hosting DEV 환경에 검증·빌드·배포할 때 사용합니다. PRD 배포에는 사용하지 않습니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP 앱 DEV 배포
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 요청된 초기화 KP 앱을 DEV Firebase Hosting에 배포합니다. 이 Skill은 DEV만 대상으로 합니다.
 
 ## 수행 절차
 
 1. 현재 저장소의 `AGENTS.md`, `AGENTS.local.md`, 브랜치와 `git status --short --branch`를 확인합니다. 관련 없는 미커밋 변경이 배포 산출물에 들어갈 수 있으면 먼저 범위를 확인합니다.
-2. 이 Skill과 함께 설치된 `../kp-app-deploy/SKILL.md`, `../kp-app-deploy/references/access-and-secrets.md`, `../kp-app-deploy/references/firebase-hosting.md`를 읽고 공통 계정·배포 규칙을 적용합니다. 필요한 참조나 `kp-skill-manager`가 설치되어 있지 않으면 필요한 이유와 프로젝트 로컬 설치 경로를 설명하고 동의를 구합니다.
+2. 이 Skill과 함께 설치된 `../kp-app-deploy/SKILL.md`, `../kp-app-deploy/references/access-and-secrets.md`, `../kp-app-deploy/references/firebase-hosting.md`를 읽고 공통 계정·배포 규칙을 적용합니다. 필요한 참조가 없으면 기존 파일을 덮어쓰지 않고 프로젝트 로컬에 준비합니다.
 3. 대상 `package.json`, `firebase.json`, `.firebaserc`에서 `build:dev`, `deploy:dev`, Firebase 프로젝트 ID, `hosting:dev` 연결 대상 사이트 ID와 도메인을 확인합니다. 값을 추측하거나 다른 저장소에서 복사하지 않습니다.
 4. DEV 빌드와 저장소가 요구하는 검사를 실행합니다. 실패하거나 설정이 서로 맞지 않으면 배포하지 않고 문제를 보고합니다.
 5. 검증이 통과한 경우 `deploy:dev`를 실행하고 CLI 결과와 DEV 도메인의 HTTP 응답을 확인합니다. `firebase deploy` 단독 명령은 사용하지 않습니다.
@@ -37,4 +39,3 @@ metadata:
 
 - 공통 Firebase 배포 절차와 계정 검증은 [`kp-app-deploy`](../kp-app-deploy/SKILL.md)를 따릅니다.
 - PRD 배포 요청은 [`kp-app-deploy-prd`](../kp-app-deploy-prd/SKILL.md)로 연결합니다.
-- 이 Skill을 프로젝트 로컬로 사용할 때는 같은 에이전트 경로에 `kp-skill-manager` Skill 전체가 있어야 합니다. 없으면 먼저 설치 동의를 받습니다.

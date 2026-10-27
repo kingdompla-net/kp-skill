@@ -41,5 +41,6 @@
 
 ## 참조 자료
 
+- 모든 KP Skill은 [`.agents/references/credential-and-local-config.md`](.agents/references/credential-and-local-config.md)를 읽고 로컬 설정·비밀정보 기준을 따릅니다. 비밀이 아닌 계정·환경 값은 프로젝트 로컬 `AGENTS.local.md`에 설정하고, 실제 비밀값은 기록하지 않습니다.
 - 저장소 패턴, 코드베이스 지도, 테스트와 문서 공개 경계: 프로젝트에 설치된 `kp-api-init` Skill의 `references/api-project-architecture.md`를 확인합니다. Skill을 설치하지 않은 agent라면 저장소 유지 담당자에게 정본 경로를 확인합니다.
 - IAM·secret·계정 보호: [`.agents/references/cloud-access.md`](.agents/references/cloud-access.md)

@@ -2,10 +2,12 @@
 name: kp-api-worker
 description: "KP API 기능을 HTTP 요청에서 분리해 Cloud Tasks 또는 Scheduler 기반 비동기 worker로 구현할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP API worker 구현
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 worker는 응답 시간 제한, 긴 처리, 외부 retry, 정기 실행, 서로 다른 확장·권한 경계처럼 구체적인 요구가 있을 때만 추가합니다. 짧은 동기 endpoint의 기본 구현으로 worker를 도입하지 않습니다.
 
@@ -33,10 +35,3 @@ worker를 실제 배포하려면 사용자가 환경을 지정해 요청해야 �
 | CLI | Git·package manager | `git status --short --branch`로 상태를 확인하고 test·lint는 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 실행합니다. | [git status](https://git-scm.com/docs/git-status), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
 | CLI | Firebase CLI: emulator·deploy | emulator는 `firebase emulators:exec --config <FIREBASE_CONFIG> --project demo-<TEST_PROJECT_ID> --only <EMULATOR_LIST> "<TEST_COMMAND>"`, 승인된 deploy는 `firebase deploy --config <CONFIG_PATH> --only functions:<FUNCTION_EXPORT> --project <FIREBASE_PROJECT_ID>`를 사용합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [`kp-api-test-deploy`](../kp-api-test-deploy/SKILL.md), [`kp-api-deploy`](../kp-api-deploy/SKILL.md) |
 | 기타 | Queue·database SDK·schema validation·test runner·mock | 대상 repository 설정을 확인합니다. 운영 queue나 외부 부작용은 검증을 위해 실행하지 않습니다. | — |
-
-## KP Skill 관계와 관리자 설치
-
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-api-worker/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-api-worker/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 선행 조건은 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

@@ -2,10 +2,12 @@
 name: kp-skill-release
 description: "KP Skill을 개선해 적절한 SemVer로 배포하거나, 플러그인·Skill 버전 이력을 확인하고 이전 버전의 Skill 콘텐츠를 더 높은 새 버전으로 재발행할 때 사용합니다."
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # KP Skill 버전 관리와 릴리스
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 지정된 플러그인이나 Skill의 정본을 확인하고, 변경 영향에 맞는 SemVer를 적용해 승인된 경로로 릴리스합니다. 버전을 사용자에게 지정해 달라고 요청하지 말고 실제 변경에서 적절한 증가 폭을 선택합니다.
 
@@ -79,8 +81,6 @@ PR이 실제로 병합된 뒤 default branch의 commit과 버전을 다시 확�
 | CLI | GitHub CLI | PR은 `gh pr create --base <BASE_BRANCH> --title "<CONVENTIONAL_TITLE>" --body-file <PR_BODY_FILE>`, 이미 게시한 tag의 Release는 `gh release create <TAG> --title <TITLE> --notes-file <RELEASE_NOTES_FILE> --verify-tag`로 생성합니다. | [gh pr create](https://cli.github.com/manual/gh_pr_create), [gh release create](https://cli.github.com/manual/gh_release_create) |
 | 기타 | Frontmatter·plugin manifest·marketplace JSON·README·tag metadata | 파일 간 버전 정합성을 확인합니다. Validator는 저장소에서 실제 확인한 명령만 실행합니다. | — |
 
-## KP Skill 연결과 관리자 기준
+## 배포 상태 확인
 
-- 이 Skill은 `kp-skill-manager` 플러그인의 일부이므로 manager 자체 설치 동의를 다시 요구하지 않습니다. 다른 KP Skill이 필요하면 관계표에서 확인하고, 현재 프로젝트·에이전트 경로에 없을 때는 필요한 이유와 이름을 설명한 뒤 설치 동의를 구합니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-skill-release/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-skill-release/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 전체 설치 절차는 [플러그인 안내](../../README.ko.md)를 확인합니다.
 - 관리자가 PR 리뷰를 승인한 것만으로 배포가 완료된 것은 아닙니다. PR이 기본 브랜치에 실제로 병합되어 정본에 반영된 뒤에만 배포 완료로 보고합니다.

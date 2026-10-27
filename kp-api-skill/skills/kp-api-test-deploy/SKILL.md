@@ -2,10 +2,12 @@
 name: kp-api-test-deploy
 description: "KP API 기능을 DEV·PRD와 분리된 로컬 emulator 또는 승인된 전용 테스트 Firebase project에서 검증할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP API 테스트 환경 실행
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 실제 DEV·PRD Functions를 변경하지 않고 API와 worker를 검증합니다. 기본 경로는 unit test와 Firebase Local Emulator Suite입니다. 이 Skill에서 `test deploy`라고 부르는 원격 배포는 전용 테스트 Firebase project가 확인된 경우에만 수행합니다.
 
@@ -58,10 +60,3 @@ metadata:
 | CLI | Package manager | lockfile에서 manager를 확인한 뒤 `<PACKAGE_MANAGER> run <TEST_SCRIPT>` 및 `<PACKAGE_MANAGER> run <LINT_SCRIPT>` 형식으로 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
 | CLI | Firebase CLI: 원격 test deploy | 전용 test project가 확인되고 요청된 경우에만 `firebase deploy --config <CONFIG_PATH> --only functions:<FUNCTION_EXPORT> --project <TEST_PROJECT_ID>`를 실행합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [Functions 배포](https://firebase.google.com/docs/functions/manage-functions) |
 | 기타 | Local Emulator Suite·test runner·mock/stub | emulator 미지원 동작은 별도 승인된 test harness로 구분합니다. | [Emulator Suite](https://firebase.google.com/docs/emulator-suite) |
-
-## KP Skill 관계와 관리자 설치
-
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-api-test-deploy/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-api-test-deploy/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 선행 조건은 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

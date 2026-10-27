@@ -1,18 +1,18 @@
 # KP API Skill
 
-Version: 1.0.0
+Version: 1.1.0
 
 `kp-api-skill` provides project-local Skills for initializing Firebase Functions codebases and for implementing, validating, and deploying the HTTP endpoints and asynchronous workers a KP API needs. It supports both new APIs and existing API repositories.
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-api-init`](skills/kp-api-init/SKILL.md) | `1.0.0` | Creating a Firebase Functions codebase and domain router | Inspect existing Firebase configuration and prepare the codebase, router, project guidance, and environment-specific npm scripts. |
-| [`kp-api-endpoint`](skills/kp-api-endpoint/SKILL.md) | `1.0.0` | Adding or changing a synchronous HTTP endpoint in an existing router | Implement authentication, input validation, authorization, errors, and tests using the repository's patterns. |
-| [`kp-api-worker`](skills/kp-api-worker/SKILL.md) | `1.0.0` | When work needs asynchronous execution, retries, or scheduling | Design Cloud Tasks or Scheduler workers and verify idempotency, retries, and concurrency boundaries. |
-| [`kp-api-test-deploy`](skills/kp-api-test-deploy/SKILL.md) | `1.0.0` | Testing outside DEV and PRD | Prefer unit tests and local emulators; use a remote test project only after verifying isolation. |
-| [`kp-api-build`](skills/kp-api-build/SKILL.md) | `1.0.0` | Building a requested domain API end to end | Inspect the repository and combine `init`, `endpoint`, `worker`, and isolated testing only as needed. |
-| [`kp-api-deploy`](skills/kp-api-deploy/SKILL.md) | `1.0.0` | When the user explicitly requests a DEV or PRD deployment | Verify test evidence, Firebase project, function scope, identity, and permissions before deploying selected functions. |
-| [`kp-api-docs`](skills/kp-api-docs/SKILL.md) | `1.0.0` | Documenting a deployed public API in Developer Center | Update the local Center repository, expose only public contracts, and use a one-day preview with callback cleanup. |
+| [`kp-api-init`](skills/kp-api-init/SKILL.md) | `1.0.1` | Creating a Firebase Functions codebase and domain router | Inspect existing Firebase configuration and prepare the codebase, router, project guidance, and environment-specific npm scripts. |
+| [`kp-api-endpoint`](skills/kp-api-endpoint/SKILL.md) | `1.0.1` | Adding or changing a synchronous HTTP endpoint in an existing router | Implement authentication, input validation, authorization, errors, and tests using the repository's patterns. |
+| [`kp-api-worker`](skills/kp-api-worker/SKILL.md) | `1.0.1` | When work needs asynchronous execution, retries, or scheduling | Design Cloud Tasks or Scheduler workers and verify idempotency, retries, and concurrency boundaries. |
+| [`kp-api-test-deploy`](skills/kp-api-test-deploy/SKILL.md) | `1.0.1` | Testing outside DEV and PRD | Prefer unit tests and local emulators; use a remote test project only after verifying isolation. |
+| [`kp-api-build`](skills/kp-api-build/SKILL.md) | `1.0.1` | Building a requested domain API end to end | Inspect the repository and combine `init`, `endpoint`, `worker`, and isolated testing only as needed. |
+| [`kp-api-deploy`](skills/kp-api-deploy/SKILL.md) | `1.0.1` | When the user explicitly requests a DEV or PRD deployment | Verify test evidence, Firebase project, function scope, identity, and permissions before deploying selected functions. |
+| [`kp-api-docs`](skills/kp-api-docs/SKILL.md) | `1.0.1` | Documenting a deployed public API in Developer Center | Update the local Center repository, expose only public contracts, and use a one-day preview with callback cleanup. |
 
 Create one Firebase Functions codebase and domain router when a domain is introduced. Add synchronous endpoints to the existing router. Add a worker only when the requested workflow needs independent execution, longer processing, retries, or scheduling. Do not create a new codebase or Cloud Function for every endpoint. Separate HTTP and background resources when their contracts, permissions, or lifecycles justify it.
 
@@ -26,10 +26,12 @@ Review changes in a DEV Hosting Preview Channel before a live release. Set the p
 
 ## Bootstrap a new API repository
 
-Every KP app or API Skill requires the complete three-Skill `kp-skill-manager` set in the same project and agent scope. If the manager is missing, explain why it is required and where it will be installed, then ask for consent before installing it. Install and verify the manager first; if the user declines, do not install the requested KP Skill.
+Any API Skill requires all three `kp-skill-manager` Skills and the complete `kp-credential` Skill set in the same project and agent scope. Skills CLI does not resolve plugin dependencies, so when an installed API Skill runs, it checks the selected agent's project path and automatically installs any missing dependency Skills before starting the task. Tell the user which work requires which Skills and paths before installation, then report the added Skill names and verified paths. The commands below are optional preinstallation steps.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' --agent codex --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credential/skills \
   --skill '*' --agent codex --copy --yes
 ~~~
 
@@ -49,13 +51,14 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
   --skill kp-api-init --agent codex --copy --yes
 ~~~
 
-This command installs only `kp-api-init`. When initialization finishes, that Skill installs the other six Skills in `kp-api-skill` into the same project and agent scope. It does not install `kp-app-skill`. A Codex project tree looks like this:
+This command installs `kp-api-init`. Before initialization, that Skill checks for the required manager and credential sets and installs any missing Skills. When initialization finishes, it installs the other six Skills in `kp-api-skill` into the same project and agent scope. It does not install `kp-app-skill`. A Codex project tree looks like this:
 
 ~~~text
 <project>/.agents/skills/
 ├── kp-skill-create/
 ├── kp-skill-release/
 ├── kp-skill-install/
+├── kp-credential/
 ├── kp-api-init/
 ├── kp-api-endpoint/
 ├── kp-api-worker/
@@ -69,12 +72,14 @@ Claude Code uses `.claude/skills/` instead of `.agents/skills/`. Test the initia
 
 ## Use in an existing API repository
 
-Initialization is not required. Install the whole plugin set into the target project:
+Initialization is not required. Install the whole API plugin or the requested individual API Skill. The commands below can optionally preinstall the required manager and credential sets:
 
-If the manager is missing from the selected agent path, install all manager Skills first with the same `--agent` options, then install the API plugin.
+If only the requested API Skill is installed, it automatically installs any missing dependency Skills when it runs, before starting the task.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credential/skills \
   --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
@@ -85,11 +90,11 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
 
 Keep only the `--agent` options you use. To install a single API Skill, replace `--skill '*'` with its name. The default scope is the current project. Leave out `--global` and `-g` when the Skills should stay with this repository. The canonical source is `kp-api-skill/skills/` in `kp-skill`; after an upstream update, run `npx skills update` and review the diff.
 
-Claude native plugin installation uses the manager dependency declared in `.claude-plugin/plugin.json` and is separate from Skills CLI copy installation. Verify native plugin scope with its host; use the Skills CLI steps above when the Skills must stay with one repository.
+Claude native plugin installation uses the manager and credential dependencies declared in `.claude-plugin/plugin.json` and is separate from Skills CLI copy installation. Verify native plugin scope with its host; use the Skills CLI steps above when the Skills must stay with one repository.
 
 ## Accounts, access, and secrets
 
-Initialization does not collect passwords or API keys. Keep `AGENTS.local.md` ignored by Git and use it only for non-secret values such as account emails, DEV/PRD project IDs, principal names, observed permission errors, and Keychain or Secret Manager item references. Store passwords, OAuth tokens, API keys, private keys, and service-account JSON in an OS Keychain or organization secret manager, and expose them only to an approved process for the shortest required period.
+Initialization does not collect passwords or API keys. Keep `AGENTS.local.md` ignored by Git and use it only for non-secret values such as account emails, DEV/PRD project IDs, principal names, observed permission errors, and secret item labels. For local API calls, the `kp-credential` CLI is automatically installed from its Skill folder when first needed. Enter values through its hidden prompt, approve an origin/path/method scope, and use `kp-credential request <item-name> --url <HTTPS_URL>`. The helper has no command that returns the stored value; it redacts exact and common encoded copies from request responses. Firebase runtime secrets remain in Google Cloud Secret Manager; this helper does not inject secrets into arbitrary CLI environment variables or browser login forms.
 
 Membership in a Google Workspace does not automatically grant Cloud Functions deployment access. Report the principal, project, function or codebase, region, and exact denied permission from a real 403 before asking a project administrator for the minimum required access. Do not guess roles or request `Owner` or `Editor` by default. See [`kp-api-deploy` access guidance](skills/kp-api-deploy/references/access-and-secrets.md).
 

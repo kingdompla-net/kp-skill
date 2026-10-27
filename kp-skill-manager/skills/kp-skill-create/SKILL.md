@@ -2,10 +2,12 @@
 name: kp-skill-create
 description: "KP Skill 저장소에서 작성 기준에 맞춰 새 플러그인과 Skill을 만들거나, 지정한 플러그인에 Skill을 추가할 때 사용합니다."
 metadata:
-  version: "1.0.2"
+  version: "1.1.0"
 ---
 
 # KP Skill과 플러그인 생성
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 이 저장소의 구조와 작성 관례를 확인해 재사용할 플러그인 또는 Skill을 추가합니다. 요청에 새 플러그인 생성과 기존 플러그인 내 Skill 추가가 함께 포함되면 두 작업을 같은 변경 맥락으로 연결합니다.
 
@@ -26,12 +28,13 @@ metadata:
 ## 지정한 플러그인에 Skill을 추가할 때
 
 - Skill 폴더 이름, frontmatter 이름, `agents/openai.yaml`에서 호출하는 이름을 일치시킵니다.
+- 모든 새 `SKILL.md`에 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽으라는 짧은 라우팅 문장을 둡니다. 상세 절차를 각 Skill에 복사하지 않고, 설치된 프로젝트에 공통 문서가 없으면 manager 정본을 통해 준비합니다.
 - README는 [플러그인 README 작성 기준](../../../references/plugin-readme-style.md)에 따라 `README.ko.md`와 `README.md`의 구조·Skill 표·설치 절차·사용 순서를 맞춥니다.
 - 요청 기능을 수행하는 데 필요한 `SKILL.md`만 작성합니다. 조건부 절차, 자료표, 긴 예시는 필요한 경우에만 연결된 references로 나눕니다.
 - `SKILL.md`에 `## 사용하는 API·CLI·도구` 섹션을 표로 추가합니다. 열은 `구분`, `API·CLI·도구`, `실제 사용 방식과 명령`, `공식 문서`로 구성합니다. API는 service와 endpoint/operation, 직접 호출 여부를 적고 각 API 문서를 연결합니다. 내부 KP API도 Developer Center의 해당 endpoint 문서를 연결하며, `appSetApp`처럼 endpoint 문서가 있으면 문서 홈 대신 직접 링크합니다. CLI는 실행 파일, 정확한 subcommand와 사용 옵션을 기록합니다. project·site·export·script 등 대상에 따라 달라지는 값은 `<...>`로 표시하고 확인 위치를 씁니다. 대상 저장소에서 정해지는 script는 `npm run <SCRIPT_NAME>`처럼 호출 형식과 `package.json` 등 확인 위치를 기록합니다. 여러 API나 명령은 행을 나누며, API가 없으면 `없음`으로 표시하고 기타 SDK·emulator·테스트 도구와 확인 기준도 적습니다.
 - 새 한국어 설명은 존댓말로 작성합니다. 표준 식별자, command, path, URL과 고정된 API 필드명은 필요한 경우 원문을 유지합니다.
 - 대상 플러그인의 양쪽 README 표에 Skill 링크, 버전, 사용 시점과 역할을 추가하고, 플러그인 버전은 manifest·README·marketplace에서 일치시킵니다. 각 Skill 버전은 해당 Skill의 `metadata.version`과 표를 맞춥니다.
-- 새 KP 플러그인의 `.claude-plugin/plugin.json`에는 `dependencies: ["kp-skill-manager@kp-skill"]`를 선언합니다. `kp-skill-manager` 플러그인 자체에는 자기 의존성을 추가하지 않습니다. Skills CLI를 쓰는 프로젝트 로컬 설치 안내에는 manager 전체를 같은 agent 경로에 먼저 설치하는 명령과 동의 절차를 포함합니다.
+- 새 KP 플러그인의 `.claude-plugin/plugin.json`에는 `kp-skill-manager@kp-skill` 의존성을 선언합니다. `kp-app-skill`과 `kp-api-skill`에는 `kp-credential@kp-skill`도 추가하고, `kp-credential`에는 manager만 추가합니다. manager 자체에는 자기 의존성을 추가하지 않습니다. Skills CLI 복사 설치 안내에는 필요한 의존성 플러그인의 전체 Skill을 요청된 Skill보다 먼저 자동 설치하고, 설치 전에 작업·Skill 이름·프로젝트 경로를 알린 뒤 결과를 보고하는 절차를 포함합니다.
 - 새 Skill과 플러그인의 역할·연결은 [KP Skill 관계표와 생성·버전·네이밍 원칙](../kp-skill-install/references/kp-skill-catalog-and-authoring.md)에 추가합니다. 관계표에는 실제로 이어지는 작업만 적고 무조건 함께 실행하는 흐름으로 작성하지 않습니다.
 - 다른 플러그인이나 사용자의 설치 경로는 추가 요청 없이 변경하지 않습니다.
 
@@ -58,10 +61,3 @@ metadata:
 | CLI | Git 변경·PR | 승인된 경로만 `git add <APPROVED_PATHS>`, `git diff --cached`, `git commit -m "<TYPE>(agents): <DESCRIPTION>"`으로 처리합니다. Fork는 `gh repo fork kingdompla-net/kp-skill --clone`, branch push는 `git push --set-upstream <PUSH_REMOTE> <WORK_BRANCH>`, PR은 `gh pr create --base <BASE_BRANCH> --title "<CONVENTIONAL_TITLE>" --body-file <PR_BODY_FILE>`입니다. | [git add](https://git-scm.com/docs/git-add), [git diff](https://git-scm.com/docs/git-diff), [git commit](https://git-scm.com/docs/git-commit), [git push](https://git-scm.com/docs/git-push), [gh repo fork](https://cli.github.com/manual/gh_repo_fork), [gh pr create](https://cli.github.com/manual/gh_pr_create) |
 | CLI | Skills CLI | 프로젝트 Skill 설치가 별도 범위에 포함된 경우 `npx skills add <SOURCE_URL> --skill <SKILL_NAME> --agent <AGENT> --copy --yes`를 실행합니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) |
 | 기타 | Frontmatter·Markdown·manifest·README·marketplace JSON | metadata 및 파일 간 정합성을 확인합니다. `kp-skill-release` 절차 없이 tag나 marketplace를 게시하지 않습니다. | — |
-
-## KP Skill 연결과 관리자 기준
-
-- 새 Skill을 만들거나 프로젝트 로컬 Skill을 정본 후보로 가져오기 전에 [KP Skill 관계표와 생성·버전·네이밍 원칙](../kp-skill-install/references/kp-skill-catalog-and-authoring.md)을 읽고 적용합니다.
-- 이 Skill은 `kp-skill-manager` 플러그인의 일부이므로 manager 자체의 설치 동의를 다시 요구하지 않습니다. 사용자가 manager 설치를 요청하면 전체 manager Skill을 같은 프로젝트·에이전트 범위에 설치합니다.
-- 다른 KP Skill이 필요해지면 관계표를 따라 연결합니다. 해당 Skill이 현재 프로젝트·에이전트 경로에 없으면 필요한 이유와 이름을 설명하고 설치 동의를 받은 뒤에만 설치합니다. 전역 설치는 하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-skill-create/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-skill-create/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 전체 설치 절차는 [플러그인 안내](../../README.ko.md)를 확인합니다.

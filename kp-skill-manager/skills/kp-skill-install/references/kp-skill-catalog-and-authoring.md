@@ -2,17 +2,18 @@
 
 이 문서는 `kp-skill` 저장소의 모든 Skill 사이의 연결 기준과 새 Skill 생성·버전 관리 원칙을 정의합니다. `kp-skill-manager`의 모든 Skill과 다른 KP Skill은 교차 작업이나 설치가 필요할 때 이 문서를 확인합니다.
 
-## 필수 관리자 플러그인과 설치 동의
+## 필수 companion plugin과 자동 설치
 
-- `kp-skill`에서 제공하는 Skill을 프로젝트에 하나라도 설치할 때는 같은 프로젝트와 같은 에이전트 범위에 `kp-skill-manager` 플러그인의 Skill 전체를 함께 설치합니다. Codex 프로젝트 경로는 `.agents/skills/`, Claude Code 프로젝트 경로는 `.claude/skills/`입니다. 다른 에이전트는 해당 에이전트의 프로젝트 경로를 확인합니다.
+- `kp-skill`의 모든 Skill에는 같은 프로젝트·에이전트 범위의 `kp-skill-manager` 전체 Skill 세트가 필요합니다. `kp-app-skill` 또는 `kp-api-skill`에서 Skill 하나를 설치하거나 사용할 때는 `kp-credential` 전체 Skill 세트도 함께 필요합니다. Codex 프로젝트 경로는 `.agents/skills/`, Claude Code 프로젝트 경로는 `.claude/skills/`입니다. 다른 에이전트는 해당 에이전트의 프로젝트 경로를 확인합니다.
 - Skills CLI 복사 설치에서는 플러그인 이름으로 디렉터리를 중첩하지 않습니다. 각 Skill은 `<agent-project-skill-dir>/<skill-name>/SKILL.md`에 바로 설치합니다. 예를 들어 Codex는 `<project>/.agents/skills/kp-app-init/SKILL.md`, Claude Code는 `<project>/.claude/skills/kp-app-init/SKILL.md`를 사용합니다. `.agents/skills/kp-app-skill/kp-app-init/`처럼 플러그인 아래에 넣지 않습니다.
 - `npx skills add`는 명령을 실행한 저장소를 기본 project scope로 사용합니다. 대상 프로젝트 루트에서 실행하고 `--global`/`-g`는 사용자가 전역 설치를 명시한 경우에만 지정합니다. global/project 경로 차이는 [Skills CLI 지원 에이전트 안내](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)에서 확인합니다.
-- `kp-skill-manager`가 없으면 대상 Skill을 먼저 설치하거나 실행하지 말고, `kp-skill-manager` 플러그인이 이 프로젝트의 해당 에이전트에 필요하다는 점과 설치 경로를 설명한 뒤 설치 동의를 구합니다. 동의하면 manager의 Skill 전체를 먼저 설치하고 설치 결과를 확인한 뒤 대상 Skill을 설치합니다. 거부하면 KP Skill 설치나 그에 의존하는 작업을 시작하지 않습니다.
-- 사용자가 `kp-skill-manager`를 직접 설치해 달라고 요청한 경우에는 manager 자체 설치가 동의 범위에 포함됩니다. manager 플러그인 전체를 프로젝트 로컬로 설치하며 전역 경로를 사용하지 않습니다.
-- 다른 KP Skill이 필요해지면 아래 관계표에서 해당 Skill을 확인합니다. 필요한 Skill이 같은 에이전트의 프로젝트 경로에 없으면 필요한 이유와 이름을 알려드리고 추가 설치 동의를 구합니다. 동의받은 Skill만 같은 프로젝트·에이전트 범위에 설치합니다. 필요하지 않은 선택 Skill을 미리 설치하지 않습니다.
+- 앱/API Skill 하나를 요청받으면 manager 전체, credential 전체, 요청한 앱/API Skill을 같은 에이전트의 프로젝트 범위에서 manager → credential → 요청된 Skill 순서로 자동 설치하고 검증합니다. 설치 전에 필요한 작업, Skill 이름과 경로를 알리고 설치 후 추가한 Skill과 경로를 보고합니다. 별도 동의를 묻지 않습니다.
+- 어떤 KP Skill에서 manager Skill이 필요하면 manager 전체를 자동 설치합니다. credential Skill이 필요하면 manager 전체를 확인·설치한 뒤 credential 전체를 설치합니다. 사용자 전역 설치는 하지 않습니다.
+- 다른 KP Skill이 필요해지면 아래 관계표에서 해당 Skill을 확인합니다. manager·credential dependency 이외의 선택 Skill이 현재 프로젝트에 없으면 필요한 이유와 이름을 알려드리고 동의를 받은 뒤 설치합니다. 필요하지 않은 선택 Skill을 미리 설치하지 않습니다.
 - 설치된 Skill은 현재 에이전트가 지원하는 호출 방법으로 사용합니다. 직접 호출할 수 없는 환경에서는 해당 Skill의 `SKILL.md`를 읽어 그 절차를 적용합니다. 절차를 중복 구현하거나 전역 Skill을 대신 사용하지 않습니다.
-- Skills CLI로 개별 Skill을 복사하는 설치 방식은 플러그인 의존성을 자동 설치하지 않습니다. 따라서 설치 안내는 manager를 먼저 설치하고 대상 플러그인을 설치하도록 안내하며, Skill 실행 시에도 이 절의 설치 여부를 확인합니다. Claude Code native plugin 설치는 앱·API 플러그인 manifest의 `kp-skill-manager` 의존성을 따릅니다.
-- `kp-app-init`은 초기화 후 `kp-app-skill`에 속한 누락된 Skill만 같은 project·agent 경로에 설치합니다. `kp-api-init`은 `kp-api-skill`의 누락된 Skill만 설치합니다. 두 초기화 Skill은 서로의 플러그인을 설치하지 않으며, manager는 별도 필수 선행 설치입니다. 이미 존재하는 대상 Skill은 사용자 수정과 버전을 확인하지 않고 덮어쓰지 않습니다.
+- Skills CLI로 개별 Skill을 복사하는 설치 방식은 플러그인 의존성을 자동 설치하지 않습니다. `kp-skill-install`과 각 README 절차는 필요한 manager·credential 전체 Skill을 지명 Skill보다 먼저 자동 설치합니다. Claude native plugin은 manifest 의존성을 따릅니다. 앱·API manifest에는 manager와 credential이 모두 선언되어야 합니다.
+- `kp-credential` plugin은 manager 전체 Skill 세트를 의존합니다. manager 자체는 다른 plugin을 의존하지 않습니다.
+- `kp-app-init`은 초기화 후 `kp-app-skill`에 속한 누락된 Skill만 같은 project·agent 경로에 설치합니다. `kp-api-init`은 `kp-api-skill`의 누락된 Skill만 설치합니다. 필요한 manager·credential 세트는 자동 확인·설치한 뒤 초기화를 진행하며, 두 초기화 Skill은 서로의 app/API plugin을 설치하지 않습니다. 이미 존재하는 대상 Skill은 사용자 수정과 버전을 확인하지 않고 덮어쓰지 않습니다.
 - 프로젝트 scope는 `<project>/.agents/skills/<skill-name>/`(Codex), `<project>/.claude/skills/<skill-name>/`(Claude Code)입니다. 사용자 scope는 `--global`/`-g`로 별도 선택하며 해당 agent의 global path를 사용합니다. plugin 전체 또는 선택 Skill 설치 명령은 각 plugin README를 기준으로 합니다.
 
 ## KP Skill 참조 관계표
@@ -37,17 +38,19 @@ manager 플러그인은 모든 KP Skill의 공통 필수 의존성입니다. 아
 | [`kp-skill-manager`](../../../README.ko.md) | [`kp-skill-create`](../../kp-skill-create/SKILL.md) | 새 플러그인·Skill을 만들거나 프로젝트 로컬 Skill을 정본 후보로 가져올 때 | 릴리스 요청이 승인되면 [`kp-skill-release`](../../kp-skill-release/SKILL.md)를 사용합니다. 병합된 버전을 프로젝트에 적용할 때는 [`kp-skill-install`](../SKILL.md)을 사용합니다. |
 | `kp-skill-manager` | [`kp-skill-release`](../../kp-skill-release/SKILL.md) | 승인된 KP Skill 변경을 버전업·릴리스하거나 이력을 조회할 때 | 새 Skill 파일과 플러그인 구성이 필요하면 [`kp-skill-create`](../../kp-skill-create/SKILL.md)를 먼저 사용합니다. 병합 후 설치본은 [`kp-skill-install`](../SKILL.md)로 갱신합니다. |
 | `kp-skill-manager` | [`kp-skill-install`](../SKILL.md) | KP Skill을 특정 프로젝트에 설치하거나 병합된 버전으로 갱신할 때 | 원격 변경이 아직 병합되지 않았다면 업데이트하지 말고 [`kp-skill-release`](../../kp-skill-release/SKILL.md)의 상태를 확인합니다. 프로젝트 로컬 Skill을 정본으로 추가하려면 [`kp-skill-create`](../../kp-skill-create/SKILL.md)를 사용합니다. |
+| [`kp-credential`](../../../../kp-credential/README.ko.md) | [`kp-credential`](../../../../kp-credential/skills/kp-credential/SKILL.md) | 로컬 API credential을 OS 저장소에 저장하거나 승인 범위로 사용할 때 | CLI 설치·저장·권한 승인·요청·폐기를 담당합니다. 앱/API Skill에는 필수 의존성으로 함께 설치합니다. |
 
 표의 관련 Skill은 같은 대화에서 무조건 모두 실행하는 목록이 아닙니다. 현재 요청의 단계가 해당 Skill의 책임에 들어올 때만 연결합니다. 배포, PR·병합, Preview, 외부 callback 같은 단계에는 각 Skill의 별도 승인 규칙이 계속 적용됩니다.
 
 ## 새 Skill 생성과 네이밍
 
-- 새 플러그인 이름은 `kp-<영역>-skill` 형식으로 지정합니다. 예: `kp-app-skill`, `kp-api-skill`, `kp-skill-manager`입니다. 플러그인은 여러 관련 Skill의 배포 단위입니다.
-- 새 KP 플러그인의 Claude manifest에는 `kp-skill-manager@kp-skill` 의존성을 포함합니다. manager 플러그인 자신에는 자기 의존성을 추가하지 않습니다. Skills CLI 복사 설치 안내에는 manager 전체를 먼저 설치하는 순서와 동의 규칙을 포함합니다.
+- 새 플러그인 이름은 `kp-<영역>-skill` 형식을 우선합니다. `kp-credential`처럼 기존 CLI를 감싸는 짧은 제품 이름은 예외로 허용합니다. 플러그인은 여러 관련 Skill의 배포 단위입니다.
+- 새 KP 플러그인의 Claude manifest에는 `kp-skill-manager@kp-skill` 의존성을 포함합니다. 앱/API에는 `kp-credential@kp-skill`도 선언하고, credential plugin에는 manager만 선언합니다. manager 자체에는 자기 의존성을 추가하지 않습니다. Skills CLI 설치 안내에는 필요한 plugin 전체 Skill 세트를 대상 Skill보다 먼저 설치하는 절차를 포함합니다.
 - Skill 이름과 디렉터리 이름은 소문자 ASCII kebab-case로 동일하게 작성합니다. Skill 이름은 `kp-<영역>-<행동 또는 결과>` 형식을 우선하며, `kp-app-skill` 안에서 다시 `kp-app-skill`처럼 플러그인 이름 전체를 반복하지 않습니다. 예: `kp-app-init`, `kp-api-endpoint`, `kp-skill-release`입니다.
 - 각 Skill은 식별 가능한 하나의 작업 책임을 맡습니다. 여러 단계를 조합하는 진입 Skill은 `kp-api-build`처럼 범위와 조합 기준을 분명히 하고, 기존 Skill의 단순 별칭이나 책임 중복을 만들지 않습니다.
 - 프로젝트 로컬에서 검증한 Skill을 정본에 추가할 때는 원본 프로젝트를 보존하고 정본 후보로 검토합니다. 프로젝트 경로·계정·실제 값, 비밀정보, 그 저장소에만 맞는 규칙은 일반화하거나 제외합니다. 대상 플러그인의 기존 구성, 사용자 변경, 지원 에이전트 경로를 확인하고 승인 없이 설치본이나 다른 프로젝트를 덮어쓰지 않습니다.
 - `SKILL.md` frontmatter의 `name`은 디렉터리 이름과 같게 작성합니다. `description`에는 적용되는 요청과 역할을 짧게 적고, 한국어 설명은 존댓말로 작성합니다. 긴 절차나 관계표는 references에 두고 `SKILL.md`에서 필요한 시점에 연결합니다.
+- 모든 KP Skill은 프로젝트 `AGENTS.md`에서 연결하는 `.agents/references/credential-and-local-config.md`를 읽습니다. 새 Skill에는 이 경로를 안내하는 짧은 문장만 넣고, 상세 절차는 [공통 설정·자격 증명 기준](credential-and-local-config.md)에 둡니다. 값은 plugin의 source template이 아니라 사용자 프로젝트에 복사된 `AGENTS.local.md`의 해당 위치에 설정합니다.
 - 새 Skill 버전은 `1.0.0`에서 시작합니다. Skill의 `metadata.version`은 개별 Skill 이력을, `.claude-plugin/plugin.json`과 marketplace의 버전은 해당 플러그인 패키지 이력을 나타냅니다. 한 Skill의 변경도 plugin package에 들어가면 플러그인 버전을 별도로 올립니다. 기존 버전을 임의로 초기화하지 않습니다.
 - 버전 숫자는 사용자가 지정하도록 묻지 않습니다. 릴리스 요청이 승인된 뒤 변경 영향에 따라 SemVer를 정하고 Skill 정본·plugin manifest·marketplace·README를 일치시킵니다. 단순 로컬 편집·검토에서는 버전을 올리지 않습니다.
 

@@ -1,13 +1,15 @@
 # KP API Skill 프로젝트 로컬 설치
 
-`kp-api-init`이 끝나면 이 문서에 따라 `kp-api-skill`의 누락된 Skill만 초기화 대상 저장소에 설치합니다. `kp-api-init`은 앱 플러그인이나 다른 KP 플러그인의 Skill을 설치하지 않습니다. 이미 운영 중인 저장소에서도 초기화 없이 API Skill 전체 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
+`kp-api-init`이 끝나면 이 문서에 따라 `kp-api-skill`의 누락된 Skill만 초기화 대상 저장소에 설치합니다. API 초기화 전에 `kp-skill-manager`와 `kp-credential` 전체 Skill을 확인하고, 빠진 항목은 사용자에게 작업·Skill 이름·경로를 알린 뒤 자동 설치합니다. `kp-api-init`은 앱 플러그인이나 다른 선택 KP 플러그인의 Skill을 설치하지 않습니다. 이미 운영 중인 저장소에서도 초기화 없이 API Skill 전체 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
 
-## 필수 관리자 Skill
+## 필수 companion plugin
 
-KP Skill을 하나라도 프로젝트에 설치할 때는 `kp-skill-manager` 플러그인의 Skill 전체도 같은 프로젝트와 에이전트 경로에 있어야 합니다. 없는 경우 manager가 Skill 생성·릴리스·설치 갱신과 관계표를 제공한다는 점을 사용자에게 설명하고, 설치 동의를 받은 뒤에만 먼저 설치합니다. 사용자가 거부하면 API Skill 설치를 진행하지 않습니다. `--yes`는 동의를 받은 뒤에만 사용합니다.
+API Skill을 하나만 설치해도 `kp-skill-manager`의 전체 세 Skill과 `kp-credential`의 전체 Skill이 같은 프로젝트·에이전트 경로에 필요합니다. 빠진 의존성은 필요한 작업, Skill 이름, 경로를 사용자에게 알린 뒤 자동 설치합니다. Skills CLI는 manifest dependency를 자동 처리하지 않습니다. 아래 명령은 미리 설치하려는 경우에 사용하며, 요청한 API Skill만 설치해도 실행 시 빠진 dependency를 자동으로 설치합니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' --agent codex --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credential/skills \
   --skill '*' --agent codex --copy --yes
 ~~~
 
@@ -41,6 +43,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
 ├── kp-skill-create/
 ├── kp-skill-release/
 ├── kp-skill-install/
+├── kp-credential/
 ├── kp-api-init/
 ├── kp-api-endpoint/
 ├── kp-api-worker/
@@ -54,10 +57,12 @@ Claude Code에서는 같은 Skill 이름의 폴더가 `.claude/skills/` 바로 �
 
 Claude Code이면 `--agent claude-code`, Hermes Agent이면 `--agent hermes-agent`, OpenClaw이면 `--agent openclaw`를 사용합니다. 여러 agent 디렉터리에 설치할 때는 `--agent` 옵션을 반복합니다.
 
-manager 설치 명령에서 같은 agent 목록을 사용해 먼저 manager 전체를 설치한 뒤 API Skill을 설치합니다.
+미리 설치하려는 경우 manager와 credential 명령에서 같은 agent 목록을 사용합니다. 빠진 dependency는 API Skill 실행 시 자동 설치되므로 설치를 선행할 필요는 없습니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credential/skills \
   --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
@@ -68,13 +73,17 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-man
 기존 codebase에서 Skill을 사용하려고 재초기화하지 않습니다. 저장소 루트에서 다음 명령으로 네 agent 경로에 설치합니다.
 
 ~~~sh
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credential/skills \
+  --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill/skills \
   --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
 ## 설치 확인과 업데이트
 
-- `kp-skill-manager` 세 Skill과 API 플러그인의 일곱 Skill 및 연결된 참조 자료가 프로젝트 경로에 있는지 확인합니다.
+- `kp-skill-manager` 세 Skill, `kp-credential` 전체 Skill, API 플러그인의 일곱 Skill 및 연결된 참조 자료가 프로젝트 경로에 있는지 확인합니다.
 - 각 Skill의 `metadata.version`이 해당 plugin version과 일치하는지 확인합니다.
 - 설치 결과를 `git status --short`로 확인하고 사용자 local 수정 사항을 보존합니다.
 - 정본은 `kp-skill` 저장소입니다. upstream update 이후 `npx skills update`를 실행하고 변경을 검토합니다. 프로젝트 복사본만 임의 수정해 정본과 다르게 관리하지 않습니다.

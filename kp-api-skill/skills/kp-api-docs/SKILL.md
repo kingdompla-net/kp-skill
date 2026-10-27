@@ -2,10 +2,12 @@
 name: kp-api-docs
 description: "배포된 KP API 중 공개할 계약만 kingdom-planet-center API Docs에 반영하고 만료형 Preview로 검토할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP API Developer Center 문서 반영
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 실제 배포가 확인된 API의 공개 계약을 로컬 `kingdom-planet-center` 저장소에 반영하고, 사용자 검토용 1일 Preview를 제공합니다. DEV·PRD live Hosting에 곧바로 배포하지 않습니다. API 코드가 merge됐거나 테스트를 통과했다는 사실만으로 cloud 배포가 완료됐다고 간주하지 않습니다.
 
@@ -86,10 +88,3 @@ Firebase Preview Channel은 만료를 지정해도 공개 URL이고 연결된 ba
 | CLI | Git·package manager | `git status --short --branch`로 확인하고, Center 저장소에서 확인한 script를 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 실행합니다. | [git status](https://git-scm.com/docs/git-status), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
 | CLI | Firebase CLI | Preview 배포: `firebase hosting:channel:deploy <CHANNEL_ID> --only <HOSTING_TARGET> --expires 1d --project <DEV_PROJECT_ID>`<br>삭제: `firebase hosting:channel:delete <CHANNEL_ID> --site <DEV_SITE_ID> --project <DEV_PROJECT_ID>` | [CLI reference](https://firebase.google.com/docs/cli), [Preview Channel 관리](https://firebase.google.com/docs/hosting/manage-hosting-resources), [다중 site](https://firebase.google.com/docs/hosting/multisites) |
 | 기타 | `api-docs-v2.json`·renderer·검사 도구·Aside Browser | JSON과 기존 renderer를 확인하고 Developer Center 및 Preview 화면을 프로젝트 브라우저 규칙에 따라 살펴봅니다. | — |
-
-## KP Skill 관계와 관리자 설치
-
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-api-docs/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-api-docs/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 선행 조건은 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

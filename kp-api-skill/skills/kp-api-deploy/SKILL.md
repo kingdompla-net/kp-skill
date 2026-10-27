@@ -2,10 +2,12 @@
 name: kp-api-deploy
 description: "사용자가 환경을 지정해 요청한 KP Firebase Functions codebase 또는 함수를 사전 검증하고 좁은 범위로 배포할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP API Firebase Functions 배포
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 DEV 또는 PRD에 사용자가 명시적으로 배포를 요청한 경우에만 해당 Firebase Functions를 배포합니다. PRD credential을 개발·테스트 세션에 노출하지 않고, 쓰기 권한을 agent가 스스로 추가하거나 넓히지 않습니다. 배포 전에 [`kp-api-test-deploy`](../kp-api-test-deploy/SKILL.md)의 격리 검증 결과를 확인합니다.
 
@@ -53,10 +55,3 @@ source branch/commit, 검사 결과, 인증 principal, Firebase project, config/
 | CLI | Package manager | `package.json`에 검증된 배포 script가 있으면 `<PACKAGE_MANAGER> run <DEPLOY_SCRIPT>`로 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
 | CLI | Firebase CLI | 승인된 직접 배포는 `firebase deploy --config <CONFIG_PATH> --only functions:<FUNCTION_EXPORT> --project <FIREBASE_PROJECT_ID>`로 범위를 고정합니다. export와 project/config 값은 저장소 설정에서 확인합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [Functions 배포](https://firebase.google.com/docs/functions/manage-functions) |
 | 기타 | Firebase 설정·emulator·unit test | 배포 대상과 인증 주체를 대상 저장소 설정 및 emulator 결과와 대조합니다. | — |
-
-## KP Skill 관계와 관리자 설치
-
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-api-deploy/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-api-deploy/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 선행 조건은 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

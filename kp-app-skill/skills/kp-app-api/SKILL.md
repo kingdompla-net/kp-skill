@@ -2,10 +2,12 @@
 name: kp-app-api
 description: "초기화된 KP React 앱에 새 KP API 기능을 연결하거나 기존 API 연동을 수정할 때 사용합니다."
 metadata:
-  version: "2.6.0"
+  version: "2.6.1"
 ---
 
 # KP 앱 API 연동
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 사용자가 요청한 API 기능을 기존 KP 앱 구조에 연결한다. 새 프로젝트 초기화, KP API 서버 자체의 변경, 사용자 요청과 무관한 API 목록 전체 구현은 맡지 않는다.
 
@@ -30,10 +32,3 @@ API 계약, 인증, 데이터 소유권의 세부 원칙은 위에 연결한 `kp
 | CLI | Git | 저장소 상태를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
 | CLI | Package manager | lockfile과 `package.json`에서 manager 및 script를 확인하고 `<PACKAGE_MANAGER> run <SCRIPT_NAME>`으로 test·lint·format을 실행합니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
 | 기타 | TypeScript·Zod·TanStack Query·test 도구·브라우저 | 대상 앱의 기존 의존성과 브라우저 규칙을 따릅니다. | — |
-
-## KP Skill 관계와 관리자 설치
-
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-app-api/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-app-api/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 선행 조건은 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.
