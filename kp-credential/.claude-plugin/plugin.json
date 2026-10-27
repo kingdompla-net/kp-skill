@@ -1,0 +1,10 @@
+{
+  "name": "kp-credential",
+  "description": "macOS Keychain과 Windows Credential Manager에 저장한 API credential을 승인 범위에서 사용하도록 안내하는 Skill을 제공합니다.",
+  "author": {
+    "name": "Kingdom Planet",
+    "url": "https://github.com/kingdompla-net"
+  },
+  "version": "1.0.0",
+  "dependencies": ["kp-skill-manager@kp-skill"]
+}

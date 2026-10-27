@@ -1,0 +1,19 @@
+{
+  "name": "kp-credential",
+  "version": "1.0.0",
+  "description": "Local OS keyring CLI with scoped secret-backed HTTP requests for KP Skills",
+  "type": "module",
+  "os": [
+    "darwin",
+    "win32"
+  ],
+  "bin": {
+    "kp-credential": "./bin/kp-credential.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@napi-rs/keyring": "2.1.2"
+  }
+}
