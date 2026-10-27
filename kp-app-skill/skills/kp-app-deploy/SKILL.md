@@ -2,10 +2,12 @@
 name: kp-app-deploy
 description: "초기화된 KP React 앱을 Firebase Hosting에 배포할 때 사용합니다. 이 Skill의 기본 호출은 DEV이며, DEV·PRD 절차는 각각 별도 Skill로 선택할 수 있습니다."
 metadata:
-  version: "2.7.0"
+  version: "2.7.1"
 ---
 
 # KP 앱 Firebase Hosting 배포
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 초기화된 KP 앱의 Firebase Hosting을 검증하고 요청된 환경에 배포합니다. 환경이 없는 기본 호출은 DEV 배포로 해석합니다. PRD 요청은 먼저 production 빌드까지 진행하고, 사용자가 현재 대상에 대한 실제 배포를 별도로 승인한 뒤에만 live 배포합니다.
 
@@ -40,10 +42,6 @@ PRD 실제 배포는 이 기본 Skill의 호출만으로 승인된 것으로 보
 | CLI | Firebase CLI | 직접 배포가 승인된 경우 `firebase deploy --only hosting:<HOSTING_TARGET> --project <FIREBASE_PROJECT_ID>`로 Hosting만 배포합니다. | [Firebase CLI](https://firebase.google.com/docs/cli), [Hosting 배포](https://firebase.google.com/docs/hosting) |
 | 기타 | `package.json`·`firebase.json`·`.firebaserc`·build·검사 도구·브라우저 | 설정 파일로 target을 확인하고 화면 검증은 해당 저장소의 브라우저 절차를 따릅니다. | — |
 
-## KP Skill 관계와 관리자 설치
+## 배포 Skill 호출
 
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
 - Claude Code에서 프로젝트 로컬 Skill을 직접 설치했다면 `/kp-app-deploy-dev` 또는 `/kp-app-deploy-prd`를 사용합니다. Claude Code 플러그인으로 설치했다면 `/kp-app-skill:kp-app-deploy-dev` 또는 `/kp-app-skill:kp-app-deploy-prd`를 사용합니다. Codex에서는 `$kp-app-deploy-dev` 또는 `$kp-app-deploy-prd` Skill을 선택합니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-app-deploy/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-app-deploy/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 manager 선행 조건은 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

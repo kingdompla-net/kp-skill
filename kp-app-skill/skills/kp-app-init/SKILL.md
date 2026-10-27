@@ -2,10 +2,12 @@
 name: kp-app-init
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용합니다."
 metadata:
-  version: "2.8.1"
+  version: "2.8.2"
 ---
 
 # KP 앱 초기화
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 이미 화면 설계가 끝난 프론트엔드 소스를 실제 KP API 앱으로 연결한다. 기존 화면과 사용자의 작업물을 보존하고, 새 앱의 API 계약과 권한은 최신 KP 공식 문서 및 사용자가 제공한 앱 설정으로 확인한다.
 
@@ -26,8 +28,9 @@ metadata:
    - KP Developer Center 로그인 계정: API 문서 열람에 필요한 계정 이메일과 인증 수단의 로컬 참조를 AGENTS.local.md에서 확인합니다. 비밀번호·세션 쿠키·토큰은 그 파일에 기록하지 않습니다.
    - 확정 구조의 store/slices/와 모든 폴더명 단수 원칙이 충돌한다. 이 초기화에서 해당 경로가 필요하면 store/slice/로 바꿀지, 기존 경로의 예외로 둘지 확인한다.
 3. VITE_APP_NAME은 package.json의 name에서 만들고, VITE_APP_DESCRIPTION은 package 설명·README·화면의 실제 목적에 맞춰 쓴다. 앱 이름 변환이 PascalCase인지 공백으로 구분한 이름인지 불명확하면 예시를 제시해 확인한다. 설명을 지어낼 근거가 없으면 사용자에게 목적을 묻는다.
-4. AGENTS.local.md는 assets/templates/AGENTS.local.md를 바탕으로 GitHub/Git identity, 환경별 프로젝트 ID·Hosting target·`KP_SYSTEM_APP_ID`, 계정 이메일, 테스트 계정 이메일·역할, Secret Manager·Keychain 항목 이름처럼 비밀이 아닌 로컬 설정을 기록합니다. 실제 비밀번호·세션·액세스 토큰·API key·개인 키는 이 파일, 셸 설정, 저장소 파일에 넣지 않습니다. 실제 비밀은 OS Keychain 또는 조직 Secret Manager에 두고 필요한 명령의 프로세스에만 환경 변수로 주입합니다. AGENTS.local.md가 .gitignore에 포함되어 `git check-ignore -v AGENTS.local.md`로 확인되는지 검증합니다.
-   - KP API 문서를 읽을 때는 Developer Center 계정 이메일과 인증 수단의 로컬 참조를 확인합니다. 정보가 없으면 사용자에게 필요한 항목만 요청하며 비밀번호를 입력받아 문서에 보관하지 않습니다.
+4. 대상 프로젝트 루트에 `AGENTS.local.md`가 없으면 `assets/templates/AGENTS.local.md`를 먼저 복사합니다. 이미 있으면 덮어쓰지 말고 필요한 항목만 병합합니다. 저장소와 사용자가 확인해 준 비밀 아닌 GitHub/Git identity, 환경별 project ID·Hosting target·`KP_SYSTEM_APP_ID`, 계정 이메일, 테스트 계정 정보는 프로젝트 로컬 복사본의 해당 위치에 설정합니다. 원본 template에는 사용자 값을 입력하지 않습니다. API header key/token은 `kp-credential`의 숨김 입력으로 OS 자격 증명 저장소에 저장하고 승인한 origin·경로·method로 요청합니다. 비밀값을 파일·대화·셸 설정·명령 인수에 넣지 않으며, 임의 CLI 환경 변수 주입을 구현하지 않습니다. 파일이 Git에서 추적되지 않고 무시되는지 `git ls-files -- AGENTS.local.md`, `git check-ignore -v AGENTS.local.md`로 검증합니다.
+   - API key나 token이 필요한 경우 공통 reference의 절차에 따라 `kp-credential --version`을 확인하고, CLI가 없거나 낡았으면 설치된 Skill 폴더에서 자동 설치·갱신합니다. 사용자는 `kp-credential add <항목이름>`의 숨김 입력으로 값을 저장하고 `kp-credential grant <항목이름> --origin <HTTPS_ORIGIN> --path-prefix <PATH> --header <HEADER> --methods <METHODS>`로 요청 범위를 대화형 승인합니다. 이후 에이전트는 승인 범위에서 `kp-credential request <항목이름> --url <HTTPS_URL>`을 사용하며 CLI의 저장값 조회 명령은 제공하지 않습니다.
+   - KP API 문서를 읽을 때는 Developer Center 계정 이메일과 인증 수단의 로컬 참조를 확인합니다. 정보가 없으면 사용자에게 필요한 항목만 요청하며 비밀번호를 입력받아 문서에 보관하지 않습니다. `kp-credential`은 승인된 API header 사용만 지원하며 브라우저 로그인 비밀번호를 대신 입력하지 않습니다.
    - Git identity나 GitHub 원격 인증, Firebase/GCP 작업, 로컬·개발 서버 테스트에 필요한 계정·권한·환경을 확인합니다. 로그인 계정과 프로젝트 권한은 서로 다르므로 403이나 IAM 오류가 나면 실제 주체·프로젝트·리소스·거부된 permission을 기록해 권한 관리자에게 필요한 최소 권한 수정을 안내합니다.
 
 ## 구현 기준
@@ -41,8 +44,9 @@ metadata:
 - Zod가 없으면 저장소의 package manager를 확인해 런타임 의존성으로 추가한다. npm 저장소라면 npm i zod를 사용하고 lockfile을 함께 갱신한다.
 - 기존 파일을 덮어쓰지 않는다. 같은 경로에 기존 코드가 있으면 소비자와 테스트를 확인하고 필요한 동작을 합친다.
 - 화면 요청은 hook/query/에 TanStack Query key·query·mutation을 두고, 전역 클라이언트 상태는 store/의 Zustand에 둔다. 서버 응답을 Zustand에 중복 보관하지 않는다. 확정 구조에 없는 서비스 계층은 임의로 추가하지 않는다. 여러 API 호출로 이루어진 흐름도 우선 query/mutation에서 조정하되, 새 계층이 필요해 보이면 구조를 바꾸기 전에 사용자에게 묻는다.
-- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고, 작업을 시작하기 전에 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 전체가 있는지 확인합니다. 없으면 manager 설치가 필요한 이유와 경로를 설명하고 사용자 동의를 구합니다. 동의한 경우에만 manager의 세 Skill을 먼저 설치하고 결과를 확인합니다. 초기화가 끝나면 이미 설치된 파일과 사용자 변경을 확인한 뒤 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete`, `kp-app-image-optimize` 중 누락된 Skill만 같은 프로젝트 경로에 설치합니다. `kp-api-skill`은 설치하지 않습니다. 거부하면 필요한 manager를 포함한 KP Skill 설치와 작업을 진행하지 않습니다. `--global` 또는 `-g`는 사용하지 않습니다. 설치 후 manager와 앱 Skill이 선택된 프로젝트·에이전트 경로에 있는지 검증합니다.
-- `.agents/references/cloud-access.md`의 템플릿을 대상 저장소에 복사하고, 루트 `AGENTS.md`에서 해당 문서와 `AGENTS.local.md`를 읽도록 연결합니다. 기존 문서는 덮어쓰지 않고 필요한 규칙만 병합합니다.
+- 초기화 결과를 넘기기 전에 references/plugin-skills.md를 읽고, 초기화가 끝나면 기존 파일과 사용자 수정을 보존하면서 `kp-app-api`, `kp-app-deploy`, `kp-app-deploy-dev`, `kp-app-deploy-prd`, `kp-app-preview-release`, `kp-app-preview-delete`, `kp-app-image-optimize` 중 누락된 Skill만 같은 프로젝트 경로에 설치합니다. `kp-api-skill`은 설치하지 않습니다. `--global` 또는 `-g`는 사용하지 않습니다. 설치 후 추가한 앱 Skill과 실제 프로젝트·에이전트 경로를 사용자에게 알립니다.
+- 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 대상 저장소의 `.agents/references/credential-and-local-config.md`로 복사합니다. 기존 파일은 덮어쓰지 말고 필요한 규칙만 병합합니다. 생성하는 루트 `AGENTS.md`에서 이 참조와 `AGENTS.local.md`를 읽도록 라우팅합니다.
+- `.agents/references/cloud-access.md` 템플릿도 대상 저장소에 복사하고, 해당 파일의 기존 계정·권한 규칙을 보존합니다.
 - 이후 references/agent-ide.md를 읽고 초기화 대상 저장소에만 biome-eslint-ide-config-skill을 프로젝트 로컬로 설치하고 실행한다. 사용자의 전역 Skill 설치는 대상 저장소 설치를 대체하지 않는다. 그 스킬의 사용자 확인 절차와 전체 파일 자동 수정 승인 단계를 생략하지 않는다.
 - 초기화할 때는 `package.json`, `firebase.json`, `.firebaserc`, `.env.development*`, `.env.production*`을 먼저 읽고 기존 설정을 보존하며 합친다. Vite 프로젝트의 `package.json`에는 `build:dev`와 `deploy:dev`를 반드시 추가한다. `build:dev`는 `vite build --mode development`를 실행하고, `deploy:dev`는 `npm run build:dev`를 먼저 실행한 뒤 확인된 실제 DEV Firebase 프로젝트 ID를 사용해 `firebase deploy --only hosting:dev --project <확인된 DEV 프로젝트 ID>`를 실행한다. PRD Firebase 프로젝트 ID와 Hosting 사이트 ID를 모두 확인하면 `build:prd`와 `deploy:prd`도 추가한다. `build:prd`는 `vite build --mode production`, `deploy:prd`는 `npm run build:prd` 후 확인된 PRD 프로젝트 ID로 `firebase deploy --only hosting:prd --project <확인된 PRD 프로젝트 ID>`를 실행한다. `<...>` 대체 문구를 스크립트에 남기지 않는다. 같은 이름의 기존 스크립트가 있으면 현재 동작을 확인해 합치고, 안전하게 합칠 수 없을 때만 사용자에게 선택을 요청한다.
 - Node.js 버전은 `.nvmrc`, `.node-version`, `.tool-versions`, `package.json`의 `engines.node`, CI 설정을 확인해 기록합니다. 프로젝트가 버전을 고정하지 않았다면 에이전트 셸의 Node 버전을 프로젝트 기준으로 간주하지 않습니다. 대상 도구가 지원하는 범위와 현재 로컬 버전을 설명하고 사용자에게 고정 여부와 버전을 확인합니다. 사용자가 고정을 원하지 않으면 명세에 `미고정`이라고 기록합니다.
@@ -56,7 +60,7 @@ metadata:
 
 초기화, 코드 연결, 로컬 검증이 끝나면 대상 저장소에서 /init을 실행한다. 생성된 결과를 확인하고 아래 문서 계약에 맞게 보완한다.
 
-- 루트 AGENTS.md에 실제 폴더 트리를 그리고 .agents/references/의 상세 문서와 하위 AGENTS.md로 연결한다.
+- 루트 AGENTS.md에 실제 폴더 트리를 그리고 .agents/references/의 상세 문서와 하위 AGENTS.md로 연결한다. 모든 KP Skill이 `.agents/references/credential-and-local-config.md`를 읽도록 라우팅한다.
 - 생성하는 루트 `AGENTS.md`에는 작업마다 최소한 `main`/`dev`가 아닌 별도 작업 브랜치를 사용하고, 권장 방식은 작업별 워크트리와 브랜치를 함께 만드는 것이라고 명시한다. `main`/`dev`에 직접 push하려면 push 직전에 매번 사용자의 명시적 승인을 받도록 한다. GitHub 원격 인증 계정과 Git 커밋 identity가 같은 사용자 계정이어야 하며, `AGENTS.local.md`에 정한 author·committer 이름과 이메일을 커밋 전에 확인하도록 명시한다. author와 committer 이메일은 모두 해당 GitHub 계정에 인증된 이메일 또는 그 계정의 noreply 주소여야 한다.
 - 생성하는 루트 `AGENTS.md`에는 모든 작업을 기능·수정 목적별 맥락으로 나누고, 각 맥락의 구현과 직접 검증이 끝날 때마다 독립 커밋으로 남긴다고 명시한다. 작업 완료는 확인된 base를 대상으로 PR을 만들고 필요한 검사와 리뷰가 끝난 뒤 PR을 base에 병합해야 완료된다고 명시한다. PR 없이 브랜치를 base에 직접 병합하는 작업은 사전에 사용자의 명시적 승인을 받도록 한다.
 - `assets/templates/.agents/references/commit-rule.md`와 `pr-rule.md`를 각각 대상 저장소의 `.agents/references/commit-rule.md`와 `pr-rule.md`로 복사하고, `assets/templates/.references/PULL_REQUEST_TEMPLATE.md`를 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`로 복사한다. 같은 경로의 기존 문서가 있으면 덮어쓰지 말고 내용을 합친다.
@@ -85,12 +89,5 @@ metadata:
 | API | Firebase Auth redirect domain | OAuth redirect의 authorized domain 설정을 확인합니다. | [authorized domain 안내](https://firebase.google.com/docs/auth/web/redirect-best-practices) |
 | CLI | Git·npm·Vite | 상태·ignore 확인은 `git status --short --branch`, `git check-ignore -v AGENTS.local.md`입니다. npm 설치는 `npm install zod`, build는 `vite build --mode development` 또는 `vite build --mode production`, scripts는 `npm run build:dev`, `npm run deploy:dev`, 필요 시 `npm run build:prd`, `npm run deploy:prd`입니다. | [git status](https://git-scm.com/docs/git-status), [git check-ignore](https://git-scm.com/docs/git-check-ignore), [npm install](https://docs.npmjs.com/cli/v11/commands/npm-install), [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script), [Vite CLI](https://vite.dev/guide/cli) |
 | CLI | Firebase CLI | 생성하는 deploy script는 `firebase deploy --only hosting:dev --project <DEV_FIREBASE_PROJECT_ID>` 또는 `firebase deploy --only hosting:prd --project <PRD_FIREBASE_PROJECT_ID>`입니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
-| CLI | Skills CLI | 설치가 승인되면 manager를 먼저 `npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills --skill '*' --agent <AGENT> --copy --yes`, 앱 Skill은 `npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill/skills --skill <SKILL_NAME> --agent <AGENT> --copy --yes`로 설치합니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) |
+| CLI | Skills CLI | 설치가 승인되면 manager 전체, credential 전체, 요청된 앱 Skill 순서로 각각 `npx skills add <PLUGIN_SKILLS_SOURCE> --skill '*' --agent <AGENT> --copy --yes`를 실행합니다. Skills CLI는 plugin dependencies를 자동 처리하지 않습니다. | [Skills CLI commands](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) |
 | 기타 | React·TypeScript·Zod·TanStack Query·Zustand·lint·format·브라우저 | 대상 저장소 설정을 확인하고 Developer Center·브라우저 작업은 프로젝트의 브라우저 규칙을 따릅니다. | — |
-
-## KP Skill 관계와 관리자 설치
-
-- 이 Skill을 프로젝트에서 사용할 때는 동일한 프로젝트·에이전트 경로에 `kp-skill-manager`의 세 Skill이 있는지 확인합니다. 없으면 manager의 역할과 필요한 설치 경로를 설명하고 설치 동의를 받은 뒤에만 manager 전체를 프로젝트 로컬로 설치합니다. 거부하면 KP Skill 작업을 진행하지 않습니다. 사용자가 manager 설치를 직접 요청한 경우는 설치 동의로 봅니다.
-- 다른 KP Skill이 필요해지면 아래 정본 문서 또는 현재 에이전트의 `.agents/skills/kp-skill-install/references/`나 `.claude/skills/kp-skill-install/references/`에 있는 관계표를 읽습니다. 필요한 Skill이 없으면 이유와 이름을 알리고 추가 설치 동의를 구합니다. 동의한 Skill만 설치하며 관계표의 모든 Skill을 무조건 실행하지 않습니다.
-- 프로젝트 로컬 복사 설치 경로는 Codex의 `<project>/.agents/skills/kp-app-init/SKILL.md`와 Claude Code의 `<project>/.claude/skills/kp-app-init/SKILL.md`입니다. 플러그인 이름의 상위 폴더는 만들지 않습니다. 설치 명령과 초기화 후 설치 범위는 [플러그인 안내](../../README.ko.md)를 확인합니다.
-- 정본 관계표: `kp-skill-manager/skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md`.

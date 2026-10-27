@@ -2,10 +2,12 @@
 name: kp-app-image-optimize
 description: "KP React 앱의 로컬 이미지 또는 Firebase Storage 이미지를 분석하고, 실제 화면에 맞게 용량·형식을 최적화할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP 앱 이미지 최적화
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 KP 앱에서 실제 사용하는 이미지의 로딩 비용을 줄이고, 소비 경로와 Firebase Storage metadata를 보존해 최적화 결과를 반영합니다. 이미 충분히 작은 자산은 불필요하게 변환하지 않습니다.
 

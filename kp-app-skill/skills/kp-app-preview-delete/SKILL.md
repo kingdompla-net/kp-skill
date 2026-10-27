@@ -2,10 +2,12 @@
 name: kp-app-preview-delete
 description: "검토가 끝났거나 PR이 병합된 KP 앱 Firebase Hosting Preview Channel과 이번 작업에서 추가한 OAuth callback을 확인해 정리할 때 사용합니다."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # KP 앱 Firebase Hosting 프리뷰 정리
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 검토가 끝난 앱 Preview Channel과 해당 배포를 위해 임시 등록한 OAuth callback을 정리합니다. 사용자 또는 적용 지침이 지정한 정리 범위만 처리합니다.
 

@@ -1,23 +1,30 @@
 # KP Skill Manager
 
-버전: 1.0.3
+버전: 1.1.0
 
 `kp-skill-manager`는 이 저장소의 플러그인과 Skill을 생성하고, SemVer와 Git 태그로 버전을 관리하며, 승인된 변경을 배포하고, 지정된 프로젝트의 로컬 Skill 설치를 갱신합니다.
 
-`kp-skill-manager`는 모든 `kp-skill` 앱·API Skill의 필수 동반 플러그인입니다. 다른 KP Skill을 프로젝트에 설치할 때 manager의 세 Skill도 같은 프로젝트·에이전트 경로에 있어야 합니다. 관계, 호출 흐름, 생성·버전·네이밍 원칙은 [KP Skill 관계표와 생성·버전·네이밍 원칙](skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md)을 따릅니다.
+`kp-skill-manager`는 모든 KP Skill의 필수 동반 플러그인입니다. `kp-app-skill`이나 `kp-api-skill`에서 Skill 하나를 설치할 때는 manager의 세 Skill과 `kp-credential` 전체 Skill을 같은 프로젝트·에이전트 범위에 함께 설치합니다. 관계와 설치 흐름은 [KP Skill 관계표와 생성·버전·네이밍 원칙](skills/kp-skill-install/references/kp-skill-catalog-and-authoring.md)을 따릅니다.
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.0.2` | 프로젝트에 Skill 초안을 만들거나 명시적으로 정본 승격을 요청할 때 | 공통 Skill 템플릿과 플러그인 README 기준에 맞춰 작성하고, 관리자·기여자 계정에 맞는 PR 경로를 따릅니다. |
-| [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.1` | Skill 개선 배포, 버전 이력 조회 또는 이전 버전 콘텐츠를 새 버전으로 재발행할 때 | 변경 영향에 따라 버전을 올리고 manifest·README·태그를 맞춘 뒤 계정에 따른 PR·병합 경로를 따릅니다. |
-| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.0.2` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 설치 출처와 범위를 확인하고 선택한 플러그인 또는 전체 KP Skill 설치를 갱신한 뒤 실제 파일 버전을 검증합니다. |
+| [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.1.0` | 프로젝트에 Skill 초안을 만들거나 명시적으로 정본 승격을 요청할 때 | 공통 Skill 템플릿과 플러그인 README 기준에 맞춰 작성하고, 관리자·기여자 계정에 맞는 PR 경로를 따릅니다. |
+| [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.2` | Skill 개선 배포, 버전 이력 조회 또는 이전 버전 콘텐츠를 새 버전으로 재발행할 때 | 변경 영향에 따라 버전을 올리고 manifest·README·태그를 맞춘 뒤 계정에 따른 PR·병합 경로를 따릅니다. |
+| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.1.0` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 설치 출처와 범위를 확인하고 필요한 manager·credential Skill을 프로젝트 로컬로 자동 설치해 실제 경로를 검증합니다. |
 
 ## 프로젝트 로컬 설치
 
-사용자가 `kp-skill-manager`를 설치하도록 요청하면 manager의 세 Skill을 함께 설치합니다. 다른 KP Skill을 설치하기 위한 필수 동반 설치라면 대상 프로젝트와 에이전트 경로에 manager가 없는 이유와 설치 범위를 먼저 설명하고 동의를 구합니다. 동의한 경우 프로젝트 저장소 루트에서 실행합니다.
+manager Skill을 사용할 때는 manager 세 Skill 전체가 같은 프로젝트·에이전트 경로에 필요합니다. 앱/API Skill이나 credential Skill에는 credential 전체도 필요합니다. Skills CLI 복사 설치는 dependency를 자동 해석하지 않으므로, 실행 중인 Skill이 선택된 프로젝트·에이전트 경로를 확인해 빠진 전체 세트를 작업 전에 자동 설치합니다. 설치 전에는 필요한 작업, Skill 이름과 경로를 사용자에게 알리고 설치 후 추가 항목과 경로를 보고합니다.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
+  --skill '*' --agent codex --copy --yes
+~~~
+
+credential 전체를 미리 설치하려면 위 manager 명령과 같은 agent 옵션으로 다음 명령을 실행합니다.
+
+~~~bash
+npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credential/skills \
   --skill '*' --agent codex --copy --yes
 ~~~
 
@@ -30,7 +37,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-man
 
 Codex 프로젝트에 manager를 설치하면 `.agents/skills/kp-skill-create/`, `.agents/skills/kp-skill-release/`, `.agents/skills/kp-skill-install/`이 만들어집니다. Claude Code에서는 같은 이름의 폴더가 `.claude/skills/` 바로 아래에 생깁니다. 플러그인 이름을 감싸는 상위 폴더는 만들지 않습니다. 다른 에이전트는 [공식 지원 에이전트 표](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)에서 프로젝트 경로를 확인해 주세요.
 
-Skills CLI 복사 설치는 plugin 의존성을 자동으로 설치하지 않습니다. 앱·API Skill을 추가할 때 manager가 없다면 설치 이유와 경로를 설명하고 동의를 받은 뒤 manager 세 Skill을 먼저 설치합니다. Claude native plugin 설치는 `.claude-plugin/plugin.json`의 의존성 선언을 따르며, Skills CLI 설치와 별도입니다. 사용자 전역 설치는 사용자가 해당 범위를 명시한 경우에만 선택합니다.
+Skills CLI 복사 설치는 plugin 의존성을 자동으로 설치하지 않습니다. 앱·API Skill을 실행하면 누락된 manager와 credential 전체 Skill을 작업 전에 사용자에게 알리고 프로젝트 로컬로 자동 설치합니다. Claude native plugin은 앱/API manifest에 선언된 두 의존성을 따릅니다. 사용자 전역 설치는 사용자가 해당 범위를 명시한 경우에만 선택합니다.
 
 ## 버전과 배포 기준
 

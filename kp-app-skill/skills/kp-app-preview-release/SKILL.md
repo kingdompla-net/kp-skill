@@ -2,10 +2,12 @@
 name: kp-app-preview-release
 description: "요청된 KP React 앱 변경을 Firebase Hosting Preview Channel에 배포하고, 필요한 OAuth callback을 승인된 앱 설정에 등록·검증할 때 사용합니다."
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # KP 앱 Firebase Hosting 프리뷰 배포
+
+작업 시작 시 프로젝트 루트 `AGENTS.md`와 연결된 `.agents/references/credential-and-local-config.md`를 읽습니다. 로컬 reference가 없으면 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 사용해 프로젝트 로컬 사본과 `AGENTS.md` 라우트를 준비합니다.
 
 요청된 앱 변경을 임시 Firebase Hosting Preview Channel에 배포해 검토할 때 사용합니다. 이 Skill은 live Hosting channel 배포를 수행하지 않습니다.
 

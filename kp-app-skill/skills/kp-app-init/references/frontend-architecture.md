@@ -89,7 +89,7 @@ src/
 - Git identity나 GitHub 원격 인증, Firebase/GCP 작업, 로컬·개발 서버 테스트, KP API 문서 열람을 시작하기 전에 대상 저장소 루트의 AGENTS.local.md를 확인합니다. 비밀·권한 기준은 [.agents/references/cloud-access.md 템플릿](../assets/templates/.agents/references/cloud-access.md)을 대상 저장소에 복사해 사용합니다.
 - 필요한 계정 식별자나 환경 정보가 없으면 사용자에게 해당 값만 요청해 AGENTS.local.md를 갱신합니다. 비밀번호·token·API key는 입력받아 이 파일에 기록하지 않습니다. 파일이 .gitignore에 포함되어 있는지 확인합니다.
 - 커밋 전 활성 GitHub 계정과 `git var GIT_AUTHOR_IDENT`, `git var GIT_COMMITTER_IDENT`를 확인한다. author·committer의 이름은 AGENTS.local.md에 정한 값을 사용하고, 두 이메일이 모두 같은 GitHub 계정에 인증된 이메일 또는 그 계정의 noreply 주소인지 검증한다. 계정이 다르거나 확인할 수 없으면 커밋하지 않는다.
-- AGENTS.local.md에는 비밀 저장소의 이름과 환경 변수 이름만 둡니다. 비밀값은 OS Keychain 또는 조직 비밀 저장소에 보관하고 필요한 명령 프로세스에만 주입합니다. GitHub 계정, Firebase CLI 계정, gcloud CLI 계정, ADC 주체와 프로젝트 IAM 권한을 각각 확인합니다.
+- AGENTS.local.md에는 비밀 저장소 항목 라벨과 필요한 비밀이 쓰이는 목적만 둡니다. 로컬 API header credential은 `kp-credential`에 숨김 입력으로 저장하고 승인한 origin·경로·method를 통해 요청합니다. 이 도구는 임의 CLI 환경 변수 주입이나 브라우저 로그인 입력을 지원하지 않습니다. Firebase CLI, gcloud CLI, ADC와 GitHub 인증은 각 도구의 지원 로그인 경로를 사용하고, API runtime secret은 Google Cloud Secret Manager에 둡니다.
 - KP API 계약은 [DEV Developer Center](https://developer-kpcenter-dev.web.app/api)와 [PRD Developer Center](https://developer-kpcenter.web.app/api)에서 확인한다. 사용할 환경의 문서를 읽고, 로그인 계정은 AGENTS.local.md의 Developer Center 항목을 따른다.
 
 ## Firebase Hosting 구성과 배포 Skill 연결
