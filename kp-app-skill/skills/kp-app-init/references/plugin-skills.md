@@ -1,6 +1,6 @@
 # KP 앱 플러그인 Skill 프로젝트 로컬 설치
 
-초기화가 끝나면 이 문서에 따라 `kp-app-skill`의 누락된 Skill만 초기화 대상 저장소의 현재 에이전트용 프로젝트 경로에 설치합니다. 앱 초기화 전에 `kp-skill-manager`와 `kp-credential` 전체 Skill을 확인하고, 빠진 항목은 사용자에게 작업·Skill 이름·경로를 알린 뒤 자동 설치합니다. `kp-app-init`은 API 플러그인이나 다른 선택 KP 플러그인의 Skill을 설치하지 않습니다. 기존 앱 저장소에서도 초기화 없이 전체 앱 Skill 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
+초기화가 끝나면 이 문서에 따라 `kp-app-skill`의 누락된 Skill만 초기화 대상 저장소의 현재 에이전트용 프로젝트 경로에 설치합니다. 앱 초기화 전에 `kp-skill-manager`와 `kp-credential` 전체 Skill을 확인하고, 빠진 항목은 사용자에게 작업·Skill 이름·경로를 알린 뒤 자동 설치합니다. `kp-credential` Skill 복사가 끝나면 같은 설치 작업에서 설치된 Skill의 `scripts/install-global.mjs`를 실행해 CLI package를 OS 사용자 npm 전역 환경에 설치·갱신하고 `kp-credential --version` 및 명령 탐색을 확인합니다. `kp-app-init`은 API 플러그인이나 다른 선택 KP 플러그인의 Skill을 설치하지 않습니다. 기존 앱 저장소에서도 초기화 없이 전체 앱 Skill 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
 
 ## 설치 전 확인
 
@@ -11,7 +11,7 @@
 
 ## 필수 companion plugin
 
-앱 Skill을 하나만 설치해도 `kp-skill-manager`의 전체 세 Skill과 `kp-credential`의 전체 Skill이 같은 프로젝트·에이전트 경로에 필요합니다. 빠진 의존성은 필요한 작업, Skill 이름, 경로를 사용자에게 알린 뒤 자동 설치합니다. Skills CLI는 manifest dependency를 자동 처리하지 않으므로 아래 두 명령은 미리 설치하려는 경우에 사용합니다. 자동 설치가 끝난 뒤에는 동일한 범위에서 초기화나 요청 작업을 계속합니다.
+앱 Skill을 하나만 설치해도 `kp-skill-manager`의 전체 세 Skill과 `kp-credential`의 전체 Skill이 같은 프로젝트·에이전트 경로에 필요합니다. 빠진 의존성은 필요한 작업, Skill 이름, 경로를 사용자에게 알린 뒤 자동 설치합니다. `kp-credential` Skill 복사가 끝나면 같은 설치 작업 안에서 설치된 Skill의 `scripts/install-global.mjs`를 실행해 CLI package를 OS 사용자 npm 전역 환경에 설치하고, `kp-credential --version`과 일반 명령 탐색을 확인합니다. Skills CLI는 manifest dependency와 OS npm package를 자동 처리하지 않으므로 아래 두 명령은 미리 Skill 파일을 복사하려는 경우에 사용합니다. 사용자가 Skills CLI만 직접 실행한 경우에는 credential 작업 전에 agent가 helper로 CLI 설치·PATH 확인을 마칩니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills --skill '*' --agent codex --copy --yes
@@ -81,6 +81,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-app-skill
 ## 설치 후 확인
 
 - `kp-skill-manager` 세 Skill, `kp-credential` 전체 Skill, 현재 앱 플러그인 버전의 모든 Skill이 현재 에이전트의 프로젝트 로컬 경로에 있는지 확인합니다.
+- `kp-credential` CLI가 OS 사용자 전역 npm 환경에 설치돼 있고 `kp-credential --version`과 일반 command lookup이 성공하는지 확인합니다.
 - 각 Skill 디렉터리에 유효한 `SKILL.md`가 있고 `metadata.version`이 플러그인 README의 개별 버전과 맞는지 확인합니다. Plugin version은 개별 Skill 버전과 별도로 관리합니다.
 - `kp-app-init`은 초기화·구조 연결 작업에, `kp-app-api`는 새 KP API 기능 연동·기존 연동 수정에, 환경을 지정하지 않은 `kp-app-deploy`는 기본 DEV 배포에 연결합니다. DEV·PRD를 고정해 호출하는 Claude Code 프로젝트 Skill은 각각 `/kp-app-deploy-dev`, `/kp-app-deploy-prd`이며, 플러그인 설치에서는 `/kp-app-skill:kp-app-deploy-dev`, `/kp-app-skill:kp-app-deploy-prd`를 사용합니다. Codex에서는 `$kp-app-deploy-dev`, `$kp-app-deploy-prd`를 선택합니다. `kp-app-preview-release`는 검토용 Preview Channel 배포에, `kp-app-preview-delete`는 검토 완료 또는 PR 병합 뒤 해당 Preview 정리에 연결합니다.
 - 별도 `biome-eslint-ide-config-skill`은 이 플러그인에 포함되지 않습니다. 해당 Skill은 [agent-ide.md](agent-ide.md)의 절차에 따라 같은 대상 저장소의 프로젝트 로컬 경로에 따로 설치합니다.

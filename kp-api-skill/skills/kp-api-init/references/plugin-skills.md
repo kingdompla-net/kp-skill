@@ -1,10 +1,10 @@
 # KP API Skill 프로젝트 로컬 설치
 
-`kp-api-init`이 끝나면 이 문서에 따라 `kp-api-skill`의 누락된 Skill만 초기화 대상 저장소에 설치합니다. API 초기화 전에 `kp-skill-manager`와 `kp-credential` 전체 Skill을 확인하고, 빠진 항목은 사용자에게 작업·Skill 이름·경로를 알린 뒤 자동 설치합니다. `kp-api-init`은 앱 플러그인이나 다른 선택 KP 플러그인의 Skill을 설치하지 않습니다. 이미 운영 중인 저장소에서도 초기화 없이 API Skill 전체 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
+`kp-api-init`이 끝나면 이 문서에 따라 `kp-api-skill`의 누락된 Skill만 초기화 대상 저장소에 설치합니다. API 초기화 전에 `kp-skill-manager`와 `kp-credential` 전체 Skill을 확인하고, 빠진 항목은 사용자에게 작업·Skill 이름·경로를 알린 뒤 자동 설치합니다. `kp-credential` Skill 복사가 끝나면 같은 설치 작업에서 설치된 Skill의 `scripts/install-global.mjs`를 실행해 CLI package를 OS 사용자 npm 전역 환경에 설치·갱신하고 `kp-credential --version` 및 명령 탐색을 확인합니다. `kp-api-init`은 앱 플러그인이나 다른 선택 KP 플러그인의 Skill을 설치하지 않습니다. 이미 운영 중인 저장소에서도 초기화 없이 API Skill 전체 묶음을 프로젝트 로컬로 직접 설치할 수 있습니다.
 
 ## 필수 companion plugin
 
-API Skill을 하나만 설치해도 `kp-skill-manager`의 전체 세 Skill과 `kp-credential`의 전체 Skill이 같은 프로젝트·에이전트 경로에 필요합니다. 빠진 의존성은 필요한 작업, Skill 이름, 경로를 사용자에게 알린 뒤 자동 설치합니다. Skills CLI는 manifest dependency를 자동 처리하지 않습니다. 아래 명령은 미리 설치하려는 경우에 사용하며, 요청한 API Skill만 설치해도 실행 시 빠진 dependency를 자동으로 설치합니다.
+API Skill을 하나만 설치해도 `kp-skill-manager`의 전체 세 Skill과 `kp-credential`의 전체 Skill이 같은 프로젝트·에이전트 경로에 필요합니다. 빠진 의존성은 필요한 작업, Skill 이름, 경로를 사용자에게 알린 뒤 자동 설치합니다. `kp-credential` Skill 복사가 끝나면 같은 설치 작업 안에서 설치된 Skill의 `scripts/install-global.mjs`를 실행해 CLI package를 OS 사용자 npm 전역 환경에 설치하고, `kp-credential --version`과 일반 명령 탐색을 확인합니다. Skills CLI는 manifest dependency와 OS npm package를 자동 처리하지 않습니다. 아래 명령은 미리 Skill 파일을 복사하려는 경우에 사용하며, 사용자가 Skills CLI만 직접 실행한 경우에는 API 작업 전에 agent가 helper로 CLI 설치·PATH 확인을 마칩니다.
 
 ~~~sh
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -84,6 +84,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
 ## 설치 확인과 업데이트
 
 - `kp-skill-manager` 세 Skill, `kp-credential` 전체 Skill, API 플러그인의 일곱 Skill 및 연결된 참조 자료가 프로젝트 경로에 있는지 확인합니다.
+- `kp-credential` CLI가 OS 사용자 전역 npm 환경에 설치돼 있고 `kp-credential --version`과 일반 command lookup이 성공하는지 확인합니다.
 - 각 Skill의 `metadata.version`이 해당 plugin version과 일치하는지 확인합니다.
 - 설치 결과를 `git status --short`로 확인하고 사용자 local 수정 사항을 보존합니다.
 - 정본은 `kp-skill` 저장소입니다. upstream update 이후 `npx skills update`를 실행하고 변경을 검토합니다. 프로젝트 복사본만 임의 수정해 정본과 다르게 관리하지 않습니다.

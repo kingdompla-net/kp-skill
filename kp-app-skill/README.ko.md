@@ -1,12 +1,12 @@
 # KP 앱 Skill
 
-버전: 2.10.0
+버전: 2.11.0
 
 `kp-app-skill`은 KP React 앱 초기화와 API 연동, 이미지 최적화, Firebase Hosting Preview 검토와 live 배포에 필요한 프로젝트 로컬 Skill을 제공합니다.
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.8.2` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고 호환되는 도구·Node.js 설정을 `.agents/references/spec.md`에 기록하며 Firebase Hosting target, 환경별 Preview 시스템 App ID, URL·callback·정리 상태를 추적합니다. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.9.0` | 설계된 React 저장소를 KP 앱으로 처음 연결할 때 | 기존 화면과 기준 도구 구성을 보존하고 호환되는 도구·Node.js 설정을 `.agents/references/spec.md`에 기록하며 Firebase Hosting target, 환경별 Preview 시스템 App ID, URL·callback·정리 상태를 추적합니다. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.1` | 이미 초기화된 앱에 기능을 추가하거나 KP API 연동을 수정할 때 | 공식 API 계약을 확인해 기존 앱 구조와 query/state 경계에 연결합니다. |
 | [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.7.1` | 환경을 지정하지 않고 기본 배포를 요청했을 때 | DEV를 기본값으로 선택하고 Firebase Hosting 공통 배포 규칙을 안내합니다. |
 | [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.0.1` | DEV 배포 Skill을 직접 호출할 때 | DEV Hosting만 검증·빌드·배포합니다. |
@@ -15,7 +15,7 @@
 | [`kp-app-preview-delete`](skills/kp-app-preview-delete/SKILL.md) | `1.0.1` | 검토 완료 또는 PR 병합 뒤 해당 Preview를 정리할 때 | 해당 배포에서 추가한 callback과 Firebase Hosting Preview Channel만 확인해 정리합니다. |
 | [`kp-app-image-optimize`](skills/kp-app-image-optimize/SKILL.md) | `1.0.1` | KP 앱에서 실제 사용하는 로컬 또는 Firebase Storage 이미지의 용량 최적화를 요청할 때 | 화면 크기와 품질을 확인하고 소비 경로·다운로드 토큰·Storage metadata를 보존해 최적화합니다. |
 
-초기화 과정에서 대상 앱 `package.json`에 `build:dev`·`deploy:dev`를 만들고, PRD 프로젝트 ID와 Hosting 사이트 ID가 확인되면 `build:prd`·`deploy:prd`도 추가합니다. `kp-app-init`은 초기화가 끝난 뒤 `kp-app-skill`의 여덟 Skill을 같은 프로젝트·에이전트 경로에 설치합니다. `kp-api-skill`은 자동 설치 대상이 아닙니다. 로컬 API key는 [`kp-credential`](../kp-credential/README.ko.md)에서 숨김 입력으로 저장하고 API 사용 범위를 승인합니다. CLI는 처음 필요할 때 설치된 Skill 폴더에서 자동 설치·갱신합니다. `AGENTS.local.md`에는 항목 라벨만 기록하며 이 도구를 임의 명령이나 브라우저 로그인 비밀번호에 사용하지 않습니다.
+초기화 과정에서 대상 앱 `package.json`에 `build:dev`·`deploy:dev`를 만들고, PRD 프로젝트 ID와 Hosting 사이트 ID가 확인되면 `build:prd`·`deploy:prd`도 추가합니다. `kp-app-init`은 초기화가 끝난 뒤 `kp-app-skill`의 여덟 Skill을 같은 프로젝트·에이전트 경로에 설치합니다. `kp-api-skill`은 자동 설치 대상이 아닙니다. 앱 Skill 설치와 함께 `kp-credential` CLI를 OS 사용자 환경에 자동 설치·확인하므로 이후 로컬 API key는 [`kp-credential`](../kp-credential/README.ko.md)에서 숨김 입력으로 저장하고 API 사용 범위를 승인할 수 있습니다. `AGENTS.local.md`에는 항목 라벨만 기록하며 이 도구를 임의 명령이나 브라우저 로그인 비밀번호에 사용하지 않습니다.
 
 ## 생성 저장소의 Git 규칙
 
@@ -23,7 +23,7 @@
 
 ## 설치
 
-앱 Skill 하나를 설치하거나 사용할 때도 같은 프로젝트·에이전트 범위에 `kp-skill-manager` 세 Skill과 `kp-credential` 전체 Skill이 필요합니다. Skills CLI 자체는 plugin dependency를 자동 설치하지 않지만, 설치된 앱 Skill을 실행하면 선택한 에이전트의 프로젝트 경로를 확인해 빠진 dependency Skill을 작업 전에 자동 설치합니다. 설치 전에 필요한 작업, Skill 이름과 경로를 사용자에게 알리고, 설치 후 추가한 Skill과 경로를 보고합니다. 아래 명령은 미리 설치하려는 경우에 사용하는 선택 절차입니다.
+앱 Skill 하나를 설치하거나 사용할 때도 같은 프로젝트·에이전트 범위에 `kp-skill-manager` 세 Skill과 `kp-credential` 전체 Skill이 필요합니다. Skills CLI 자체는 dependency Skill이나 OS npm package를 자동 설치하지 않습니다. agent가 KP Skill 설치를 진행하면 필요한 dependency Skill을 설치하고, credential Skill 복사 직후 CLI를 OS 사용자 환경에 설치해 명령을 검증합니다. 설치 전에 필요한 작업, Skill 이름과 경로를 사용자에게 알리고, 설치 후 추가한 Skill과 경로 및 CLI 상태를 보고합니다. 아래 명령은 agent가 실행하는 설치 절차에서 Skill 파일만 미리 복사하려는 경우에 사용합니다.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -74,7 +74,7 @@ Claude Code에서는 `.agents/skills/` 대신 `.claude/skills/`를 사용합니�
 
 ### 기존 저장소 또는 여러 에이전트 설치
 
-기존 프로젝트에서는 초기화를 거치지 말고 앱 Skill 전체 또는 지명한 앱 Skill을 설치할 수 있습니다. 앱 Skill을 실행할 때 필요한 manager·credential Skill이 빠져 있으면 작업 전에 자동 설치합니다. 아래 manager·credential 명령은 미리 설치하려는 경우에 사용합니다. `--agent`는 반복 옵션이며, 아래는 네 에이전트의 프로젝트 경로에 모두 복사하는 예입니다.
+기존 프로젝트에서는 초기화를 거치지 말고 앱 Skill 전체 또는 지명한 앱 Skill을 설치할 수 있습니다. 앱 Skill을 설치하거나 실행하면 필요한 manager·credential Skill이 빠져 있을 때 agent가 작업 전에 자동 설치합니다. agent는 credential Skill 설치와 함께 CLI도 사용자 환경에 준비합니다. 아래 manager·credential 명령은 Skill 파일만 미리 복사하려는 경우에 사용합니다. `--agent`는 반복 옵션이며, 아래는 네 에이전트의 프로젝트 경로에 모두 복사하는 예입니다.
 
 미리 설치하려면 대상 Skill과 같은 `--agent` 옵션을 사용합니다. 단일 앱 Skill만 설치해도 실행 시 누락된 dependency를 자동으로 설치합니다.
 

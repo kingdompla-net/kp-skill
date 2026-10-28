@@ -2,7 +2,7 @@
 name: kp-skill-install
 description: "특정 KP 플러그인이나 Skill 또는 kp-skill 저장소의 전체 KP Skill을 실제 배포 버전으로 맞추기 위해 프로젝트·명시된 사용자 설치를 갱신할 때 사용합니다."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # KP Skill 설치 갱신
@@ -39,8 +39,9 @@ KP Skill을 프로젝트에 설치할 때 `kp-skill-manager`의 공통 설정·�
 
 - 현재 실행 중인 Skill을 수행하는 데 `kp-skill-manager`의 Skill이 필요하지만 전체 manager 세트가 없으면, 설치 이유·필요한 Skill·프로젝트와 agent 경로를 사용자에게 먼저 알린 뒤 manager 전체를 자동 설치하고 검증합니다. 별도 동의를 묻지 않습니다.
 - 작업에 `kp-credential`의 Skill이 필요하지만 credential 전체가 없으면 manager 전체가 있는지 먼저 확인하고, 빠진 manager 전체와 credential 전체를 같은 프로젝트·agent 범위에 자동 설치합니다. 앱/API Skill을 설치하거나 사용하는 작업은 항상 두 dependency 전체를 확인합니다. 설치 후 추가한 Skill 이름과 실제 경로를 알린 다음 요청 작업을 계속합니다.
+- `kp-credential` Skill이 dependency로 설치되는 즉시, 같은 설치 작업 안에서 설치된 Skill의 `scripts/install-global.mjs`를 실행해 CLI package를 현재 OS 사용자의 npm 전역 환경에 설치·갱신합니다. Skills CLI는 Skill 파일을 복사할 뿐 npm package를 설치하지 않으므로 helper가 package 설치, OS 사용자 PATH 설정과 `kp-credential --version` 및 일반 명령 탐색을 처리합니다. Skill 파일은 프로젝트 로컬에 두고 CLI만 OS 사용자 범위에 둡니다.
 - 앱/API native plugin은 manifest에서 manager와 credential plugin을 모두 의존성으로 선언합니다. Skills CLI 복사 설치는 dependency를 자동 처리하지 않으므로 같은 agent의 프로젝트 경로에 없는 Skill만 전체 dependency 순서대로 설치합니다. 기존 파일과 사용자의 수정은 덮어쓰지 않습니다.
-- 사용자가 `kp-credential` 설치를 요청하면 manager 전체와 credential 전체를 프로젝트 로컬로 설치합니다. `kp-skill-manager`만 요청하면 manager 전체만 설치합니다. global 설치는 사용자가 정확히 요청한 경우에만 진행합니다.
+- 사용자가 `kp-credential` 설치를 요청하면 manager·credential Skill 파일은 프로젝트 로컬로 설치하고 CLI package는 OS 사용자 환경에 설치합니다. `kp-skill-manager`만 요청하면 manager 전체만 설치합니다. `--global`/`-g` Skill 설치는 사용자가 정확히 요청한 경우에만 진행합니다.
 - 다른 KP Skill이 필요해지면 관계표에서 필요한 Skill과 이유를 확인합니다. manager·credential dependency 이외의 선택 Skill은 현재 경로에 없을 때 이름과 이유를 설명하고 별도 동의를 받은 뒤 프로젝트 로컬로 설치합니다.
 - `kp-skill` Skill 설치는 Skills CLI 복사 방식과 agent native plugin 방식의 dependency 처리 차이를 따릅니다. 앱/API native plugin은 `kp-skill-manager`와 `kp-credential` 의존성을 모두 사용하고, Skills CLI 경로는 필요한 전체 Skill 세트를 프로젝트 로컬에 자동 설치합니다.
 

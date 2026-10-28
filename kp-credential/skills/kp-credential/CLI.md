@@ -1,8 +1,10 @@
 # kp-credential CLI 안내
 
-`kp-credential` Skill 폴더에는 CLI와 npm package가 함께 들어 있습니다. API credential이 필요한 작업에서 에이전트는 `kp-credential --version`으로 설치 여부를 확인하고, 없거나 현재 Skill과 버전이 다르면 설치·갱신 전에 사용자에게 작업과 현재 사용자 npm 전역 prefix를 설명합니다. 그 뒤 이 폴더를 자동 설치·갱신하고 설치된 버전과 실행 경로를 알립니다. 저장소 clone이나 별도 CLI 다운로드는 필요하지 않습니다.
+`kp-credential` Skill 폴더에는 CLI와 npm package가 함께 들어 있습니다. 앱/API Skill을 설치할 때 dependency로 설치되는 `kp-credential` Skill의 `scripts/install-global.mjs`를 agent가 실행해 package를 OS 사용자 전역 npm 환경에 자동 설치·갱신합니다. helper는 Node.js/npm과 OS를 확인하고, macOS 또는 Windows 사용자 PATH를 필요한 경우 설정한 뒤 `kp-credential --version`과 일반 명령 탐색을 검증합니다. 사용자는 어느 프로젝트 터미널에서든 `kp-credential list`처럼 경로 없이 실행할 수 있습니다. 프로젝트 Skill 파일은 프로젝트 범위에 남고 CLI 실행 파일만 사용자 범위에 설치됩니다. 저장소 clone, 별도 다운로드, 설치 경로 입력은 필요하지 않습니다.
 
-자동 설치에는 Node.js 20 이상, npm, npm registry 접근과 사용자 계정에 쓰기 가능한 npm 전역 prefix가 필요합니다. 필수 조건이 없으면 에이전트가 원인과 해결 방법을 안내한 뒤 준비되면 자동으로 다시 시도합니다. 이때 비밀값을 대화에 보내지 않으며 권한 오류를 우회하려고 `sudo npm`을 사용하지 않습니다.
+Skills CLI로 파일만 직접 복사한 경우에는 agent가 해당 Skill을 사용하는 첫 작업에서 이 사용자 환경 설치를 완료합니다. Skills CLI 복사 명령 자체는 OS npm package를 설치하지 않으므로 `npx skills add`만 실행한 직후 CLI가 이미 설치됐다고 가정하지 않습니다.
+
+자동 설치에는 Node.js 20 이상, npm, npm registry 접근과 사용자 계정에 쓰기 가능한 npm 전역 prefix가 필요합니다. 일반 터미널에서 명령이 탐색되도록 설치 후 OS 사용자 PATH도 확인하며, 경로가 누락된 경우 agent가 표준 셸 설정을 중복 없이 보완하고 새 터미널에서 확인합니다. 필수 조건이 없으면 에이전트가 원인과 해결 방법을 안내한 뒤 준비되면 자동으로 다시 시도합니다. 이때 비밀값을 대화에 보내지 않으며 권한 오류를 우회하려고 `sudo npm`을 사용하지 않습니다.
 
 macOS에서는 Keychain, Windows에서는 Credential Manager를 사용합니다. 명령은 두 OS에서 같습니다.
 

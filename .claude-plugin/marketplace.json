@@ -11,25 +11,25 @@
       "name": "kp-app-skill",
       "source": "./kp-app-skill",
       "description": "KP React 앱 초기화, API 연동, 이미지 최적화와 Firebase Hosting 프리뷰 검토·배포를 돕는 프로젝트 로컬 Skill을 제공합니다.",
-      "version": "2.10.0"
+      "version": "2.11.0"
     },
     {
       "name": "kp-api-skill",
       "source": "./kp-api-skill",
       "description": "KP Firebase Functions 초기화, endpoint·worker 구현, 격리 테스트, 범위 지정 배포와 Developer Center API 문서화를 돕는 프로젝트 로컬 Skill을 제공합니다.",
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "kp-skill-manager",
       "source": "./kp-skill-manager",
       "description": "KP Skill 플러그인과 개별 Skill을 생성하고 버전 관리·배포하며 프로젝트 로컬 설치를 갱신합니다.",
-      "version": "1.1.0"
+      "version": "1.2.0"
     },
     {
       "name": "kp-credential",
       "source": "./kp-credential",
       "description": "macOS Keychain과 Windows Credential Manager에 저장한 API credential을 승인 범위에서 사용하도록 안내하는 Skill을 제공합니다.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     }
   ]
 }

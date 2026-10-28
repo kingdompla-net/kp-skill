@@ -1,6 +1,6 @@
 # KP Skill Manager
 
-Version: 1.1.0
+Version: 1.2.0
 
 `kp-skill-manager` creates plugins and Skills in this repository, manages their SemVer and Git tags, publishes approved changes, and updates project-local Skill installations.
 
@@ -10,11 +10,11 @@ Version: 1.1.0
 | --- | --- | --- | --- |
 | [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.1.0` | Creating a project-local Skill draft or explicitly promoting one to the canonical repository | Follows the shared Skill template and plugin README style while using the correct PR path for promotion. |
 | [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.2` | Improving and releasing a Skill, viewing version history, or republishing earlier Skill content as a new version | Selects SemVer, synchronizes manifests and READMEs, and follows the account-specific PR and merge path. |
-| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.1.0` | Updating KP Skills in the current repository or a specifically requested user scope | Verifies installation sources and scope, automatically installs required manager/credential Skills, and checks installed versions and paths. |
+| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.2.0` | Updating KP Skills in the current repository or a specifically requested user scope | Installs required manager/credential Skills, installs the credential CLI in the OS user's environment, and verifies versions and command access. |
 
 ## Project-local installation
 
-When a manager Skill is needed, the full set of three manager Skills is required in the same project and agent scope. An app/API Skill or credential Skill also requires the complete `kp-credential` set. Skills CLI copy installation does not resolve dependencies, so the running Skill checks the selected project and agent path and automatically installs any missing dependency set before the task. Tell the user which work requires which Skills and paths before installation, then report the added Skill names and verified paths.
+When a manager Skill is needed, the full set of three manager Skills is required in the same project and agent scope. An app/API Skill or credential Skill also requires the complete `kp-credential` set. Skills CLI copy installation does not resolve dependencies, so the running Skill installs any missing dependency set before the task. Right after copying the credential Skill, it also installs the CLI in the OS user's global npm environment and verifies bare-command access. Tell the user which work requires which Skills and paths before installation, then report the added Skill names, verified paths, and CLI status.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -37,7 +37,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credentia
 
 For Codex, the manager Skills are installed directly as `.agents/skills/kp-skill-create/`, `.agents/skills/kp-skill-release/`, and `.agents/skills/kp-skill-install/`. Claude Code uses the same Skill-named folders directly under `.claude/skills/`. There is no parent folder named after the plugin. See the [official supported-agent table](https://github.com/vercel-labs/skills/blob/main/docs/agents.md) for other project paths.
 
-Skills CLI copy installation does not resolve plugin dependencies. When an app/API Skill is run, its instructions install missing manager and credential Skills into the same project and agent path before starting the task. Claude native plugin installation follows both dependencies declared in `.claude-plugin/plugin.json` and is separate from Skills CLI installation. Use a user-wide path only when that scope is explicitly requested.
+Skills CLI copy installation does not resolve plugin dependencies. When an app/API Skill is installed, missing manager and credential Skills go into the same project and agent path, and the credential CLI is installed and verified in the OS user's environment. Claude native plugin installation follows both Skill dependencies declared in `.claude-plugin/plugin.json`. `--global`/`-g` refers to Skill file scope and is used only when a user-wide Skill installation is explicitly requested.
 
 ## Version and release rules
 

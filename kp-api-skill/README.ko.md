@@ -1,12 +1,12 @@
 # KP API Skill
 
-버전: 1.1.0
+버전: 1.2.0
 
 `kp-api-skill`은 KP Firebase Functions 저장소에서 새 코드베이스를 준비하고, 필요한 HTTP endpoint와 비동기 worker를 구현·검증·배포하는 프로젝트 로컬 Skill 묶음입니다. 처음 API 저장소를 만드는 경우와 기존 KP API 저장소에 합류하는 경우 모두 사용할 수 있습니다.
 
 | Skill | 버전 | 언제 사용하나 | 역할 |
 | --- | --- | --- | --- |
-| [`kp-api-init`](skills/kp-api-init/SKILL.md) | `1.0.1` | 새 Firebase Functions 코드베이스와 도메인 router를 처음 만들 때 | 기존 저장소의 Firebase 설정을 조사해 코드베이스·router·개발 지침·환경별 npm script를 준비합니다. |
+| [`kp-api-init`](skills/kp-api-init/SKILL.md) | `1.1.0` | 새 Firebase Functions 코드베이스와 도메인 router를 처음 만들 때 | 기존 저장소의 Firebase 설정을 조사해 코드베이스·router·개발 지침·환경별 npm script를 준비합니다. |
 | [`kp-api-endpoint`](skills/kp-api-endpoint/SKILL.md) | `1.0.1` | 기존 router에 동기 HTTP endpoint를 추가하거나 수정할 때 | 인증, 입력 schema, 권한, 오류 응답, 테스트를 기존 패턴에 맞춰 구현합니다. |
 | [`kp-api-worker`](skills/kp-api-worker/SKILL.md) | `1.0.1` | 요청 시간이 길거나 지연·재시도가 필요한 비동기 작업이 있을 때 | Cloud Tasks 또는 Scheduler 기반 worker를 설계하고 중복·재시도·동시성 경계를 검증합니다. |
 | [`kp-api-test-deploy`](skills/kp-api-test-deploy/SKILL.md) | `1.0.1` | DEV·PRD와 분리된 로컬 emulator 또는 승인된 전용 test project에서 검증할 때 | Unit test와 emulator를 우선하고, 격리된 project에서만 제한된 원격 테스트 배포를 수행합니다. |
@@ -28,7 +28,7 @@ QT 구현은 참고 패턴이지 복사할 템플릿이 아닙니다. 새 프로
 
 ## 새 코드베이스 초기화
 
-API Skill 하나를 설치하거나 사용할 때도 같은 프로젝트·에이전트 범위에 `kp-skill-manager` 세 Skill과 `kp-credential` 전체 Skill이 필요합니다. Skills CLI 자체는 plugin dependency를 자동 설치하지 않지만, 설치된 API Skill을 실행하면 선택한 에이전트의 프로젝트 경로를 확인해 빠진 dependency Skill을 작업 전에 자동 설치합니다. 설치 전에 필요한 작업, Skill 이름과 경로를 사용자에게 알리고, 설치 후 추가한 Skill과 경로를 보고합니다. 아래 명령은 미리 설치하려는 경우에 사용하는 선택 절차입니다.
+API Skill 하나를 설치하거나 사용할 때도 같은 프로젝트·에이전트 범위에 `kp-skill-manager` 세 Skill과 `kp-credential` 전체 Skill이 필요합니다. Skills CLI 자체는 dependency Skill이나 OS npm package를 자동 설치하지 않습니다. agent가 KP Skill 설치를 진행하면 필요한 dependency Skill을 설치하고, credential Skill 복사 직후 CLI를 OS 사용자 환경에 설치해 명령을 검증합니다. 설치 전에 필요한 작업, Skill 이름과 경로를 사용자에게 알리고, 설치 후 추가한 Skill과 경로 및 CLI 상태를 보고합니다. 아래 명령은 agent가 실행하는 설치 절차에서 Skill 파일만 미리 복사하려는 경우에 사용합니다.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -74,7 +74,7 @@ Claude Code에서는 `.agents/skills/` 대신 `.claude/skills/`를 사용합니�
 
 ## 기존 API 저장소에 설치
 
-`kp-api-init`을 실행할 필요 없이 API Skill 전체 또는 지명한 단일 API Skill을 설치할 수 있습니다. API Skill을 실행할 때 manager·credential Skill이 빠져 있으면 작업 전에 자동 설치합니다. 아래 manager·credential 명령은 미리 설치하려는 경우에 사용합니다. 아래 예시는 네 에이전트의 프로젝트 로컬 경로에 복사하며 사용하지 않는 `--agent` 옵션은 지웁니다.
+`kp-api-init`을 실행할 필요 없이 API Skill 전체 또는 지명한 단일 API Skill을 설치할 수 있습니다. API Skill을 설치하거나 실행하면 manager·credential Skill이 빠져 있을 때 agent가 작업 전에 자동 설치합니다. credential Skill 설치와 함께 CLI도 사용자 환경에 준비합니다. 아래 manager·credential 명령은 Skill 파일만 미리 복사하려는 경우에 사용합니다. 아래 예시는 네 에이전트의 프로젝트 로컬 경로에 복사하며 사용하지 않는 `--agent` 옵션은 지웁니다.
 
 미리 설치하려면 대상 Skill과 같은 `--agent` 옵션을 사용합니다. 단일 API Skill만 설치해도 실행 시 누락된 dependency를 자동으로 설치합니다.
 
@@ -96,7 +96,7 @@ Claude native plugin 설치는 `.claude-plugin/plugin.json`에 선언된 manager
 
 ## 계정·권한·비밀 정보
 
-초기화는 실제 계정 비밀번호나 API key를 생성·수집하지 않습니다. 프로젝트의 `.gitignore`가 `AGENTS.local.md`를 제외하도록 하고, 로컬 설정에는 계정 이메일, DEV·PRD project ID, 인증 주체, 권한 오류에서 관측된 범위, 비밀 항목 라벨만 둡니다. 로컬 API 요청에서는 [`kp-credential`](../kp-credential/README.ko.md)의 CLI가 처음 필요할 때 설치된 Skill 폴더에서 자동 설치·갱신됩니다. 사용자는 숨김 입력으로 값을 저장하고 origin·경로·method 범위를 승인합니다. 에이전트는 `kp-credential request <항목이름> --url <HTTPS_URL>`로 요청하며 CLI는 저장된 값을 직접 반환하지 않고 응답에서 원문과 흔한 encoding을 지웁니다. API가 credential을 임의로 변환해 응답하면 감지할 수 없으므로 해당 endpoint에 권한을 부여하지 않습니다. Firebase runtime secret은 Google Cloud Secret Manager에 둡니다. 이 도구는 임의 CLI의 환경 변수 주입이나 브라우저 로그인 입력을 지원하지 않습니다.
+초기화는 실제 계정 비밀번호나 API key를 생성·수집하지 않습니다. 프로젝트의 `.gitignore`가 `AGENTS.local.md`를 제외하도록 하고, 로컬 설정에는 계정 이메일, DEV·PRD project ID, 인증 주체, 권한 오류에서 관측된 범위, 비밀 항목 라벨만 둡니다. API Skill 설치와 함께 [`kp-credential`](../kp-credential/README.ko.md)의 CLI를 OS 사용자 환경에 자동 설치·확인합니다. 사용자는 숨김 입력으로 값을 저장하고 origin·경로·method 범위를 승인합니다. 에이전트는 `kp-credential request <항목이름> --url <HTTPS_URL>`로 요청하며 CLI는 저장된 값을 직접 반환하지 않고 응답에서 원문과 흔한 encoding을 지웁니다. API가 credential을 임의로 변환해 응답하면 감지할 수 없으므로 해당 endpoint에 권한을 부여하지 않습니다. Firebase runtime secret은 Google Cloud Secret Manager에 둡니다. 이 도구는 임의 CLI의 환경 변수 주입이나 브라우저 로그인 입력을 지원하지 않습니다.
 
 Google Workspace 계정이 있다는 것만으로 Cloud Functions 배포 권한이 생기지는 않습니다. 실제 403의 principal, project, 대상 함수·codebase, region, 거부된 permission을 확인해 프로젝트 관리자에게 최소 권한을 요청하도록 안내합니다. 역할을 추측하거나 `Owner`/`Editor`를 기본 요청하지 않습니다. 권한 모델과 수동 관리자 요청 양식은 [`kp-api-deploy` 접근 지침](skills/kp-api-deploy/references/access-and-secrets.md)에 있습니다.
 
