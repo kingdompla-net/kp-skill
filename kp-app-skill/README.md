@@ -1,25 +1,25 @@
 # KP App Skill
 
-Version: 2.11.0
+Version: 2.12.0
 
-`kp-app-skill` provides project-local Skills for initializing KP React apps, integrating APIs, optimizing images, reviewing Firebase Hosting previews, and deploying live sites.
+`kp-app-skill` provides project-local Skills for initializing KP React apps, integrating APIs, optimizing images, reviewing Firebase Hosting previews, and deploying live sites. 모든 KP 앱의 Hosting 배포는 Hosting 전용 Firebase 프로젝트 `kp-app-k00001`을 사용하며, 앱별 DEV·PRD Hosting site와 target을 구분합니다. Firebase SDK runtime project 설정은 앱별 값을 유지합니다.
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.9.0` | When connecting a designed React repository to KP for the first time | Preserves existing screens and baseline tooling, records compatible tools and Node.js settings in `.agents/references/spec.md`, and tracks Firebase Hosting targets, environment-specific Preview system App IDs, URLs, callbacks, and cleanup. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.10.0` | When connecting a designed React repository to KP for the first time | 기존 화면과 기준 도구 구성을 보존하고 호환되는 도구·Node.js 설정을 기록하며 `kp-app-k00001`의 앱별 Hosting target과 Preview 설정을 추적합니다. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.1` | Adding a feature or changing a KP API integration in an existing app | Verify the official API contract and connect it to the existing app architecture. |
-| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.7.1` | When requesting a default deployment without specifying the environment | Selects DEV as the default and provides shared Firebase Hosting deployment guidance. |
-| [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.0.1` | When directly invoking the DEV deployment Skill | Validates, builds, and deploys DEV Hosting only. |
-| [`kp-app-deploy-prd`](skills/kp-app-deploy-prd/SKILL.md) | `1.0.1` | When directly invoking the PRD deployment Skill | Validates and builds PRD, then deploys live only after separate approval. |
-| [`kp-app-preview-release`](skills/kp-app-preview-release/SKILL.md) | `1.0.2` | When a Firebase Hosting preview channel is requested for review | Verifies the environment and Hosting target, deploys a preview that expires after one day, and registers a temporary OAuth callback only when approved. |
-| [`kp-app-preview-delete`](skills/kp-app-preview-delete/SKILL.md) | `1.0.1` | After review is complete or the PR is merged | Verifies and removes only the callback and Firebase Hosting preview channel added for that deployment. |
+| [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.8.0` | When requesting a default deployment without specifying the environment | DEV를 기본값으로 선택하고 `kp-app-k00001`의 앱별 site·target을 사용하는 Hosting 배포 규칙을 안내합니다. |
+| [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.1.0` | When directly invoking the DEV deployment Skill | `kp-app-k00001`의 앱별 DEV site에 Hosting만 검증·빌드·배포합니다. |
+| [`kp-app-deploy-prd`](skills/kp-app-deploy-prd/SKILL.md) | `1.1.0` | When directly invoking the PRD deployment Skill | `kp-app-k00001`의 앱별 PRD site를 검증·빌드하고, 별도 승인을 받은 뒤에만 live 배포합니다. |
+| [`kp-app-preview-release`](skills/kp-app-preview-release/SKILL.md) | `1.1.0` | When a Firebase Hosting preview channel is requested for review | `kp-app-k00001`에서 앱·환경의 Hosting target을 검증해 1일 Preview를 배포하고 승인된 경우에만 임시 OAuth callback을 등록·검증합니다. |
+| [`kp-app-preview-delete`](skills/kp-app-preview-delete/SKILL.md) | `1.1.0` | After review is complete or the PR is merged | 해당 배포의 `kp-app-k00001` Preview Channel과 callback만 확인해 정리합니다. |
 | [`kp-app-image-optimize`](skills/kp-app-image-optimize/SKILL.md) | `1.0.1` | When optimizing local or Firebase Storage images used by a KP app | Checks display size and quality while preserving consumer paths, download tokens, and Storage metadata. |
 
-Initialization adds `build:dev` and `deploy:dev` scripts to the app's `package.json`; it adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. After initialization, `kp-app-init` installs all eight Skills from `kp-app-skill` into the same project and agent scope. It does not install `kp-api-skill`. App Skill installation also installs and verifies the `kp-credential` CLI in the OS user's environment, so local API keys can be entered through its hidden prompt and used within an approved API scope. Keep only the item label in `AGENTS.local.md`; the helper does not inject secrets into arbitrary commands or browser login forms.
+초기화 시 `kp-app-k00001`에서 해당 앱의 PRD Hosting site ID를 확인한 뒤 `deploy:prd`를 구성합니다. 앱의 Firebase SDK runtime project 설정은 별도로 유지합니다. `kp-app-init`은 앱 초기화 후 여덟 Skill을 프로젝트·에이전트 경로에 설치합니다. `kp-api-skill`은 자동 설치하지 않습니다. `kp-credential` CLI는 OS 사용자 환경에서 설치·확인합니다.
 
 ## Generated repository rules
 
-Each work context gets its own commit after implementation and direct verification finish. Once all contexts pass, the agent creates a PR against the confirmed base and merges it after required checks and reviews. A direct base merge without a PR or a direct push to `main` or `dev` requires explicit user approval immediately before the action. Before committing, verify the active GitHub account and Git author/committer identities belong to the same account, and use an email verified for that account or its GitHub noreply address. Firebase Hosting uses `vite build --mode development` and `hosting:dev` for DEV, and `vite build --mode production` and `hosting:prd` for PRD, with each environment's verified project and site IDs.
+각 환경은 Firebase Hosting project `kp-app-k00001`을 사용하고 앱별 DEV·PRD site와 target을 구분합니다. Firebase SDK runtime project 설정은 앱별 값으로 유지합니다.
 
 ## Install
 

@@ -2,7 +2,7 @@
 name: kp-app-deploy-dev
 description: "초기화된 KP React 앱을 요청된 Firebase Hosting DEV 환경에 검증·빌드·배포할 때 사용합니다. PRD 배포에는 사용하지 않습니다."
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
 # KP 앱 DEV 배포
@@ -15,13 +15,13 @@ metadata:
 
 1. 현재 저장소의 `AGENTS.md`, `AGENTS.local.md`, 브랜치와 `git status --short --branch`를 확인합니다. 관련 없는 미커밋 변경이 배포 산출물에 들어갈 수 있으면 먼저 범위를 확인합니다.
 2. 이 Skill과 함께 설치된 `../kp-app-deploy/SKILL.md`, `../kp-app-deploy/references/access-and-secrets.md`, `../kp-app-deploy/references/firebase-hosting.md`를 읽고 공통 계정·배포 규칙을 적용합니다. 필요한 참조가 없으면 기존 파일을 덮어쓰지 않고 프로젝트 로컬에 준비합니다.
-3. 대상 `package.json`, `firebase.json`, `.firebaserc`에서 `build:dev`, `deploy:dev`, Firebase 프로젝트 ID, `hosting:dev` 연결 대상 사이트 ID와 도메인을 확인합니다. 값을 추측하거나 다른 저장소에서 복사하지 않습니다.
+3. 대상 `package.json`, `firebase.json`, `.firebaserc`에서 `deploy:dev`가 `--project kp-app-k00001`을 지정하는지, `hosting:dev`가 이 프로젝트 안의 해당 앱 DEV site ID에 연결되는지, 도메인이 맞는지 확인합니다. 앱 SDK runtime Firebase project ID는 배포 project와 별도로 유지합니다. site가 불명확하면 기본 site로 대체하지 않습니다.
 4. DEV 빌드와 저장소가 요구하는 검사를 실행합니다. 실패하거나 설정이 서로 맞지 않으면 배포하지 않고 문제를 보고합니다.
 5. 검증이 통과한 경우 `deploy:dev`를 실행하고 CLI 결과와 DEV 도메인의 HTTP 응답을 확인합니다. `firebase deploy` 단독 명령은 사용하지 않습니다.
 
 ## 검증과 보고
 
-- Firebase 배포는 DEV Hosting으로만 제한하고 실제 프로젝트 ID를 명시합니다.
+- Firebase 배포는 DEV Hosting으로만 제한하고 `--project kp-app-k00001`을 명시합니다. 앱 API·Authentication·Firestore·Functions·Storage runtime 설정은 바꾸지 않습니다.
 - 저장소·브랜치·작업 트리 상태, 검사와 빌드 결과, Firebase 프로젝트·Hosting 타깃, CLI 결과와 HTTP 상태를 구분해 보고합니다.
 - 브라우저에서 확인하지 않은 화면을 시각 검증했다고 말하지 않습니다.
 
@@ -32,7 +32,7 @@ metadata:
 | API | Firebase Hosting | Firebase CLI로 배포하며 Hosting API를 직접 호출하지 않습니다. 확인된 DEV domain의 HTTP response만 읽습니다. | [Firebase Hosting](https://firebase.google.com/docs/hosting) |
 | CLI | Git | 변경 범위를 `git status --short --branch`로 확인합니다. | [git status](https://git-scm.com/docs/git-status) |
 | CLI | Package manager | lockfile에서 확인한 manager의 `run` command로 `build:dev`와 `deploy:dev`를 실행합니다. npm 저장소에서는 `npm run build:dev`, `npm run deploy:dev`입니다. | [npm run](https://docs.npmjs.com/cli/v11/commands/npm-run-script) |
-| CLI | Firebase CLI | `deploy:dev` script는 `firebase deploy --only hosting:dev --project <DEV_FIREBASE_PROJECT_ID>`를 실행합니다. ID와 target mapping은 `.firebaserc`·`firebase.json`에서 확인합니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
+| CLI | Firebase CLI | `deploy:dev` script는 `firebase deploy --only hosting:dev --project kp-app-k00001`을 실행합니다. 실제 DEV site mapping은 `.firebaserc`·`firebase.json`과 `firebase hosting:sites:list --project kp-app-k00001`에서 확인합니다. | [Firebase CLI](https://firebase.google.com/docs/cli) |
 | 기타 | `package.json`·`firebase.json`·`.firebaserc`·build·lint·test·브라우저 | project 설정으로 DEV 범위를 확인하고 화면은 프로젝트 브라우저 규칙에 따라 검증합니다. | — |
 
 ## 관련 Skill

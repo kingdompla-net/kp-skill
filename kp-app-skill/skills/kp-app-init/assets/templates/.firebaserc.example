@@ -1,16 +1,12 @@
 {
   "projects": {
-    "default": "replace-with-dev-firebase-project-id"
+    "default": "kp-app-k00001"
   },
   "targets": {
-    "replace-with-dev-firebase-project-id": {
+    "kp-app-k00001": {
       "hosting": {
-        "dev": ["replace-with-dev-hosting-site-id"]
-      }
-    },
-    "replace-with-prd-firebase-project-id": {
-      "hosting": {
-        "prd": ["replace-with-prd-hosting-site-id"]
+        "dev": ["replace-with-app-dev-hosting-site-id"],
+        "prd": ["replace-with-app-prd-hosting-site-id"]
       }
     }
   }

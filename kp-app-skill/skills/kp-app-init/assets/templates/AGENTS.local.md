@@ -12,10 +12,12 @@
 
 ## Firebase·Google Cloud 환경
 
-| 환경 | Firebase CLI 계정 | gcloud CLI 계정 | ADC 주체 | Firebase 프로젝트 ID | Hosting 사이트 ID | Hosting target |
-| --- | --- | --- | --- | --- | --- | --- |
-| DEV | {계정 이메일} | {계정 이메일} | {사용자 또는 서비스 계정 주체} | {DEV 프로젝트 ID} | {DEV 사이트 ID} | {DEV Hosting target} |
-| PRD | {계정 이메일 또는 별도 승인 계정} | {계정 이메일 또는 별도 승인 계정} | {사용자 또는 서비스 계정 주체} | {PRD 프로젝트 ID} | {PRD 사이트 ID} | {PRD Hosting target} |
+| 환경 | Firebase CLI 계정 | gcloud CLI 계정 | ADC 주체 | Firebase Hosting project ID | Hosting 사이트 ID | Hosting target | 앱 runtime Firebase project ID |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| DEV | {계정 이메일} | {계정 이메일} | {사용자 또는 서비스 계정 주체} | `kp-app-k00001` | {앱 DEV 사이트 ID} | {DEV Hosting target} | {DEV runtime project ID} |
+| PRD | {계정 이메일 또는 별도 승인 계정} | {계정 이메일 또는 별도 승인 계정} | {사용자 또는 서비스 계정 주체} | `kp-app-k00001` | {앱 PRD 사이트 ID} | {PRD Hosting target} | {PRD runtime project ID} |
+
+Firebase Hosting 배포에는 `kp-app-k00001`과 위의 앱별 site ID를 사용합니다. Firebase SDK runtime 설정에는 마지막 열의 앱별 project ID를 유지합니다.
 
 gcloud CLI 로그인 계정과 Application Default Credentials(ADC)는 별도로 확인합니다. 하나의 gcloud configuration을 바꿔도 ADC 주체가 바뀌지 않을 수 있습니다. 계정 이메일이 프로젝트의 IAM 권한을 뜻하지 않으므로 요청된 환경과 실제 권한을 각각 확인합니다.
 
