@@ -79,7 +79,7 @@ src/
 - `assets/templates/.agents/references/pr-rule.md`는 대상 저장소의 `.agents/references/pr-rule.md`로 복사한다.
 - `assets/templates/.references/PULL_REQUEST_TEMPLATE.md`는 대상 저장소의 `.references/PULL_REQUEST_TEMPLATE.md`로 복사한다.
 - `assets/templates/firebase.json`은 대상 저장소에 `firebase.json`이 없을 때 Hosting 기반으로 사용한다. 기존 설정이 있으면 대상 앱의 rewrite·header·배포 설정을 보존하면서 필요한 값을 합친다.
-- `assets/templates/.firebaserc.example`은 Firebase 프로젝트 ID와 Hosting 사이트 ID가 확인된 경우에만 `.firebaserc`를 만들거나 갱신하는 예시로 사용한다. 예시 안의 대체 문자열을 그대로 배포에 사용하지 않는다.
+- `assets/templates/.firebaserc.example`은 고정 Hosting project `kp-app-k00001`과 대상 앱의 Hosting site ID가 확인된 경우에만 `.firebaserc`를 만들거나 갱신하는 예시로 사용합니다. 앱 SDK runtime Firebase project ID는 별도로 유지합니다. 예시 안의 대체 문자열을 그대로 배포에 사용하지 않습니다.
 - 대상 저장소의 루트 `AGENTS.md`는 위 세 파일로 연결한다. 기존 문서가 있으면 덮어쓰지 않고 필요한 내용을 합친다.
 
 루트 지침은 상세 내용을 반복하지 말고 정확한 참조 경로를 안내한다. 각 문서에 존재하지 않는 파일이나 미구현 동작을 적지 않는다. 구조도와 코드 지도는 실제 소스를 반영한다.
@@ -94,29 +94,29 @@ src/
 
 ## Firebase Hosting 구성과 배포 Skill 연결
 
-`kp-church-website`에서 사용하는 DEV 흐름을 기준으로 하되, Firebase 프로젝트 ID와 Hosting 사이트 ID는 초기화 대상 저장소의 환경별 설정을 사용한다.
+`kp-church-website`에서 사용하는 DEV 흐름을 기준으로 하되, 모든 KP 앱의 Hosting 배포 project는 `kp-app-k00001`입니다. 앱별 Hosting site ID와 runtime Firebase project ID는 각각 해당 앱의 환경별 설정에서 확인합니다.
 
 - Vite 개발 빌드는 `npm run build:dev`에서 `vite build --mode development`를 실행한다.
-- DEV 배포 스크립트는 `npm run deploy:dev`에서 빌드 후 `firebase deploy --only hosting:dev --project <DEV_FIREBASE_PROJECT_ID>`를 실행한다. 배포 범위를 `hosting:dev`로 한정하고 프로젝트 ID를 명시한다.
-- PRD 설정을 확인한 앱은 `npm run build:prd`에서 `vite build --mode production`을 실행하고, `npm run deploy:prd`에서 빌드 후 `firebase deploy --only hosting:prd --project <PRD_FIREBASE_PROJECT_ID>`를 실행한다. 배포 범위를 `hosting:prd`로 한정하고 PRD 프로젝트 ID를 명시한다.
+- DEV 배포 스크립트는 `npm run deploy:dev`에서 빌드 후 `firebase deploy --only hosting:dev --project kp-app-k00001`을 실행합니다. 배포 범위를 `hosting:dev`로 한정하고 고정 Hosting project를 명시합니다.
+- 대상 앱의 PRD Hosting site ID가 확인되면 `npm run build:prd`에서 `vite build --mode production`을 실행하고, `npm run deploy:prd`에서 빌드 후 `firebase deploy --only hosting:prd --project kp-app-k00001`을 실행합니다. 배포 범위를 `hosting:prd`로 한정하고 고정 Hosting project를 명시합니다.
 
-앱 초기화에서 대상 `package.json`의 기존 `scripts`를 보존하면서 아래 DEV 항목을 반드시 추가한다. PRD Firebase 프로젝트 ID와 Hosting 사이트 ID가 확인된 경우에만 PRD 항목도 추가한다. 모든 `<...>` 값은 초기화 중 확인한 실제 ID로 치환하며 대체 문자열을 남기지 않는다. 같은 이름의 스크립트가 이미 있으면 동작을 확인해 합치고 안전한 통합이 불가능하면 사용자에게 결정받는다.
+앱 초기화에서 대상 `package.json`의 기존 `scripts`를 보존하면서 아래 DEV 항목을 반드시 추가합니다. 앱의 DEV Hosting site ID가 `kp-app-k00001`에 존재하는지 확인하며, 앱에 PRD site가 확인된 경우에만 PRD 항목도 추가합니다. `.firebaserc`의 site ID는 해당 Firebase project의 실제 Hosting 사이트 목록과 대조하고 대체 문자열을 남기지 않습니다. 같은 이름의 스크립트가 이미 있으면 동작을 확인해 합치고 안전한 통합이 불가능하면 사용자에게 결정을 요청합니다.
 
 ~~~json
 {
   "scripts": {
     "build:dev": "vite build --mode development",
-    "deploy:dev": "npm run build:dev && firebase deploy --only hosting:dev --project <DEV_FIREBASE_PROJECT_ID>",
+    "deploy:dev": "npm run build:dev && firebase deploy --only hosting:dev --project kp-app-k00001",
     "build:prd": "vite build --mode production",
-    "deploy:prd": "npm run build:prd && firebase deploy --only hosting:prd --project <PRD_FIREBASE_PROJECT_ID>"
+    "deploy:prd": "npm run build:prd && firebase deploy --only hosting:prd --project kp-app-k00001"
   }
 }
 ~~~
 
 - `firebase.json`은 `hosting` 배열에 논리 별칭 `dev`와 `prd`를 각각 구성하고 `public`은 `dist`를 사용한다. SPA는 `**`를 `/index.html`로 rewrite한다. HTML 등 기본 파일은 `no-cache`, `/assets/**`는 `public, max-age=31536000, immutable`로 설정한다.
-- `.firebaserc`는 각 Firebase 프로젝트 아래 `hosting.dev`와 `hosting.prd`를 별도로 연결한다. 논리 타깃은 같아도 실제 프로젝트 ID와 Hosting 사이트 ID는 환경별로 다를 수 있다. 참조 저장소의 사이트 ID를 대상 저장소에 복사하지 않는다.
+- `.firebaserc`는 `kp-app-k00001` project 아래 `hosting.dev`와 `hosting.prd` target을 각각 대상 앱의 DEV·PRD Hosting site ID에 연결합니다. `firebase hosting:sites:list --project kp-app-k00001`로 site를 검증하고 다른 앱의 site ID를 복사하지 않습니다. 한 앱의 DEV와 PRD는 서로 다른 site여야 하며 PRD site가 없으면 PRD 설정을 추가하지 않습니다.
 - 기존 `package.json`, `firebase.json`, `.firebaserc`를 먼저 확인하고 덮어쓰지 않는다. Firebase Hosting 설정이 없으면 `assets/templates/firebase.json`의 `dev`·`prd` 타깃을 사용하되, PRD 값이 확정되지 않았으면 `prd` 항목을 완성된 설정으로 남기지 않는다. `.firebaserc`와 배포 스크립트에도 확인되지 않은 ID를 쓰지 않는다.
-- DEV와 PRD에는 각각 확인된 Firebase 프로젝트 ID·Hosting 사이트 ID·도메인과 Vite mode를 연결한다. DEV 프로젝트·사이트·mode를 PRD에 재사용하지 않는다. 두 환경이 동일한 실제 Firebase 프로젝트를 사용한다고 확인된 경우에만 `.firebaserc` 안에서 해당 프로젝트 아래 두 논리 타깃을 함께 관리한다.
+- DEV와 PRD에는 고정 Hosting project `kp-app-k00001`을 사용하고, 환경별 Hosting site ID·도메인·Vite mode를 개별 연결합니다. 앱의 Firebase SDK runtime project ID는 별도로 보존합니다. DEV site·mode를 PRD에 재사용하지 않습니다.
 - Firebase 설정과 빌드 검증은 실제 Hosting 배포와 별개다. 실제 배포는 사용자가 환경을 명시해 요청했을 때만 하고, 대상 저장소에 프로젝트 로컬 설치된 `kp-app-deploy` Skill의 사전 검증·보고 절차를 따른다.
 
 ## 아키텍처 명명 원칙
