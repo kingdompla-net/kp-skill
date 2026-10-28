@@ -1,12 +1,12 @@
 # KP App Skill
 
-Version: 2.10.0
+Version: 2.11.0
 
 `kp-app-skill` provides project-local Skills for initializing KP React apps, integrating APIs, optimizing images, reviewing Firebase Hosting previews, and deploying live sites.
 
 | Skill | Version | When to use | Purpose |
 | --- | --- | --- | --- |
-| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.8.2` | When connecting a designed React repository to KP for the first time | Preserves existing screens and baseline tooling, records compatible tools and Node.js settings in `.agents/references/spec.md`, and tracks Firebase Hosting targets, environment-specific Preview system App IDs, URLs, callbacks, and cleanup. |
+| [`kp-app-init`](skills/kp-app-init/SKILL.md) | `2.9.0` | When connecting a designed React repository to KP for the first time | Preserves existing screens and baseline tooling, records compatible tools and Node.js settings in `.agents/references/spec.md`, and tracks Firebase Hosting targets, environment-specific Preview system App IDs, URLs, callbacks, and cleanup. |
 | [`kp-app-api`](skills/kp-app-api/SKILL.md) | `2.6.1` | Adding a feature or changing a KP API integration in an existing app | Verify the official API contract and connect it to the existing app architecture. |
 | [`kp-app-deploy`](skills/kp-app-deploy/SKILL.md) | `2.7.1` | When requesting a default deployment without specifying the environment | Selects DEV as the default and provides shared Firebase Hosting deployment guidance. |
 | [`kp-app-deploy-dev`](skills/kp-app-deploy-dev/SKILL.md) | `1.0.1` | When directly invoking the DEV deployment Skill | Validates, builds, and deploys DEV Hosting only. |
@@ -15,7 +15,7 @@ Version: 2.10.0
 | [`kp-app-preview-delete`](skills/kp-app-preview-delete/SKILL.md) | `1.0.1` | After review is complete or the PR is merged | Verifies and removes only the callback and Firebase Hosting preview channel added for that deployment. |
 | [`kp-app-image-optimize`](skills/kp-app-image-optimize/SKILL.md) | `1.0.1` | When optimizing local or Firebase Storage images used by a KP app | Checks display size and quality while preserving consumer paths, download tokens, and Storage metadata. |
 
-Initialization adds `build:dev` and `deploy:dev` scripts to the app's `package.json`; it adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. After initialization, `kp-app-init` installs all eight Skills from `kp-app-skill` into the same project and agent scope. It does not install `kp-api-skill`. For local API keys, use [`kp-credential`](../kp-credential/README.md) to enter a value through a hidden prompt and approve the API scope. Its CLI is automatically installed from the Skill folder when first needed. Keep only the item label in `AGENTS.local.md`; the helper does not inject secrets into arbitrary commands or browser login forms.
+Initialization adds `build:dev` and `deploy:dev` scripts to the app's `package.json`; it adds `build:prd` and `deploy:prd` when the PRD Firebase project and Hosting site are confirmed. After initialization, `kp-app-init` installs all eight Skills from `kp-app-skill` into the same project and agent scope. It does not install `kp-api-skill`. App Skill installation also installs and verifies the `kp-credential` CLI in the OS user's environment, so local API keys can be entered through its hidden prompt and used within an approved API scope. Keep only the item label in `AGENTS.local.md`; the helper does not inject secrets into arbitrary commands or browser login forms.
 
 ## Generated repository rules
 
@@ -23,7 +23,7 @@ Each work context gets its own commit after implementation and direct verificati
 
 ## Install
 
-Any app Skill requires all three `kp-skill-manager` Skills and the complete `kp-credential` Skill set in the same project and agent scope. Skills CLI does not resolve plugin dependencies, so when an installed app Skill runs, it checks the selected agent's project path and automatically installs any missing dependency Skills before starting the task. Tell the user which work requires which Skills and paths before installation, then report the added Skill names and verified paths. The commands below are optional preinstallation steps.
+Any app Skill requires all three `kp-skill-manager` Skills and the complete `kp-credential` Skill set in the same project and agent scope. Skills CLI does not resolve plugin dependencies or install OS npm packages, so the agent installs missing dependency Skills and then the credential CLI in the OS user's environment before starting the task. Tell the user which work requires which Skills and paths before installation, then report the added Skill names, verified paths, and CLI status. The commands below are optional steps to copy Skill files ahead of the agent setup.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -76,7 +76,7 @@ Claude Code uses `.claude/skills/` instead of `.agents/skills/`. Each directory 
 
 Run from the repository root. Repeat `--agent` for each agent that should see the project-local Skills:
 
-The commands below can preinstall all required dependency Skills. If you install only the requested app Skill, it automatically installs missing dependencies when it runs, before starting the task.
+The commands below can copy all required dependency Skill files ahead of time. If you install only the requested app Skill, the agent installs missing Skills and prepares the OS-user credential CLI before starting the requested task.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \

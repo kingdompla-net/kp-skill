@@ -2,7 +2,7 @@
 name: kp-api-init
 description: "KP Firebase Functions 저장소에 새 도메인 codebase와 최초 HTTP router를 설계하고, 환경별 실행·배포 지침을 준비할 때 사용합니다."
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
 # KP API 코드베이스 초기화
@@ -27,7 +27,7 @@ metadata:
 - request와 response schema는 기존 validation library 및 오류 계약을 따릅니다. method, 인증, 권한, 알 수 없는 body field 처리와 부작용을 계약에 기록합니다.
 - 새 codebase의 `AGENTS.md`는 [템플릿](assets/templates/AGENTS.md)을 실제 구조에 맞춰 사용합니다. 기존 지침을 덮어쓰지 말고 병합합니다. 설치된 `kp-skill-manager`의 `kp-skill-install/references/credential-and-local-config.md`를 프로젝트의 `.agents/references/credential-and-local-config.md`로 복사하고 루트 `AGENTS.md`가 이 참조를 연결하도록 합니다. 기존 local reference는 덮어쓰지 않습니다.
 - 대상 프로젝트에 `AGENTS.local.md`가 없으면 `assets/templates/AGENTS.local.md`를 프로젝트 루트로 복사합니다. 이미 있으면 보존하고 필요한 섹션만 병합합니다. 비밀이 아닌 principal·project ID·credential 항목 라벨은 프로젝트 로컬 복사본의 맞는 위치에 설정하며 원본 template은 수정하지 않습니다. 값이 누락되면 저장소 설정을 먼저 확인하고 필요한 비밀 아닌 값만 사용자에게 대화로 요청합니다. 파일이 Git에서 추적되지 않고 무시되는지 `git ls-files -- AGENTS.local.md`, `git check-ignore -v AGENTS.local.md`로 확인합니다. 실제 secret 값, token, private key, 서비스 계정 JSON은 기록하지 않습니다. 개발용 API key·token은 `kp-credential`의 숨김 입력으로 OS 자격 증명 저장소에 넣고, 승인한 HTTPS origin·경로·method 범위에서만 `kp-credential request <항목이름> --url <HTTPS_URL>`로 사용합니다. 값은 채팅, 환경 변수, 명령 인수 또는 출력에 포함하지 않습니다.
-- API credential이 필요하면 공통 reference의 절차에 따라 `kp-credential --version`을 확인하고 CLI가 없거나 낡았으면 설치된 Skill 폴더에서 자동 설치·갱신합니다. 실제 값은 `kp-credential add <항목이름>`에서 직접 입력하며, 이 도구는 임의 명령의 환경 변수 주입이나 Firebase 배포 identity 관리를 대체하지 않습니다.
+- 앱/API Skill dependency 설치 때 `kp-credential` CLI가 사용자 환경에 준비되어 있어야 합니다. API credential이 필요하면 `kp-credential --version`과 명령 탐색을 확인하고 빠졌거나 낡았으면 공통 reference의 절차로 먼저 자동 설치·갱신합니다. 실제 값은 `kp-credential add <항목이름>`의 숨김 입력에서 직접 저장하며, 이 도구는 임의 명령의 환경 변수 주입이나 Firebase 배포 identity 관리를 대체하지 않습니다.
 - 모든 작업은 branch/worktree 정책을 따르고 목적 맥락별로 커밋합니다. `main`/`dev` 직접 push는 작업 직전에 사용자의 승인을 받아야 합니다. base branch 직접 merge도 별도 승인을 받습니다. 커밋 전에 GitHub 인증 계정과 Git author/committer가 일치하는지 확인하고 repository 정책에 필요한 사전 승인을 받습니다.
 
 ## Project script 준비

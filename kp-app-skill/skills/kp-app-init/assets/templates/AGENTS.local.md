@@ -63,6 +63,6 @@ Preview channel과 callback을 추적하고 검토가 끝난 뒤 정리할 수 �
 | --- | --- | --- |
 | {예: 로컬 개발 API} | {예: `X-API-Key` 또는 `Authorization`} | {예: `kp-skill/<저장소>/<환경>/<용도>`} |
 
-API key·token은 `kp-credential`에 숨김 입력으로 저장하고, API의 origin·경로·HTTP method·header 범위를 승인합니다. 에이전트는 API credential이 필요한 시점에 CLI를 확인해 설치된 `kp-credential` Skill 폴더에서 자동 설치·갱신한 뒤, `kp-credential request <항목이름> --url <HTTPS_URL>`로 요청합니다. Node.js 20 이상과 npm이 없거나 npm 전역 prefix에 쓸 수 없어 자동 설치에 실패하면 에이전트가 원인과 조치를 안내합니다. 저장값을 직접 읽는 명령은 사용하지 않습니다.
+API key·token은 `kp-credential`에 숨김 입력으로 저장하고, API의 origin·경로·HTTP method·header 범위를 승인합니다. 앱/API Skill 설치 단계에서 에이전트가 `kp-credential` CLI를 OS 사용자 환경에 자동 설치하고 `kp-credential --version` 및 일반 명령 탐색을 확인합니다. 누락되거나 오래된 경우 credential 작업 전에 자동으로 복구합니다. 이후 에이전트는 `kp-credential request <항목이름> --url <HTTPS_URL>`로 요청합니다. Node.js 20 이상과 npm이 없거나 npm 전역 prefix에 쓸 수 없어 설치에 실패하면 에이전트가 원인과 조치를 안내합니다. 저장값을 직접 읽는 명령은 사용하지 않습니다.
 
 비밀값을 대화, 터미널 출력, 로그, 명령 인수, `.env` 파일, 테스트 결과, 최종 보고에 넣지 않습니다. 이 도구는 임의 CLI에 비밀값을 환경 변수로 주입하거나 브라우저 로그인 비밀번호를 입력하는 용도로 사용하지 않습니다.

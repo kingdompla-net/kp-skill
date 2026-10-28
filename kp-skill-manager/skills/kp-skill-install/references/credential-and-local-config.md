@@ -14,7 +14,7 @@
 
 작업에 `kp-skill-manager` 또는 `kp-credential` 플러그인의 Skill이 필요하지만 현재 프로젝트·에이전트 범위에 없으면, 해당 플러그인의 전체 Skill 세트를 자동으로 설치한 뒤 작업을 이어갑니다. manager가 필요하면 manager 전체를 설치하고, credential이 필요하면 manager 전체를 먼저 확인·설치한 다음 credential 전체를 설치합니다. `kp-app-skill`이나 `kp-api-skill`의 Skill을 사용하거나 설치할 때는 두 플러그인 전체가 모두 필수입니다. 관계표에 있다는 이유만으로 필요하지 않은 credential이나 다른 KP Skill까지 설치하지 않습니다.
 
-사용자에게 별도 설치 동의를 다시 묻지 않습니다. 설치 직전에 필요한 작업, 추가할 플러그인과 Skill, 설치 대상 경로를 알립니다. 예: “API endpoint를 검증하려면 `kp-skill-manager`의 `kp-skill-install` Skill과 `kp-credential`의 `kp-credential` Skill이 필요합니다. 현재 Codex 프로젝트 경로에 없어 각 플러그인의 전체 Skill을 설치한 뒤 진행하겠습니다.” 설치 후 실제 경로를 확인하고 추가한 Skill 이름과 경로를 알려 작업을 계속합니다. 설치가 실패하면 필요한 명령과 실패 원인을 안내하고, 설치된 것처럼 가정해 의존 작업을 수행하지 않습니다.
+사용자에게 별도 설치 동의를 다시 묻지 않습니다. 설치 직전에 필요한 작업, 추가할 플러그인과 Skill, 설치 대상 경로를 알립니다. 예: “API endpoint를 검증하려면 `kp-skill-manager`의 `kp-skill-install` Skill과 `kp-credential`의 `kp-credential` Skill이 필요합니다. 현재 Codex 프로젝트 경로에 없어 각 플러그인의 전체 Skill을 설치하고, 바로 사용할 수 있도록 `kp-credential` CLI도 이 컴퓨터의 사용자 환경에 준비한 뒤 진행하겠습니다.” 설치 후 실제 경로, CLI 버전과 명령 탐색 결과를 확인해 추가한 Skill 이름과 경로를 알려 작업을 계속합니다. 설치가 실패하면 필요한 조치와 실패 원인을 안내하고, 설치된 것처럼 가정해 의존 작업을 수행하지 않습니다.
 
 Skills CLI 복사 설치에서는 현재 실행 중인 Skill의 agent와 프로젝트 범위를 확인한 뒤 대상 저장소 루트에서 누락된 Skill만 설치합니다. manager Skill은 다음 정본에서 가져옵니다.
 
@@ -31,6 +31,17 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credentia
 `<MISSING_MANAGER_SKILL_NAMES>`와 `<MISSING_CREDENTIAL_SKILL_NAMES>`에는 설치 경로에서 확인한 누락 Skill 이름만 넣습니다. `--agent`는 현재 실행 중인 에이전트 식별자로 바꾸며, 다른 agent를 함께 지정할 필요가 없으면 하나만 씁니다. 사용자 전역 설치를 명시하지 않았다면 `--global`/`-g`를 사용하지 않습니다. Claude native plugin은 manifest 의존성으로 설치하고 같은 Skill을 복사 방식으로 중복 설치하지 않습니다.
 
 `kp-app-skill`과 `kp-api-skill`은 manager 전체와 credential 전체를 의존성으로 선언합니다. `kp-credential`은 manager 전체를 의존성으로 선언하며, manager 단독 설치에는 credential이 필요하지 않습니다.
+
+### `kp-credential` CLI를 설치 시 준비
+
+`kp-credential` Skill을 앱/API Skill의 dependency로 설치하는 동안 CLI도 같은 작업에서 설치·갱신합니다. CLI는 macOS Keychain 또는 Windows Credential Manager를 호출하는 npm package이므로 project Skill 폴더가 아니라 현재 OS 사용자의 전역 npm 환경에 설치합니다. API credential을 처음 사용할 때까지 설치를 미루지 않습니다.
+
+1. 방금 설치했거나 이미 설치된 `kp-credential` Skill 폴더의 `scripts/install-global.mjs`를 agent가 실행합니다. helper가 OS를 판별하고 Node.js 20 이상, npm, 사용자 npm 전역 경로와 CLI 버전을 확인합니다.
+2. helper는 Skill 폴더 안의 `package.json`을 기준으로 package tarball을 만들고 npm 사용자 전역 환경에 설치·갱신합니다. 프로젝트 Skill 폴더 자체를 전역 링크로 연결하지 않습니다.
+3. helper는 macOS zsh/bash 설정 파일 또는 Windows 사용자 PATH를 필요한 경우에만 중복 없이 보완하고, CLI 버전과 일반 명령 탐색을 검증합니다. 설정이 바뀌어 현재 터미널에서 PATH가 갱신되지 않으면 새 터미널을 열도록 안내합니다. 사용자에게 경로나 환경변수 값을 직접 입력하게 하지 않습니다.
+4. Node.js/npm이 없거나 설치 권한 문제가 있으면 `sudo npm` 등으로 우회하지 말고 원인과 필요한 준비를 설명합니다. 준비가 끝나면 같은 agent 설치 작업에서 helper 실행을 재시도합니다.
+
+`npx skills add`를 사용자가 agent 없이 직접 실행하면 Skills CLI는 Skill 파일만 복사하며 OS package 설치를 실행하지 않습니다. 따라서 agent가 KP Skill을 설치할 때에는 위 OS CLI 설정까지 설치 단계의 일부로 마치고, 수동 복사만 된 경우에도 credential 작업을 시작하기 전에 먼저 CLI 설정을 완료합니다.
 
 ## 프로젝트 로컬 설정값 작성
 
@@ -63,7 +74,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credentia
 
 ## `kp-credential`이 필요한 경우
 
-먼저 `kp-credential --version`과 현재 설치된 `kp-credential` Skill의 `package.json` 버전을 비교합니다. CLI가 없거나 버전이 다르면 어떤 credential 작업에 필요한지, 현재 사용자 npm 전역 prefix에 CLI를 설치·갱신한다는 점을 먼저 알립니다. 현재 Skill의 실제 폴더 경로에서 `npm install --global "<현재 kp-credential Skill 폴더>"`을 자동 실행하고 버전과 실행 경로를 확인해 보고합니다. CLI package는 Skill 폴더에 포함되므로 사용자가 `kp-skill` 저장소를 clone하거나 별도 CLI 설치 명령을 실행할 필요는 없습니다. Node.js 20 이상, npm, npm registry 접근과 사용자 계정에 쓰기 가능한 npm 전역 prefix가 필요합니다. 필수 조건이 없으면 원인과 해결 방법을 안내하고, 준비되면 자동으로 다시 시도합니다. 권한 오류를 우회하려고 `sudo npm`을 실행하거나 CLI가 준비된 것처럼 작업을 계속하지 않습니다. 자세한 내용은 [CLI 안내](https://github.com/kingdompla-net/kp-skill/blob/main/kp-credential/skills/kp-credential/CLI.md)를 확인합니다.
+앱/API Skill 설치 때 CLI가 OS 사용자 환경에 준비됐는지 확인합니다. 수동 Skills CLI 복사 설치 등으로 준비되지 않았거나 버전이 다르면 credential 작업보다 먼저 설치된 `kp-credential` Skill의 `scripts/install-global.mjs`를 agent가 실행합니다. helper가 Skill package를 사용자 npm 전역 환경에 설치하고, 필요한 경우 OS 사용자 PATH를 보완한 뒤 버전과 일반 명령 탐색을 확인합니다. Node.js 20 이상, npm, registry 접근과 사용자 쓰기 가능한 npm 전역 prefix가 필요합니다. 필수 조건이 없으면 원인과 조치를 안내하고, 준비되면 자동으로 다시 시도합니다. 권한 오류를 우회하려고 `sudo npm`을 실행하거나 CLI가 준비된 것처럼 작업을 계속하지 않습니다. 자세한 내용은 [CLI 안내](https://github.com/kingdompla-net/kp-skill/blob/main/kp-credential/skills/kp-credential/CLI.md)를 확인합니다.
 
 필요한 항목이 없을 때는 값을 요구하지 말고 사용자에게 다음 사항을 알려줍니다.
 

@@ -7,7 +7,7 @@ import { stdin, stderr, stdout } from 'node:process';
 import { readSecret, removeSecret, writeSecret } from '../src/keyring.mjs';
 import { loadRegistry, saveRegistry, getRegistryPath } from '../src/registry.mjs';
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const SECRET_FIELD_PATTERN = /(authorization|api[-_]?key|client[-_]?secret|cookie|password|refresh[-_]?token|secret|session|token)/i;
 const VALID_METHODS = new Set(['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE']);
 const FORBIDDEN_HEADERS = new Set([

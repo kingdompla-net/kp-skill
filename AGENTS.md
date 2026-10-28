@@ -67,6 +67,7 @@ API와 CLI 항목이 여러 개이면 표의 행을 나눠 읽기 쉽게 정리�
 
 - 프로젝트에 `kp-skill`의 Skill을 하나라도 설치할 때는 동일한 프로젝트와 에이전트 범위에 `kp-skill-manager` 플러그인의 Skill 전체도 설치합니다. Codex는 `.agents/skills/`, Claude Code는 `.claude/skills/`를 사용하며, 전역 설치는 하지 않습니다.
 - `kp-app-skill` 또는 `kp-api-skill`에서 Skill 하나를 설치할 때는 같은 범위에 `kp-credential` 플러그인의 Skill 전체도 필수로 설치합니다. 해당 앱/API Skill 설치 요청은 manager·credential 의존성 전체를 같은 요청의 설치 묶음으로 포함합니다.
+- 앱/API 설치 과정에서 `kp-credential` Skill을 복사한 직후 해당 Skill의 `scripts/install-global.mjs`를 실행해 CLI package를 현재 OS 사용자의 npm 전역 환경에 설치·갱신하고 `kp-credential --version`과 일반 명령 탐색을 확인합니다. Skill 파일은 프로젝트 로컬에, CLI 실행 파일은 OS 사용자 범위에 둡니다. Skills CLI만 직접 실행해 복사한 경우에는 credential 작업 전에 agent가 같은 helper로 CLI 준비와 PATH 확인을 완료합니다.
 - 설치 안내와 초기화 절차에서는 `kp-skill-manager` 전체, `kp-credential` 전체, 요청된 앱/API Skill 순서로 설치하고 결과를 확인합니다. Claude native plugin의 앱/API manifest에는 두 플러그인 의존성을 선언합니다. Skills CLI 복사 설치는 plugin 의존성을 자동 처리하지 않으므로 manager Skill과 README의 설치 절차에서 같은 순서를 처리합니다.
 - 작업에 `kp-skill-manager` 또는 `kp-credential` 플러그인의 Skill이 필요하지만 현재 프로젝트·에이전트 경로에 없으면 해당 플러그인의 전체 Skill 세트를 자동 설치합니다. `kp-credential`을 설치할 때는 manager 전체도 확인·설치합니다. 설치 전에 필요한 작업, Skill 이름과 경로를 사용자에게 알리고 설치 후 추가한 Skill과 경로를 확인해 보고합니다. 별도 설치 동의를 묻지 않고, 사용자 전역 경로는 사용하지 않습니다.
 - 앱/API Skill 하나를 설치하거나 사용하는 경우에는 `kp-skill-manager` 전체와 `kp-credential` 전체가 모두 필수입니다. Claude native plugin은 manifest dependency를 따릅니다. Skills CLI 복사 설치는 dependency를 자동 처리하지 않으므로 현재 agent의 프로젝트 경로에서 빠진 Skill만 manager → credential → 요청된 앱/API Skill 순서로 자동 설치하고 검증합니다. 기존 파일과 사용자 수정은 보존합니다.

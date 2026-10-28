@@ -6,22 +6,22 @@ KP Skill은 Kingdom Planet 프로젝트에서 재사용하는 에이전트 중�
 
 ## 로컬 API credential 도구
 
-[`kp-credential`](kp-credential/README.ko.md)은 API credential을 macOS Keychain 또는 Windows Credential Manager에 저장하고, 승인한 origin·경로·method 범위에서 HTTP 요청에 사용합니다. CLI는 Skill과 함께 배포되며 credential이 필요한 첫 작업에서 설치된 Skill 폴더로 자동 설치·갱신합니다. Node.js 20 이상과 npm이 필요합니다. 저장된 값을 그대로 보여주는 명령은 없고, 임의 명령이나 브라우저 로그인 흐름에는 credential을 전달하지 않습니다.
+[`kp-credential`](kp-credential/README.ko.md)은 API credential을 macOS Keychain 또는 Windows Credential Manager에 저장하고, 승인한 origin·경로·method 범위에서 HTTP 요청에 사용합니다. 앱/API Skill 설치 단계에서 CLI도 현재 OS 사용자의 npm 전역 환경에 자동 설치·갱신하며, `kp-credential` 명령을 경로 없이 실행할 수 있는지 확인합니다. Node.js 20 이상과 npm이 필요합니다. 저장된 값을 그대로 보여주는 명령은 없고, 임의 명령이나 브라우저 로그인 흐름에는 credential을 전달하지 않습니다.
 
 ## 제공 플러그인
 
 | 플러그인 | 버전 | 설명 |
 | --- | --- | --- |
-| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.10.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-deploy-dev`](kp-app-skill/skills/kp-app-deploy-dev/SKILL.md), [`kp-app-deploy-prd`](kp-app-skill/skills/kp-app-deploy-prd/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md), [`kp-app-image-optimize`](kp-app-skill/skills/kp-app-image-optimize/SKILL.md)를 제공합니다. |
-| [`kp-api-skill`](kp-api-skill/README.ko.md) | `1.1.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md)를 제공합니다. |
-| [`kp-skill-manager`](kp-skill-manager/README.ko.md) | `1.1.0` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md)을 제공합니다. |
-| [`kp-credential`](kp-credential/README.ko.md) | `1.0.0` | [`kp-credential`](kp-credential/skills/kp-credential/SKILL.md)을 제공합니다. |
+| [`kp-app-skill`](kp-app-skill/README.ko.md) | `2.11.0` | [`kp-app-init`](kp-app-skill/skills/kp-app-init/SKILL.md), [`kp-app-api`](kp-app-skill/skills/kp-app-api/SKILL.md), [`kp-app-deploy`](kp-app-skill/skills/kp-app-deploy/SKILL.md), [`kp-app-deploy-dev`](kp-app-skill/skills/kp-app-deploy-dev/SKILL.md), [`kp-app-deploy-prd`](kp-app-skill/skills/kp-app-deploy-prd/SKILL.md), [`kp-app-preview-release`](kp-app-skill/skills/kp-app-preview-release/SKILL.md), [`kp-app-preview-delete`](kp-app-skill/skills/kp-app-preview-delete/SKILL.md), [`kp-app-image-optimize`](kp-app-skill/skills/kp-app-image-optimize/SKILL.md)를 제공합니다. |
+| [`kp-api-skill`](kp-api-skill/README.ko.md) | `1.2.0` | [`kp-api-init`](kp-api-skill/skills/kp-api-init/SKILL.md), [`kp-api-endpoint`](kp-api-skill/skills/kp-api-endpoint/SKILL.md), [`kp-api-worker`](kp-api-skill/skills/kp-api-worker/SKILL.md), [`kp-api-test-deploy`](kp-api-skill/skills/kp-api-test-deploy/SKILL.md), [`kp-api-build`](kp-api-skill/skills/kp-api-build/SKILL.md), [`kp-api-deploy`](kp-api-skill/skills/kp-api-deploy/SKILL.md), [`kp-api-docs`](kp-api-skill/skills/kp-api-docs/SKILL.md)를 제공합니다. |
+| [`kp-skill-manager`](kp-skill-manager/README.ko.md) | `1.2.0` | [`kp-skill-create`](kp-skill-manager/skills/kp-skill-create/SKILL.md), [`kp-skill-release`](kp-skill-manager/skills/kp-skill-release/SKILL.md), [`kp-skill-install`](kp-skill-manager/skills/kp-skill-install/SKILL.md)을 제공합니다. |
+| [`kp-credential`](kp-credential/README.ko.md) | `1.1.0` | [`kp-credential`](kp-credential/skills/kp-credential/SKILL.md)을 제공합니다. |
 
 새 저장소를 초기화하지 않아도 기존 앱·API 저장소에 해당 플러그인의 전체 Skill 묶음을 프로젝트 로컬로 설치할 수 있습니다. 역할과 설치 방법은 [앱 플러그인 안내](kp-app-skill/README.ko.md), [API 플러그인 안내](kp-api-skill/README.ko.md), [Skill 관리자 안내](kp-skill-manager/README.ko.md)에서 확인해 주세요.
 
 ## 모든 KP Skill의 공통 설치 조건
 
-앱/API Skill 하나를 설치하거나 사용할 때도 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 세 Skill과 `kp-credential` 전체 Skill이 필요합니다. 네이티브 플러그인은 manifest dependency를 따릅니다. Skills CLI 복사 설치는 이를 자동 해석하지 않으므로 빠진 Skill을 manager → credential → 요청 Skill 순서로 자동 설치합니다. 설치 전에는 필요한 작업, 추가할 Skill 이름과 경로를 알리고, 설치 후 추가한 Skill과 실제 경로를 보고합니다.
+앱/API Skill 하나를 설치하거나 사용할 때도 같은 프로젝트·에이전트 경로에 `kp-skill-manager` 세 Skill과 `kp-credential` 전체 Skill이 필요합니다. 네이티브 플러그인은 manifest dependency를 따릅니다. Skills CLI 복사 설치는 dependency를 자동 해석하지 않으므로 빠진 Skill을 manager → credential → 요청 Skill 순서로 설치합니다. agent가 이 설치를 수행하면 credential Skill 복사 직후 CLI도 OS 사용자 npm 환경에 설치하고 명령 실행을 검증합니다. 설치 전에는 필요한 작업, 추가할 Skill 이름과 경로를 알리고, 설치 후 추가한 Skill과 실제 경로 및 CLI 상태를 보고합니다. Skills CLI를 agent 없이 직접 실행하면 Skill 파일만 복사되며, agent가 credential 작업 전에 CLI 준비를 마칩니다.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -48,7 +48,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-api-skill
   --skill '*' --agent codex --agent claude-code --agent hermes-agent --agent openclaw --copy --yes
 ~~~
 
-새 앱이나 API codebase에서는 해당 플러그인의 초기화 Skill 하나로 시작할 수 있습니다. 초기화 Skill은 작업 전에 빠진 manager·credential 전체를 자동 설치하고 추가한 Skill과 경로를 알립니다. `kp-app-init`은 초기화가 끝나면 `kp-app-skill`의 나머지 일곱 Skill을 같은 프로젝트·에이전트 경로에 설치하며 `kp-api-skill`은 설치하지 않습니다. `kp-api-init`은 `kp-api-skill`의 나머지 여섯 Skill만 설치하며 `kp-app-skill`은 설치하지 않습니다. 이 플러그인 Skill 묶음 확장은 초기화 Skill을 실행한 뒤 일어납니다. 기존 저장소는 재초기화하지 않고 필요한 플러그인의 전체 묶음이나 지명한 Skill을 직접 설치할 수 있습니다. Claude native plugin manifest에는 manager와 credential 의존성을 선언합니다.
+새 앱이나 API codebase에서는 해당 플러그인의 초기화 Skill 하나로 시작할 수 있습니다. 초기화 Skill은 작업 전에 빠진 manager·credential 전체를 자동 설치하고 credential CLI도 OS 사용자 환경에 설치·검증한 뒤 추가한 Skill과 경로를 알립니다. `kp-app-init`은 초기화가 끝나면 `kp-app-skill`의 나머지 일곱 Skill을 같은 프로젝트·에이전트 경로에 설치하며 `kp-api-skill`은 설치하지 않습니다. `kp-api-init`은 `kp-api-skill`의 나머지 여섯 Skill만 설치하며 `kp-app-skill`은 설치하지 않습니다. 이 플러그인 Skill 묶음 확장은 초기화 Skill을 실행한 뒤 일어납니다. 기존 저장소는 재초기화하지 않고 필요한 플러그인의 전체 묶음이나 지명한 Skill을 직접 설치할 수 있습니다. Claude native plugin manifest에는 manager와 credential 의존성을 선언합니다.
 
 ## 저장소 구조
 

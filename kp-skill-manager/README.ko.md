@@ -1,6 +1,6 @@
 # KP Skill Manager
 
-버전: 1.1.0
+버전: 1.2.0
 
 `kp-skill-manager`는 이 저장소의 플러그인과 Skill을 생성하고, SemVer와 Git 태그로 버전을 관리하며, 승인된 변경을 배포하고, 지정된 프로젝트의 로컬 Skill 설치를 갱신합니다.
 
@@ -10,11 +10,11 @@
 | --- | --- | --- | --- |
 | [`kp-skill-create`](skills/kp-skill-create/SKILL.md) | `1.1.0` | 프로젝트에 Skill 초안을 만들거나 명시적으로 정본 승격을 요청할 때 | 공통 Skill 템플릿과 플러그인 README 기준에 맞춰 작성하고, 관리자·기여자 계정에 맞는 PR 경로를 따릅니다. |
 | [`kp-skill-release`](skills/kp-skill-release/SKILL.md) | `1.0.2` | Skill 개선 배포, 버전 이력 조회 또는 이전 버전 콘텐츠를 새 버전으로 재발행할 때 | 변경 영향에 따라 버전을 올리고 manifest·README·태그를 맞춘 뒤 계정에 따른 PR·병합 경로를 따릅니다. |
-| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.1.0` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 설치 출처와 범위를 확인하고 필요한 manager·credential Skill을 프로젝트 로컬로 자동 설치해 실제 경로를 검증합니다. |
+| [`kp-skill-install`](skills/kp-skill-install/SKILL.md) | `1.2.0` | 현재 저장소나 지정된 사용자 범위의 KP Skill 설치를 최신 배포 버전에 맞출 때 | 필요한 manager·credential Skill을 프로젝트 로컬로 설치하고, credential CLI를 OS 사용자 환경에 설치·검증합니다. |
 
 ## 프로젝트 로컬 설치
 
-manager Skill을 사용할 때는 manager 세 Skill 전체가 같은 프로젝트·에이전트 경로에 필요합니다. 앱/API Skill이나 credential Skill에는 credential 전체도 필요합니다. Skills CLI 복사 설치는 dependency를 자동 해석하지 않으므로, 실행 중인 Skill이 선택된 프로젝트·에이전트 경로를 확인해 빠진 전체 세트를 작업 전에 자동 설치합니다. 설치 전에는 필요한 작업, Skill 이름과 경로를 사용자에게 알리고 설치 후 추가 항목과 경로를 보고합니다.
+manager Skill을 사용할 때는 manager 세 Skill 전체가 같은 프로젝트·에이전트 경로에 필요합니다. 앱/API Skill이나 credential Skill에는 credential 전체도 필요합니다. Skills CLI 복사 설치는 dependency를 자동 해석하지 않으므로, 실행 중인 Skill이 빠진 전체 세트를 작업 전에 설치합니다. credential Skill 복사 직후 CLI package도 OS 사용자 npm 환경에 설치하고 일반 `kp-credential` 명령이 동작하는지 확인합니다. 설치 전에는 필요한 작업, Skill 이름과 경로를 사용자에게 알리고 설치 후 추가 항목과 경로 및 CLI 상태를 보고합니다.
 
 ~~~bash
 npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-skill-manager/skills \
@@ -37,7 +37,7 @@ npx skills add https://github.com/kingdompla-net/kp-skill/tree/main/kp-credentia
 
 Codex 프로젝트에 manager를 설치하면 `.agents/skills/kp-skill-create/`, `.agents/skills/kp-skill-release/`, `.agents/skills/kp-skill-install/`이 만들어집니다. Claude Code에서는 같은 이름의 폴더가 `.claude/skills/` 바로 아래에 생깁니다. 플러그인 이름을 감싸는 상위 폴더는 만들지 않습니다. 다른 에이전트는 [공식 지원 에이전트 표](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)에서 프로젝트 경로를 확인해 주세요.
 
-Skills CLI 복사 설치는 plugin 의존성을 자동으로 설치하지 않습니다. 앱·API Skill을 실행하면 누락된 manager와 credential 전체 Skill을 작업 전에 사용자에게 알리고 프로젝트 로컬로 자동 설치합니다. Claude native plugin은 앱/API manifest에 선언된 두 의존성을 따릅니다. 사용자 전역 설치는 사용자가 해당 범위를 명시한 경우에만 선택합니다.
+Skills CLI 복사 설치는 plugin 의존성을 자동으로 설치하지 않습니다. 앱·API Skill을 설치할 때 누락된 manager와 credential 전체 Skill을 프로젝트 로컬로 설치하고, credential CLI는 OS 사용자 환경에 설치·검증합니다. Claude native plugin은 앱/API manifest에 선언된 두 Skill 의존성을 따릅니다. `--global`/`-g`로 설치하는 사용자 전역 범위는 Skill 파일을 뜻하며 사용자가 명시한 경우에만 선택합니다.
 
 ## 버전과 배포 기준
 

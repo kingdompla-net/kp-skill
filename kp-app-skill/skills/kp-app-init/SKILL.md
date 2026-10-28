@@ -2,7 +2,7 @@
 name: kp-app-init
 description: "화면 설계 소스가 준비된 저장소를 KP API 기반 React 앱으로 초기화하고, 인증·환경 설정·에이전트 개발 규칙·프론트엔드 아키텍처 문서를 연결할 때 사용합니다."
 metadata:
-  version: "2.8.2"
+  version: "2.9.0"
 ---
 
 # KP 앱 초기화
@@ -29,7 +29,7 @@ metadata:
    - 확정 구조의 store/slices/와 모든 폴더명 단수 원칙이 충돌한다. 이 초기화에서 해당 경로가 필요하면 store/slice/로 바꿀지, 기존 경로의 예외로 둘지 확인한다.
 3. VITE_APP_NAME은 package.json의 name에서 만들고, VITE_APP_DESCRIPTION은 package 설명·README·화면의 실제 목적에 맞춰 쓴다. 앱 이름 변환이 PascalCase인지 공백으로 구분한 이름인지 불명확하면 예시를 제시해 확인한다. 설명을 지어낼 근거가 없으면 사용자에게 목적을 묻는다.
 4. 대상 프로젝트 루트에 `AGENTS.local.md`가 없으면 `assets/templates/AGENTS.local.md`를 먼저 복사합니다. 이미 있으면 덮어쓰지 말고 필요한 항목만 병합합니다. 저장소와 사용자가 확인해 준 비밀 아닌 GitHub/Git identity, 환경별 project ID·Hosting target·`KP_SYSTEM_APP_ID`, 계정 이메일, 테스트 계정 정보는 프로젝트 로컬 복사본의 해당 위치에 설정합니다. 원본 template에는 사용자 값을 입력하지 않습니다. API header key/token은 `kp-credential`의 숨김 입력으로 OS 자격 증명 저장소에 저장하고 승인한 origin·경로·method로 요청합니다. 비밀값을 파일·대화·셸 설정·명령 인수에 넣지 않으며, 임의 CLI 환경 변수 주입을 구현하지 않습니다. 파일이 Git에서 추적되지 않고 무시되는지 `git ls-files -- AGENTS.local.md`, `git check-ignore -v AGENTS.local.md`로 검증합니다.
-   - API key나 token이 필요한 경우 공통 reference의 절차에 따라 `kp-credential --version`을 확인하고, CLI가 없거나 낡았으면 설치된 Skill 폴더에서 자동 설치·갱신합니다. 사용자는 `kp-credential add <항목이름>`의 숨김 입력으로 값을 저장하고 `kp-credential grant <항목이름> --origin <HTTPS_ORIGIN> --path-prefix <PATH> --header <HEADER> --methods <METHODS>`로 요청 범위를 대화형 승인합니다. 이후 에이전트는 승인 범위에서 `kp-credential request <항목이름> --url <HTTPS_URL>`을 사용하며 CLI의 저장값 조회 명령은 제공하지 않습니다.
+   - API key나 token이 필요한 경우 이 앱/API Skill 설치 과정에서 준비된 `kp-credential` CLI를 사용합니다. CLI가 없거나 낡았으면 공통 reference의 절차로 사용자 환경에 먼저 자동 설치·갱신합니다. 사용자는 `kp-credential add <항목이름>`의 숨김 입력으로 값을 저장하고 `kp-credential grant <항목이름> --origin <HTTPS_ORIGIN> --path-prefix <PATH> --header <HEADER> --methods <METHODS>`로 요청 범위를 대화형 승인합니다. 이후 에이전트는 승인 범위에서 `kp-credential request <항목이름> --url <HTTPS_URL>`을 사용하며 CLI의 저장값 조회 명령은 제공하지 않습니다.
    - KP API 문서를 읽을 때는 Developer Center 계정 이메일과 인증 수단의 로컬 참조를 확인합니다. 정보가 없으면 사용자에게 필요한 항목만 요청하며 비밀번호를 입력받아 문서에 보관하지 않습니다. `kp-credential`은 승인된 API header 사용만 지원하며 브라우저 로그인 비밀번호를 대신 입력하지 않습니다.
    - Git identity나 GitHub 원격 인증, Firebase/GCP 작업, 로컬·개발 서버 테스트에 필요한 계정·권한·환경을 확인합니다. 로그인 계정과 프로젝트 권한은 서로 다르므로 403이나 IAM 오류가 나면 실제 주체·프로젝트·리소스·거부된 permission을 기록해 권한 관리자에게 필요한 최소 권한 수정을 안내합니다.
 

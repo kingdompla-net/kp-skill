@@ -28,7 +28,7 @@ Git author와 committer는 위 GitHub 계정과 일치해야 합니다. commit �
 | --- | --- | --- | --- |
 | {예: DEV 외부 service} | {예: X-API-Key} | {예: `kp-skill/<저장소>/dev/<service>-api-key`} | {허용된 API origin/path/method} |
 
-로컬 개발 중 직접 호출하는 API credential은 `kp-credential add <항목이름>`의 숨김 입력으로 OS 자격 증명 저장소에 저장합니다. 사용자 승인 뒤 허용한 API origin·경로·method에 한해 `kp-credential request <항목이름> --url <HTTPS_URL>`로 사용합니다. API credential이 필요한 시점에 에이전트가 `kp-credential` Skill 폴더에 포함된 CLI를 자동 설치·갱신합니다. Node.js 20 이상과 npm이 없거나 npm 전역 prefix에 쓸 수 없어 설치가 실패하면 에이전트가 원인과 조치를 안내합니다. `kp-credential`은 일반 CLI 환경 변수나 브라우저 로그인 입력을 지원하지 않습니다. zsh 설정, `.env`, debug output, 명령 인수, log와 보고서에 실제 값을 넣지 않습니다.
+로컬 개발 중 직접 호출하는 API credential은 `kp-credential add <항목이름>`의 숨김 입력으로 OS 자격 증명 저장소에 저장합니다. 사용자 승인 뒤 허용한 API origin·경로·method에 한해 `kp-credential request <항목이름> --url <HTTPS_URL>`로 사용합니다. 앱/API Skill 설치 단계에서 에이전트가 `kp-credential` CLI를 OS 사용자 환경에 자동 설치하고 `kp-credential --version` 및 일반 명령 탐색을 확인합니다. 누락되거나 오래된 경우 credential 작업 전에 자동으로 복구합니다. Node.js 20 이상과 npm이 없거나 npm 전역 prefix에 쓸 수 없어 설치가 실패하면 에이전트가 원인과 조치를 안내합니다. `kp-credential`은 일반 CLI 환경 변수나 브라우저 로그인 입력을 지원하지 않습니다. zsh 설정, `.env`, debug output, 명령 인수, log와 보고서에 실제 값을 넣지 않습니다.
 
 Firebase Functions runtime secret은 배포된 함수가 사용할 값이므로 이 로컬 credential 표에 입력하지 않습니다. 필요한 경우 API 배포 Skill의 Secret Manager 절차를 별도로 따릅니다.
 
